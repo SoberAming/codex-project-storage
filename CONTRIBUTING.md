@@ -61,7 +61,7 @@ Update applicable documentation and the verification record. Record platform, Py
 
 ## Pull requests
 
-Use the [pull-request template in the source repository](https://github.com/YiMingchen111/codex-project-storage/blob/main/.github/PULL_REQUEST_TEMPLATE.md). Lead with the user-visible problem and resulting behavior. Keep changes focused and explain any effect on protected boundaries or mutation scope. List the tests you ran, failures or skips, and material limitations. If a change modifies only documentation, say so.
+Use the [pull-request template in the source repository](https://github.com/SoberAming/codex-project-storage/blob/main/.github/PULL_REQUEST_TEMPLATE.md). Lead with the user-visible problem and resulting behavior. Keep changes focused and explain any effect on protected boundaries or mutation scope. List the tests you ran, failures or skips, and material limitations. If a change modifies only documentation, say so.
 
 Do not include raw local reports, absolute personal paths, screenshots containing private information, fixture downloads, `.git` data, `__pycache__`, or credentials. Review the diff and generated archive before proposing publication.
 

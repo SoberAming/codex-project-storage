@@ -18,7 +18,7 @@
 
 ## 自动测试配置
 
-源码包含Windows/macOS、Python3.10/3.13矩阵，以及仓库检查、隔离测试与安装包构建。[实际CI记录](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml)应与发布commit对应。首次公开的[原始运行](https://github.com/YiMingchen111/codex-project-storage/actions/runs/43534331248)保留了Windows两格通过与Mac空ACL分支失败，后者已增加窄修复和15项回归，未跳过迁移检查。新增测试与原始116项分列，不把模拟或跳过描述为原生成功。
+源码包含Windows/macOS、Python3.10/3.13矩阵，以及仓库检查、隔离测试与安装包构建。[实际CI记录](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml)应与发布commit对应。首次公开的[原始运行](https://github.com/SoberAming/codex-project-storage/actions/runs/43534331248)保留了Windows两格通过与Mac空ACL分支失败，后者已增加窄修复和15项回归，未跳过迁移检查。新增测试与原始116项分列，不把模拟或跳过描述为原生成功。
 
 该兼容修复依据Apple原始实现：[ACL查询路径](https://raw.githubusercontent.com/apple-oss-distributions/Libc/main/posix1e/acl_file.c)在对象查询成功后继续读取ACL属性，[ACL属性未设置](https://raw.githubusercontent.com/apple-oss-distributions/Libc/main/gen/filesec.c)也可能返回ENOENT。执行器只在对象前后普通类型和身份/元数据稳定时确认无扩展ACL；实际缺失、漂移或权限/I/O错误仍拒绝。
 

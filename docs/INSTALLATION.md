@@ -37,7 +37,7 @@ shasum -a 256 ./codex-project-storage-1.3.0.zip
 
 ## 方式二：Git检出
 
-本项目源码地址为`https://github.com/YiMingchen111/codex-project-storage`。下面的固定版本检出命令在对应tag实际发布后可用；源码推送到main不等于该tag已存在。目录已存在时先检查，不能对已有安装强制覆盖。
+本项目源码地址为`https://github.com/SoberAming/codex-project-storage`。下面的固定版本检出命令在对应tag实际发布后可用；源码推送到main不等于该tag已存在。目录已存在时先检查，不能对已有安装强制覆盖。
 
 Windows PowerShell用户级示例：
 
@@ -46,14 +46,14 @@ $skillParent = Join-Path $env:USERPROFILE '.agents\skills'
 $skillTarget = Join-Path $skillParent 'codex-project-storage'
 if (Test-Path -LiteralPath $skillTarget) { throw '目标已存在，请先检查或升级现有安装。' }
 New-Item -ItemType Directory -Path $skillParent -Force | Out-Null
-git clone --depth 1 --branch v1.3.0 https://github.com/YiMingchen111/codex-project-storage.git $skillTarget
+git clone --depth 1 --branch v1.3.0 https://github.com/SoberAming/codex-project-storage.git $skillTarget
 ```
 
 macOS用户级示例：
 
 ```sh
 mkdir -p "$HOME/.agents/skills"
-git clone --depth 1 --branch v1.3.0 https://github.com/YiMingchen111/codex-project-storage.git "$HOME/.agents/skills/codex-project-storage"
+git clone --depth 1 --branch v1.3.0 https://github.com/SoberAming/codex-project-storage.git "$HOME/.agents/skills/codex-project-storage"
 ```
 
 标准`git clone`在目标非空时会拒绝。不要接着手工删现有目录绕过拒绝。

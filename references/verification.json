@@ -226,7 +226,7 @@
     "scope_note": "Historical prepublication independent fixture. Current relocation helper changed afterward; not a frozen-current-bundle claim."
   },
   "release_ci": {
-    "workflow_url": "https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml",
+    "workflow_url": "https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml",
     "evidence_policy": "Read actual runs for the exact release revision; a workflow declaration is not a passing result.",
     "matrix": [
       "windows-latest / Python 3.10",
@@ -234,7 +234,7 @@
       "macos-latest / Python 3.10",
       "macos-latest / Python 3.13"
     ],
-    "pre_fix_run_url": "https://github.com/YiMingchen111/codex-project-storage/actions/runs/43534331248",
+    "pre_fix_run_url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43534331248",
     "pre_fix_result": "Both Windows jobs passed. Mac jobs passed cache tests, then rejected ordinary no-ACL files in relocation; failure retained.",
     "fix": "Distinguish absent extended ACL from a missing or changed ordinary object; refuse actual errors. No skipped relocation suite or weakened preserve policy.",
     "acl_regression_suite": "tests/test_macos_acl.py",

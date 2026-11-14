@@ -21,4 +21,4 @@ List the commands or suites run, platform and tool versions, results, and any fa
 - [ ] No secrets, sessions, indexes, databases, customer files, raw personal reports, or private absolute paths are included.
 - [ ] I have permission to share the contribution and preserved any required third-party notices.
 
-Security-sensitive findings belong in the private route in the [security policy](https://github.com/YiMingchen111/codex-project-storage/security/policy), not in a public PR description.
+Security-sensitive findings belong in the private route in the [security policy](https://github.com/SoberAming/codex-project-storage/security/policy), not in a public PR description.

@@ -2,7 +2,7 @@
 
 [English](README.en.md) · [安装](docs/INSTALLATION.md) · [使用示例](docs/QUICKSTART.md) · [安全边界](docs/SAFETY.md)
 
-[![CI](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml)
+[![CI](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml)
 
 项目越做越大，先弄清楚空间用在哪里，再决定删除或迁移。
 

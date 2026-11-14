@@ -4,12 +4,12 @@
 
 | 项目 | 已确认的发布配置 |
 | --- | --- |
-| GitHub账号 | `YiMingchen111` |
+| GitHub账号 | `SoberAming` |
 | 仓库名 | `codex-project-storage` |
-| 仓库地址 | `https://github.com/YiMingchen111/codex-project-storage` |
+| 仓库地址 | `https://github.com/SoberAming/codex-project-storage` |
 | 版本tag | `v1.3.0` |
 | 中文名称 | 项目磁盘管家 |
-| 许可证 | MIT；署名为`Copyright (c) 2026 YiMingchen111` |
+| 许可证 | MIT；署名为`Copyright (c) 2026 SoberAming` |
 | 首次发布状态建议 | 先发布带明确限制的Pre-release，Mac尚未真机验收 |
 
 ## 一、发布身份与许可证
@@ -21,7 +21,7 @@
 
 ## 二、创建空仓库
 
-在GitHub右上角选择`New repository`，Owner选`YiMingchen111`，名称填`codex-project-storage`。可先Private审阅，准备公开时再切Public；选择Public并上传即对外可见。
+在GitHub右上角选择`New repository`，Owner选`SoberAming`，名称填`codex-project-storage`。可先Private审阅，准备公开时再切Public；选择Public并上传即对外可见。
 
 复制以下英文简介到Description：
 
@@ -55,7 +55,7 @@ git status --short
 git add .
 git diff --cached --stat
 git commit -m "Prepare v1.3.0 open-source release"
-git remote add origin https://github.com/YiMingchen111/codex-project-storage.git
+git remote add origin https://github.com/SoberAming/codex-project-storage.git
 git push -u origin main
 ```
 

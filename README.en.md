@@ -1,6 +1,6 @@
 # Codex Project Storage
 
-[![CI](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml)
+[![CI](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml)
 
 [中文](README.md) · English
 
