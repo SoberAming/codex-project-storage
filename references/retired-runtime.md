@@ -172,7 +172,8 @@ macOS advisory locks do not freeze noncooperating writers. Visibility of every
 other account is not guaranteed. `--confirm-idle` is therefore mandatory on both
 systems and means project writers will remain stopped through the operation.
 Two stable snapshots are additional evidence, not an operating-system freeze.
-Mac device validation remains separate from Windows and mocked unit tests.
+Personal Mac and external-drive validation remain separate from hosted macOS
+fixtures, Windows execution and mocked unit tests.
 
 ## Commands
 
@@ -231,6 +232,31 @@ the observed volume-free delta. Other processes, allocation, snapshots and open
 handles can affect actual free space. A project occupying 2.83 GiB cannot yield
 dozens of GiB; a positively qualified 2.18 GiB historical test workload is a
 material candidate even when the ordinary bytecode cleaner yields only KiB.
+
+## Verification scope
+
+The [qualified hosted run](https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569)
+binds revision `b75a54ccd85f8cb55561bc84c6db1eba89877f15`. Windows X64 and
+macOS ARM64 (`macos26`) each ran Python 3.10.11 and 3.13.17. All four jobs
+completed the real isolated plan/apply CLI and the native OS activity queries
+against a new fictional PG layout: six files and 29,461,707 logical bytes.
+No PostgreSQL server was started or connected, and no project code was executed.
+The retained producer, inputs and sibling completion log remained available.
+
+The 40-case retirement suite passed all 40 cases on each Windows job. Each Mac
+job passed 37 and skipped only the three Windows-specific PowerShell/CIM/process
+lifetime tests. The overall ten-suite counts and exact skip names are recorded
+in [compatibility](../docs/COMPATIBILITY.md). A skipped Windows-specific check
+does not establish its equivalent on macOS; advisory locking and visibility
+limitations above remain in force.
+
+These results qualify the tested hosted fixtures, not personal Macs, external
+drives, complete APFS clone/snapshot or business workflows, real PostgreSQL
+server operation, or retirement of arbitrary business/state databases. Each
+release tag still requires its exact revision to pass the gate; the linked run
+does not qualify a later documentation commit. Initial 1.4 CI failure evidence
+is [retained](https://github.com/SoberAming/codex-project-storage/actions/runs/43556855654);
+the npm builtin-config compatibility fix did not relax retirement rules.
 
 ## Retention migration is separate
 

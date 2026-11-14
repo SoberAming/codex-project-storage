@@ -218,12 +218,33 @@ python tests/test_npm_cache_guard.py --work-root SAFE_TEST_ROOT \
   --integration-node TRUSTED_NATIVE_NODE --integration-npm-cli TRUSTED_NPM_CLI
 ```
 
-Windows/exFAT native integration with Node 22.14.0/npm 10.9.2 was exercised during
-development. Other allowed Node majors are admission ranges, not claims of
-native integration on each version. macOS runtime behavior must be verified separately; portable unit
-tests and source review do not establish native Mac execution or mandatory
-exclusion of writers. Other npm versions remain unsupported rather than silently
-using the nearest reviewed contract.
+The [qualified hosted run](https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569)
+binds revision `b75a54ccd85f8cb55561bc84c6db1eba89877f15`. Its Windows X64 and
+macOS ARM64 (`macos26`) jobs each ran Python 3.10.11 and 3.13.17 with native
+Node 22.14.0/npm 10.9.2. The 64-case npm suite passed all 64 cases on each
+Windows job; each Mac job passed 63 and skipped only the Windows mandatory
+sharing-denial test. Native integration was explicitly enabled and completed
+on all four jobs, removing two new cache files: 878 logical bytes on Windows
+and 894 on macOS. The original package, producer and original log survived;
+no real user/shared cache was selected. Logical bytes are separate from observed
+free-space changes, which can be negative because other disk activity continues.
+
+The [initial failed run](https://github.com/SoberAming/codex-project-storage/actions/runs/43556855654)
+is retained. It exposed an installed-layout difference: official Node archives
+can omit the builtin `npm/npmrc`. Only this missing leaf under a stable ordinary
+package directory is now recorded as absent; a present file remains fully
+hashed. Missing parents, links, permission/I/O errors, appearance and identity
+drift still refuse execution. All other bound implementation files remain
+mandatory, and the optional state is checked before/after probing and again
+before native clean. No installed configuration is created or repaired.
+
+Earlier Windows/exFAT integration remains historical evidence. Other allowed
+Node majors are admission ranges, not individually tested native versions.
+Hosted results do not qualify personal Macs, external drives, complete APFS
+clone/snapshot or business workflows, or mandatory exclusion of writers.
+Each release tag still requires a passing gate for its exact revision; the run
+above does not qualify a later documentation commit. Other npm versions remain
+unsupported rather than silently using the nearest reviewed contract.
 
 ## Primary references
 

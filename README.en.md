@@ -81,11 +81,22 @@ No tool can infer every private format, prove every external reference, or elimi
 
 ## Validation status
 
-The local 1.4 candidate completed **246 checks on Windows / Python 3.13.13: 237 passed and 9 were explicitly skipped** for platform or fixture-filesystem link limitations. A separate independent review passed 32 targeted groups. New 1.4 code has not run a new hosted Mac matrix; this local result does not inherit the older public CI result.
+The current 1.4 runtime source revision, `b75a54ccd85f8cb55561bc84c6db1eba89877f15`, passed the [four-job GitHub Actions run (43557649569)](https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569); its evidence summary reports `qualified=true`. All four jobs used Node 22.14.0 / npm 10.9.2:
 
-The historical v1.3.0 Windows regression run executed **116 tests: 114 passed and 2 were explicitly skipped** because the fixture filesystem could not create the required links. Independent checks included a new isolated pip-cache purge and a frozen-version fictional-project cleanup with retained-file verification.
+| Hosted environment | Python | Tests | Passed | Platform-specific skips |
+| --- | --- | --- | --- | --- |
+| Windows X64 | 3.10.11 | 258 | 256 | 2 |
+| Windows X64 | 3.13.17 | 258 | 256 | 2 |
+| macOS ARM64, `macos26` | 3.10.11 | 258 | 254 | 4 |
+| macOS ARM64, `macos26` | 3.13.17 | 258 | 254 | 4 |
 
-The public version runs isolated fixtures in GitHub-hosted Windows/macOS and Python 3.10/3.13 environments. Check the CI link above for the actual result and revision. The first Mac run exposed an empty-ACL compatibility error; that failure is retained, and a narrow fix and regression tests were added. **Personal Mac devices, external drives, and actual business workflows have not been accepted.** Hosted fixture results do not establish all-filesystem support. Exact component hashes, historical evidence, and limitations are in [the verification record](references/verification.json). Release-tool and ACL tests are separate from the original 116-test record.
+Windows skips two native Apple ACL tests. macOS skips three Windows PowerShell / CIM / process checks and one Windows mandatory sharing-denial test. Each job also completed real CLI executions for native npm 10.9.2 cleanup in an isolated cache and retirement of a synthetic PostgreSQL test-directory layout in a fictional project. No real user cache was touched, no database was connected, and no project code was executed.
+
+The failed [initial 1.4 matrix run (43556855654)](https://github.com/SoberAming/codex-project-storage/actions/runs/43556855654) remains available. A narrow compatibility fix allows verification to continue when npm's builtin configuration file, `npm/npmrc`, is explicitly absent in the installation layout. It does not broaden the exclusive-cache contract or the CLI execution scope.
+
+These results qualify only the named revision in the listed hosted environments and isolated fixtures. **Personal Mac devices, external drives, all APFS layouts, and actual business workflows have not been accepted; neither has a real PostgreSQL server.** Every release tag must still bind its exact revision and pass the release gate. A later final documentation commit or any other new revision needs its own four-job run and cannot inherit this CI result. Local installation, GitHub publication, remote CI, and actual business cleanup remain separate evidence states.
+
+Historical evidence: an earlier local 1.4 candidate completed 246 checks on Windows / Python 3.13.13, with 237 passed and 9 skipped for platform or fixture-filesystem link limitations, plus 32 independent targeted review groups. Those are not the current matrix counts. The historical v1.3 core run executed 116 isolated-fixture tests, with 114 passed and 2 skipped because the fixture filesystem could not create the required links; separate checks covered an isolated pip-cache purge and a frozen-version fictional-project cleanup. See the [upgrade notes](docs/RELEASE_NOTES_v1.4.0.md) and [verification record](references/verification.json).
 
 ## Documentation and contributions
 
