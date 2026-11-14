@@ -66,6 +66,7 @@ SUPPORTED = {"10.9.2": "c7aced5e5ab97d492529195f59db75e035a79f161a7939ed330a0eef
 SOURCES = [
     "https://docs.npmjs.com/cli/v10/commands/npm-cache",
     "https://raw.githubusercontent.com/npm/cli/v10.9.2/lib/commands/cache.js",
+    "https://raw.githubusercontent.com/npm/cli/v10.9.2/workspaces/config/lib/index.js",
     "https://raw.githubusercontent.com/npm/cacache/v19.0.1/lib/content/path.js",
     "https://raw.githubusercontent.com/npm/cacache/v19.0.1/lib/entry-index.js",
 ]
@@ -208,6 +209,41 @@ def tool_path(value, project, script=False):
     return path
 
 
+def builtin_npmrc_record(package):
+    """Bind the one legitimately optional installed implementation file.
+
+    Official Node archives may omit npm/npmrc. Only a missing leaf underneath
+    the same ordinary installed package directory means absence. A link,
+    permission/I/O error, vanished parent, or inspection drift is not absence.
+    This never creates or repairs any npm configuration.
+    """
+    g.ancestors(package)
+    parent_id = g.root_identity(package)
+    path = package / "npmrc"
+    try:
+        g.plain(path, False)
+    except FileNotFoundError:
+        g.ancestors(package)
+        if g.root_identity(package) != parent_id:
+            fail("Installed npm directory changed while checking optional builtin config")
+        try:
+            g.plain(path, False)
+        except FileNotFoundError:
+            if g.root_identity(package) != parent_id:
+                fail("Installed npm directory changed while binding builtin config absence")
+            return {"state": "absent", "parent_identity": parent_id}
+        fail("Builtin npmrc appeared during absence inspection")
+    # Do not catch errors from the content read: disappearance after a positive
+    # lstat must not be silently reclassified as an optional missing file.
+    return {"state": "present", "record": n.file_record(path, 2 * 1024 * 1024)}
+
+
+def recheck_builtin_npmrc(tool):
+    package = Path(tool["npm_cli"]).parent.parent
+    if builtin_npmrc_record(package) != tool["implementation"]["npmrc"]:
+        fail("Installed builtin npmrc presence/content/identity changed; native clean refused")
+
+
 def probe_tool(project, node_value, cli_value):
     node, cli = tool_path(node_value, project), tool_path(cli_value, project, True)
     package = cli.parent.parent
@@ -223,8 +259,9 @@ def probe_tool(project, node_value, cli_value):
     implementation = {}
     for rel in ("bin/npm-cli.js", "lib/cli.js", "lib/cli/entry.js", "lib/npm.js",
                 "lib/commands/cache.js", "node_modules/@npmcli/config/lib/index.js",
-                "node_modules/@npmcli/config/lib/definitions/definitions.js", "npmrc"):
+                "node_modules/@npmcli/config/lib/definitions/definitions.js"):
         implementation[rel] = n.file_record(package.joinpath(*rel.split("/")), 2 * 1024 * 1024)
+    implementation["npmrc"] = builtin_npmrc_record(package)
     node_record = n.file_record(node, 128 * 1024 * 1024)
     result = run_native([str(node), "--version"], node.parent, node.parent)
     if (result["returncode"] != 0 or result["timed_out"] or result["output_truncated"]
@@ -232,6 +269,8 @@ def probe_tool(project, node_value, cli_value):
         fail("Native Node version probe failed or is outside the admitted major versions")
     if node_record != n.file_record(node, 128 * 1024 * 1024):
         fail("Node executable changed during probing")
+    if builtin_npmrc_record(package) != implementation["npmrc"]:
+        fail("Installed builtin npmrc changed during tool probing")
     return {"node": str(node), "node_record": node_record, "node_version": result["output"].strip(),
             "npm_cli": str(cli), "npm_version": version, "package_record": package_record,
             "implementation": implementation,
@@ -651,6 +690,7 @@ def apply(args):
             receipt["status"] = "native_evidence_guard_pending"
             write_report(output, receipt, False, receipt_id)
             with guarded_provenance(project, final_provenance), n.anchored_cache(stage):
+                recheck_builtin_npmrc(current["native_tool"])
                 receipt["status"] = "native_started_result_unknown"
                 write_report(output, receipt, False, receipt_id)
                 native = run_native(npm_command(current["native_tool"], stage), stage, stage)

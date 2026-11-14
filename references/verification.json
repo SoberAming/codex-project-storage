@@ -20,7 +20,7 @@
     },
     "npm_cache_guard.py": {
       "version": "1.4.0",
-      "sha256": "a05493bf042b2041ec5d8374b5dfdc80bfbdf2ec6b0877b760a4d84c4c697282"
+      "sha256": "3fa70c6ed5517975678de38a6b41272dd81047b76ecf23e79bcc8c36a017b648"
     },
     "project_profiler.py": {
       "version": "1.4.0",
@@ -283,121 +283,18 @@
     }
   },
   "upgrade_1_4": {
-    "status": "local_candidate_validated",
-    "platform": "Windows",
-    "python": "3.13.13",
-    "fixture_filesystem": "exFAT",
-    "suites": [
+    "status": "hosted_qualification_pending",
+    "historical_local_validation": "See historical_initial_v1_4_local_candidate; initial package-supplied npmrc assumption corrected afterward",
+    "native_integration_explicitly_enabled_on_all_jobs": true,
+    "failure_history": [
       {
-        "suite": "test_storage_guard",
-        "tests": 25,
-        "skipped": 2,
-        "passed": 23
-      },
-      {
-        "suite": "test_storage_modes",
-        "tests": 22,
-        "skipped": 0,
-        "passed": 22
-      },
-      {
-        "suite": "test_project_profiler",
-        "tests": 21,
-        "skipped": 0,
-        "passed": 21
-      },
-      {
-        "suite": "test_generated_artifacts",
-        "tests": 17,
-        "skipped": 0,
-        "passed": 17
-      },
-      {
-        "suite": "test_native_cache",
-        "tests": 25,
-        "skipped": 0,
-        "passed": 25
-      },
-      {
-        "suite": "test_state_boundaries",
-        "tests": 10,
-        "skipped": 0,
-        "passed": 10
-      },
-      {
-        "suite": "test_release_tools",
-        "tests": 19,
-        "skipped": 0,
-        "passed": 19
-      },
-      {
-        "suite": "test_macos_acl",
-        "tests": 15,
-        "skipped": 2,
-        "passed": 13
-      },
-      {
-        "suite": "test_npm_cache_guard",
-        "tests": 52,
-        "skipped": 2,
-        "passed": 50
-      },
-      {
-        "suite": "test_retired_runtime_guard",
-        "tests": 40,
-        "skipped": 3,
-        "passed": 37
+        "run_id": 43556855654,
+        "sha": "ad0d00151b51d5d679608e74710c7beed027b5fc",
+        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43556855654",
+        "result": "all four jobs rejected official Node distributions without optional builtin npmrc; all other fixture checks passed",
+        "fix": "Bind the one optional builtin npmrc as verified present or verified absent; all other implementation files remain required"
       }
-    ],
-    "tests_run": 246,
-    "skipped": 9,
-    "remaining_must_fix": [],
-    "independent_forward_use": {
-      "scope": "analysis only on an existing project snapshot with bounded producer/log review",
-      "user_project_files_deleted": 0,
-      "user_project_files_migrated": 0,
-      "actual_user_project_released_bytes": 0,
-      "occupancy_not_promised_reclaim": true
-    },
-    "native_npm_integration": {
-      "node": "22.14.0",
-      "npm": "10.9.2",
-      "new_local_offline_package_and_exclusive_cache": true,
-      "removed_files": 2,
-      "removed_logical_bytes": 764,
-      "retained_package_producer_and_original_debug_log": true,
-      "real_user_or_shared_cache_modified": false
-    },
-    "retired_runtime_cli_integration": {
-      "native_postgresql_started": false,
-      "new_fictional_pg_layout_only": true,
-      "actual_guarded_file_deletion": true,
-      "removed_files": 6,
-      "removed_logical_bytes": 29461707,
-      "retained_producer_inputs_logs_results_and_business_fixture": true,
-      "native_activity_query": true
-    },
-    "independent_review_scope": [
-      "source-scoped non-replayable claims and unknown member refusal",
-      "no credential/customer-document body reads during reference discovery",
-      "OS-derived trusted activity executable and clean child environment",
-      "fixed native npm and content-addressed cache qualification",
-      "evidence identity/content binding and guarded handles throughout release",
-      "linear scan count and durable pending batches for large small-file sets"
-    ],
-    "independent_current_target_groups_passed": 32,
-    "independent_review_is_separate_from_unit_test_counts": true,
-    "limitations": [
-      "New 1.4 code has not run on actual macOS, APFS or a new hosted CI matrix.",
-      "POSIX locks are advisory and do not exclude noncooperating writers.",
-      "Only npm 10.9.2 command implementation is supported; other Node majors are admission rules, not individually tested versions.",
-      "PG retirement is only for positively reviewed disposable synthetic data, not business/state databases or retained recovery stores.",
-      "Code citations and hashes bind real evidence; they do not automatically prove arbitrary program semantics or historical ownership.",
-      "Logical deletion bytes and volume free-space changes are different measurements."
-    ],
-    "published_to_github": false,
-    "new_hosted_ci_run": false,
-    "previous_runs_and_failed_qa_preserved": true
+    ]
   },
   "historical_v1_3_scope_and_limits": {
     "bundle_version": "1.3.0",
@@ -439,5 +336,158 @@
       "External targets can disconnect after acceptance; future reachability is not guaranteed."
     ],
     "scope_note": "Exact prior scope and limits retained as historical v1.3 declarations; they do not describe the new v1.4 npm or synthetic-PG execution modes."
+  },
+  "historical_initial_v1_4_local_candidate": {
+    "components": {
+      "generated_artifact_guard.py": {
+        "version": "1.3.0",
+        "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+      },
+      "native_cache_guard.py": {
+        "version": "1.3.0",
+        "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+      },
+      "npm_cache_guard.py": {
+        "version": "1.4.0",
+        "sha256": "a05493bf042b2041ec5d8374b5dfdc80bfbdf2ec6b0877b760a4d84c4c697282"
+      },
+      "project_profiler.py": {
+        "version": "1.4.0",
+        "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
+      },
+      "relocation_guard.py": {
+        "version": "1.3.0",
+        "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+      },
+      "retired_runtime_guard.py": {
+        "version": "1.4.0",
+        "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
+      },
+      "storage_guard.py": {
+        "version": "1.3.0",
+        "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+      },
+      "volume_advisor.py": {
+        "version": "2.0.0",
+        "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+      }
+    },
+    "validation": {
+      "status": "local_candidate_validated",
+      "platform": "Windows",
+      "python": "3.13.13",
+      "fixture_filesystem": "exFAT",
+      "suites": [
+        {
+          "suite": "test_storage_guard",
+          "tests": 25,
+          "skipped": 2,
+          "passed": 23
+        },
+        {
+          "suite": "test_storage_modes",
+          "tests": 22,
+          "skipped": 0,
+          "passed": 22
+        },
+        {
+          "suite": "test_project_profiler",
+          "tests": 21,
+          "skipped": 0,
+          "passed": 21
+        },
+        {
+          "suite": "test_generated_artifacts",
+          "tests": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        {
+          "suite": "test_native_cache",
+          "tests": 25,
+          "skipped": 0,
+          "passed": 25
+        },
+        {
+          "suite": "test_state_boundaries",
+          "tests": 10,
+          "skipped": 0,
+          "passed": 10
+        },
+        {
+          "suite": "test_release_tools",
+          "tests": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        {
+          "suite": "test_macos_acl",
+          "tests": 15,
+          "skipped": 2,
+          "passed": 13
+        },
+        {
+          "suite": "test_npm_cache_guard",
+          "tests": 52,
+          "skipped": 2,
+          "passed": 50
+        },
+        {
+          "suite": "test_retired_runtime_guard",
+          "tests": 40,
+          "skipped": 3,
+          "passed": 37
+        }
+      ],
+      "tests_run": 246,
+      "skipped": 9,
+      "remaining_must_fix": [],
+      "independent_forward_use": {
+        "scope": "analysis only on an existing project snapshot with bounded producer/log review",
+        "user_project_files_deleted": 0,
+        "user_project_files_migrated": 0,
+        "actual_user_project_released_bytes": 0,
+        "occupancy_not_promised_reclaim": true
+      },
+      "native_npm_integration": {
+        "node": "22.14.0",
+        "npm": "10.9.2",
+        "new_local_offline_package_and_exclusive_cache": true,
+        "removed_files": 2,
+        "removed_logical_bytes": 764,
+        "retained_package_producer_and_original_debug_log": true,
+        "real_user_or_shared_cache_modified": false
+      },
+      "retired_runtime_cli_integration": {
+        "native_postgresql_started": false,
+        "new_fictional_pg_layout_only": true,
+        "actual_guarded_file_deletion": true,
+        "removed_files": 6,
+        "removed_logical_bytes": 29461707,
+        "retained_producer_inputs_logs_results_and_business_fixture": true,
+        "native_activity_query": true
+      },
+      "independent_review_scope": [
+        "source-scoped non-replayable claims and unknown member refusal",
+        "no credential/customer-document body reads during reference discovery",
+        "OS-derived trusted activity executable and clean child environment",
+        "fixed native npm and content-addressed cache qualification",
+        "evidence identity/content binding and guarded handles throughout release",
+        "linear scan count and durable pending batches for large small-file sets"
+      ],
+      "independent_current_target_groups_passed": 32,
+      "independent_review_is_separate_from_unit_test_counts": true,
+      "limitations": [
+        "New 1.4 code has not run on actual macOS, APFS or a new hosted CI matrix.",
+        "POSIX locks are advisory and do not exclude noncooperating writers.",
+        "Only npm 10.9.2 command implementation is supported; other Node majors are admission rules, not individually tested versions.",
+        "PG retirement is only for positively reviewed disposable synthetic data, not business/state databases or retained recovery stores.",
+        "Code citations and hashes bind real evidence; they do not automatically prove arbitrary program semantics or historical ownership.",
+        "Logical deletion bytes and volume free-space changes are different measurements."
+      ],
+      "published_to_github": false,
+      "new_hosted_ci_run": false,
+      "previous_runs_and_failed_qa_preserved": true
+    }
   }
 }

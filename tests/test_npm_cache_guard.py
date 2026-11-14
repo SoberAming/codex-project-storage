@@ -2,6 +2,7 @@
 import argparse
 import contextlib
 import datetime as dt
+import errno
 import hashlib
 import importlib.util
 import io
@@ -23,6 +24,7 @@ SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "npm_cache_guard.py"
 spec = importlib.util.spec_from_file_location("npm_cache_guard", SCRIPT)
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
+REAL_PROBE_TOOL = m.probe_tool
 
 
 def dump(path, data):
@@ -61,6 +63,8 @@ class NpmCacheTests(unittest.TestCase):
         self.index.write_bytes(b"\n" + hashlib.sha1(payload).hexdigest().encode() + b"\t" + payload)
         self.node = self.base / "trusted" / "node.exe"
         self.cli = self.base / "trusted" / "npm" / "bin" / "npm-cli.js"
+        self.cli.parent.mkdir(parents=True)
+        self.cli.write_text("// Inert trusted-tool fixture, never launched\n", encoding="utf-8")
         self.assessment = self.base / "review.json"
         self.review = {
             "schema": m.ASSESSMENT, "project": str(self.project), "cache": ".runtime/npm-cache",
@@ -76,7 +80,8 @@ class NpmCacheTests(unittest.TestCase):
                 "activity_checked_at": dt.datetime.now(dt.timezone.utc).isoformat(),
                 "activity_findings": "Only this unittest owns the new temporary fixture; no npm producer is running and no external process was given its random path."}}
         dump(self.assessment, self.review)
-        self.tool = {"node": str(self.node), "npm_cli": str(self.cli), "npm_version": "10.9.2", "test_tool": True}
+        self.tool = {"node": str(self.node), "npm_cli": str(self.cli), "npm_version": "10.9.2", "test_tool": True,
+                     "implementation": {"npmrc": m.builtin_npmrc_record(self.cli.parent.parent)}}
         self.fail_native = False
         self.recreate_source = False
         self.calls = []
@@ -176,6 +181,138 @@ class NpmCacheTests(unittest.TestCase):
     def test_unsupported_native_contract_is_blocked(self):
         with mock.patch.object(m, "probe_tool", side_effect=m.g.GuardError("unsupported version")):
             self.assert_blocked()
+
+    def test_builtin_npmrc_may_be_absent_without_creating_it(self):
+        package = self.cli.parent.parent
+        record = m.builtin_npmrc_record(package)
+        self.assertEqual(record, {"state": "absent", "parent_identity": m.g.root_identity(package)})
+        self.assertFalse((package / "npmrc").exists())
+
+    def test_present_builtin_npmrc_is_hashed(self):
+        path = self.cli.parent.parent / "npmrc"
+        path.write_text("prefix=../\n", encoding="utf-8")
+        record = m.builtin_npmrc_record(path.parent)
+        self.assertEqual(record["state"], "present")
+        self.assertEqual(record["record"]["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
+
+    def test_builtin_npmrc_appearance_invalidates_absence_binding(self):
+        package = self.cli.parent.parent
+        m.recheck_builtin_npmrc(self.tool)
+        (package / "npmrc").write_text("prefix=../\n", encoding="utf-8")
+        with self.assertRaises(m.g.GuardError):
+            m.recheck_builtin_npmrc(self.tool)
+
+    def test_builtin_npmrc_replacement_invalidates_positive_binding(self):
+        package = self.cli.parent.parent
+        path = package / "npmrc"
+        path.write_text("prefix=../\n", encoding="utf-8")
+        self.tool["implementation"]["npmrc"] = m.builtin_npmrc_record(package)
+        replacement = self.base / "replacement-npmrc"
+        replacement.write_text("prefix=/different-installed-prefix\n", encoding="utf-8")
+        os.replace(replacement, path)
+        with self.assertRaises(m.g.GuardError):
+            m.recheck_builtin_npmrc(self.tool)
+
+    def test_builtin_npmrc_permission_error_is_not_absence(self):
+        path = self.cli.parent.parent / "npmrc"
+        original = m.g.plain
+        def plain(value, directory=None):
+            if Path(value) == path:
+                raise PermissionError(errno.EACCES, "Synthetic unreadable installed config", str(path))
+            return original(value, directory)
+        with mock.patch.object(m.g, "plain", side_effect=plain), mock.patch.object(m.n, "file_record") as reader:
+            with self.assertRaises(PermissionError):
+                m.builtin_npmrc_record(path.parent)
+            self.assertEqual(reader.call_count, 0)
+
+    def test_builtin_npmrc_disappearing_after_positive_lstat_is_not_absence(self):
+        path = self.cli.parent.parent / "npmrc"
+        path.write_text("prefix=../\n", encoding="utf-8")
+        with mock.patch.object(m.n, "file_record", side_effect=FileNotFoundError(errno.ENOENT, "Synthetic mid-read disappearance", str(path))):
+            with self.assertRaises(FileNotFoundError):
+                m.builtin_npmrc_record(path.parent)
+
+    def test_builtin_npmrc_io_error_is_not_absence(self):
+        path = self.cli.parent.parent / "npmrc"
+        original = m.g.plain
+        def plain(value, directory=None):
+            if Path(value) == path:
+                raise OSError(errno.EIO, "Synthetic installed config I/O failure", str(path))
+            return original(value, directory)
+        with mock.patch.object(m.g, "plain", side_effect=plain):
+            with self.assertRaises(OSError):
+                m.builtin_npmrc_record(path.parent)
+
+    def test_builtin_npmrc_link_or_reparse_is_not_absence(self):
+        path = self.cli.parent.parent / "npmrc"
+        path.write_text("prefix=../\n", encoding="utf-8")
+        original = m.os.lstat
+        def lstat(value, *args, **kwargs):
+            info = original(value, *args, **kwargs)
+            if Path(value) == path:
+                values = {key: getattr(info, key) for key in dir(info) if key.startswith("st_")}
+                if os.name == "nt":
+                    values["st_file_attributes"] = getattr(info, "st_file_attributes", 0) | 0x400
+                else:
+                    values["st_mode"] = (info.st_mode & ~0o170000) | 0o120000
+                return types.SimpleNamespace(**values)
+            return info
+        with mock.patch.object(m.os, "lstat", side_effect=lstat), mock.patch.object(m.n, "file_record") as reader:
+            with self.assertRaises(m.g.GuardError):
+                m.builtin_npmrc_record(path.parent)
+            self.assertEqual(reader.call_count, 0)
+
+    def test_builtin_npmrc_missing_parent_is_not_optional_absence(self):
+        with self.assertRaises(FileNotFoundError):
+            m.builtin_npmrc_record(self.base / "missing-installation")
+
+    def test_builtin_npmrc_appearing_during_absence_inspection_is_refused(self):
+        path = self.cli.parent.parent / "npmrc"
+        original = m.g.plain
+        calls = []
+        def plain(value, directory=None):
+            if Path(value) == path and not calls:
+                calls.append(1)
+                path.write_text("prefix=../\n", encoding="utf-8")
+                raise FileNotFoundError(errno.ENOENT, "Synthetic first absent observation", str(path))
+            return original(value, directory)
+        with mock.patch.object(m.g, "plain", side_effect=plain):
+            with self.assertRaises(m.g.GuardError):
+                m.builtin_npmrc_record(path.parent)
+        self.assertTrue(path.exists(), "A newly appeared installation file must not be removed")
+
+    def test_required_implementation_files_are_still_mandatory(self):
+        fake_source = b"// inert upstream command fixture\n"
+        def reading(path, limit=m.MAX_EVIDENCE):
+            if Path(path).name == "package.json":
+                return b'{"name":"npm","version":"10.9.2"}', {"fixture": True}
+            return fake_source, {"fixture": True}
+        def recording(path, *args, **kwargs):
+            if Path(path).as_posix().endswith("lib/npm.js"):
+                raise FileNotFoundError(errno.ENOENT, "Required implementation missing", str(path))
+            return {"fixture": True}
+        with mock.patch.object(m, "tool_path", side_effect=lambda value, project, script=False: Path(value)), \
+                mock.patch.object(m, "read_bytes", side_effect=reading), \
+                mock.patch.object(m, "SUPPORTED", {"10.9.2": hashlib.sha256(fake_source).hexdigest()}), \
+                mock.patch.object(m.n, "file_record", side_effect=recording):
+            with self.assertRaises(FileNotFoundError):
+                REAL_PROBE_TOOL(self.project, self.node, self.cli)
+
+    def test_builtin_npmrc_appearing_after_detach_stops_native(self):
+        _, args = self.saved()
+        calls = []
+        def probing(*_):
+            calls.append(1)
+            if len(calls) == 2:
+                (self.cli.parent.parent / "npmrc").write_text("prefix=../\n", encoding="utf-8")
+            return self.tool
+        with mock.patch.object(m, "probe_tool", side_effect=probing):
+            with self.assertRaises(m.g.GuardError):
+                self.apply(args)
+        self.assertFalse(self.calls)
+        receipt = json.loads(Path(args.receipt).read_text())
+        self.assertTrue(Path(receipt["detached_source"]).exists())
+        self.assertEqual(receipt["status"], "stopped_requires_review_no_retry")
 
     def test_nonexistent_producer_excerpt_is_rejected(self):
         self.review["producer"]["excerpts"] = ["npm install --cache unknown"]

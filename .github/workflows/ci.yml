@@ -71,6 +71,7 @@ jobs:
           New-Item -ItemType Directory -Path $testRoot | Out-Null
           $suites = @('test_storage_guard', 'test_storage_modes', 'test_project_profiler', 'test_generated_artifacts', 'test_native_cache', 'test_state_boundaries', 'test_release_tools', 'test_macos_acl', 'test_retired_runtime_guard', 'test_npm_cache_guard')
           foreach ($suite in $suites) {
+            Write-Output ('STORAGE_SUITE=' + $suite)
             $suiteRoot = Join-Path $testRoot $suite
             New-Item -ItemType Directory -Path $suiteRoot | Out-Null
             if ($suite -eq 'test_npm_cache_guard') {

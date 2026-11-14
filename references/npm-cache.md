@@ -12,6 +12,16 @@ blocked result. Do not change a version string or use another command to bypass
 that result. The selected installed Node/npm must be trusted by the operator;
 this tool binds core implementation files and is not software attestation.
 
+Official Node distribution archives may legitimately omit the installed
+`npm/npmrc` builtin configuration; an MSI installation may contain it. Only this
+one implementation file is optional. The plan records either its exact ordinary
+file identity/content or verified absence under the unchanged ordinary npm
+installation directory. Absence is checked twice, again after the Node probe,
+and immediately before native cache cleaning. A file that appears later, a
+replacement, links/reparse points, permission/I/O errors, missing parent or
+inspection drift refuses execution. The adapter never creates or repairs an
+installed `npmrc`. All other listed implementation files remain mandatory.
+
 ## What is eligible
 
 - An explicitly selected npm cache **inside the selected independent project**.
@@ -223,6 +233,9 @@ using the nearest reviewed contract.
 - [Reviewed npm 10.9.2 cache implementation](https://raw.githubusercontent.com/npm/cli/v10.9.2/lib/commands/cache.js)
   scopes `clean` to `join(this.npm.cache, '_cacache')` and removes it through the
   native filesystem API. Its normalized command-source SHA256 is checked.
+- [npm 10.9.2 configuration loader](https://raw.githubusercontent.com/npm/cli/v10.9.2/workspaces/config/lib/index.js)
+  loads the builtin `npmPath/npmrc` through its file loader; a missing builtin
+  configuration is a legitimate default rather than a required installed file.
 - [cacache content paths](https://raw.githubusercontent.com/npm/cacache/v19.0.1/lib/content/path.js)
   and [index implementation](https://raw.githubusercontent.com/npm/cacache/v19.0.1/lib/entry-index.js)
   define the reviewed content-address and checksummed key-bucket layout.

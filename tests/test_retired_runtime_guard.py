@@ -503,6 +503,11 @@ class RetirementTests(unittest.TestCase):
         (RUN / "actual-cli-reclaim.json").write_text(json.dumps({"fixture": str(self.area), "plan": str(self.plan),
             "receipt": str(self.receipt), "logical_deleted_bytes": result["deleted_logical_bytes"],
             "volume_free_delta_bytes": result["source_free_delta_bytes"], "platform": sys.platform}, indent=2), encoding="utf-8")
+        print("\nRUNTIME_INTEGRATION=" + json.dumps({
+            "platform": sys.platform, "status": result["status"], "deleted_files": result["deleted_files"],
+            "logical_deleted_bytes": result["deleted_logical_bytes"],
+            "volume_free_delta_bytes": result["source_free_delta_bytes"],
+            "database_connected": result["database_connected"], "project_code_executed": result["project_code_executed"]}))
 
 
 if __name__ == "__main__":
