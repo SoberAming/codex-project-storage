@@ -976,6 +976,16 @@
       "POSIX locks remain advisory; a noncooperating writer cannot be ruled out universally.",
       "Skipped tests are platform-specific checks, not successful native behavior on that platform.",
       "Logical removed bytes and source-volume free-space deltas differ; concurrent writes and filesystem allocation can alter the delta."
+    ],
+    "final_revision_failed_checks": [
+      {
+        "run_id": 43558427122,
+        "sha": "8432430a697a6321cd6c15d984df28eb9ff3d334",
+        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43558427122",
+        "scope": "release-tool minimal fixture, not cleanup runtime",
+        "reason": "Runtime reference gained a relative link to compatibility documentation that was optional in the minimal curated fixture",
+        "fix": "Promote docs/COMPATIBILITY.md to required runtime distribution members; no runtime cleanup policy changed"
+      }
     ]
   },
   "historical_v1_3_scope_and_limits": {

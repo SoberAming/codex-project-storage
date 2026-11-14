@@ -30,13 +30,14 @@ RUNTIME_FILES = (
     "references/verification.json", "references/project-types.md",
     "references/generated-artifacts.md", "references/native-cache.md",
     "references/retired-runtime.md", "references/npm-cache.md",
+    "docs/COMPATIBILITY.md",
     "references/codex-state.md", "LICENSE", "README.md",
 )
 PUBLIC_DOCS = (
     "README.en.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md",
     "SUPPORT.md", "CODE_OF_CONDUCT.md", "ACKNOWLEDGEMENTS.md",
     "THIRD_PARTY_NOTICES.md", "docs/INSTALLATION.md", "docs/QUICKSTART.md",
-    "docs/ARCHITECTURE.md", "docs/SAFETY.md", "docs/COMPATIBILITY.md",
+    "docs/ARCHITECTURE.md", "docs/SAFETY.md",
     "docs/RELEASING.md", "docs/GITHUB-PUBLISHING.zh-CN.md",
     "docs/RELEASE_NOTES_v1.3.0.md", "docs/RELEASE_NOTES_v1.4.0.md", "docs/ROADMAP.md",
 )
