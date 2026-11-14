@@ -1,5 +1,7 @@
 # Codex Project Storage
 
+[![CI](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml)
+
 [中文](README.md) · English
 
 Understand why a Codex project's disk is filling up, then choose what to delete, move, or retain. The agent investigates technical details; the user chooses the outcome.
@@ -79,7 +81,7 @@ No tool can infer every private format, prove every external reference, or elimi
 
 The v1.3.0 Windows regression run executed **116 tests: 114 passed and 2 were explicitly skipped** because the fixture filesystem could not create the required links. Independent checks included a new isolated pip-cache purge and a frozen-version fictional-project cleanup with retained-file verification.
 
-macOS path and locking logic is implemented, but **real Mac acceptance has not been completed**. A future CI run is separate evidence; Windows results, mocked aliases, or a workflow file do not establish Mac, APFS, or all-filesystem support. Exact component hashes, historical evidence, and limitations are in [the verification record](references/verification.json).
+The public version runs isolated fixtures in GitHub-hosted Windows/macOS and Python 3.10/3.13 environments. Check the CI link above for the actual result and revision. The first Mac run exposed an empty-ACL compatibility error; that failure is retained, and a narrow fix and regression tests were added. **Personal Mac devices, external drives, and actual business workflows have not been accepted.** Hosted fixture results do not establish all-filesystem support. Exact component hashes, historical evidence, and limitations are in [the verification record](references/verification.json). Release-tool and ACL tests are separate from the original 116-test record.
 
 ## Documentation and contributions
 

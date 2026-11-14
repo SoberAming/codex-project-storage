@@ -2,6 +2,8 @@
 
 [English](README.en.md) · [安装](docs/INSTALLATION.md) · [使用示例](docs/QUICKSTART.md) · [安全边界](docs/SAFETY.md)
 
+[![CI](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/YiMingchen111/codex-project-storage/actions/workflows/ci.yml)
+
 项目越做越大，先弄清楚空间用在哪里，再决定删除或迁移。
 
 这是一个面向 Codex 的项目存储优化 Skill。Agent 核实数据用途、项目归属、引用、重建条件和存储位置，给出推荐方案；用户决定采用的结果，无需逐个辨认缓存、索引和技术文件。
@@ -63,7 +65,7 @@ $codex-project-storage 分析这个项目所在磁盘的主要占用、增长来
 
 v1.3 核心版本在 Windows / Python 3.13.13 的隔离样本中运行了 **116 项测试：114 通过，2 项因样本文件系统缺少链接能力而跳过**；另有隔离 pip 缓存的真实清理和冻结组件的独立试用记录。摘要见[验证记录](references/verification.json)。
 
-macOS 流程已实现，**尚未完成 Mac 真机验收**。仓库提供 Windows/macOS 自动测试配置；配置存在不表示远端已经运行或通过。Python 3.10 仅有语法检查记录，具体运行版本与文件系统能力以实际结果为准。开源发布工具的新增测试另行记录，不混入核心 116 项。
+公开版在 GitHub 的 Windows/macOS、Python 3.10/3.13 环境运行隔离样本；请查看上方 CI 的实际结果及其对应 commit。首次 Mac 运行发现的空 ACL 兼容分支已修复并增加回归，失败记录保留。**尚未完成个人 Mac 设备、外部磁盘和实际业务工作流验收**；托管样本通过不能代替这些验收。新增发布工具和 Mac ACL 测试单独记录，不混入原始核心 116 项。
 
 ## 参与和反馈
 

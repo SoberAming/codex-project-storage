@@ -41,7 +41,7 @@ jobs:
         run: |
           $testRoot = Join-Path $env:RUNNER_TEMP ('storage-skill-tests-' + [guid]::NewGuid().ToString('N'))
           New-Item -ItemType Directory -Path $testRoot | Out-Null
-          $suites = @('test_storage_guard', 'test_storage_modes', 'test_project_profiler', 'test_generated_artifacts', 'test_native_cache', 'test_state_boundaries', 'test_release_tools')
+          $suites = @('test_storage_guard', 'test_storage_modes', 'test_project_profiler', 'test_generated_artifacts', 'test_native_cache', 'test_state_boundaries', 'test_release_tools', 'test_macos_acl')
           foreach ($suite in $suites) {
             $suiteRoot = Join-Path $testRoot $suite
             New-Item -ItemType Directory -Path $suiteRoot | Out-Null

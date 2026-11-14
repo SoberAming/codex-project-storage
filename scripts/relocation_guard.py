@@ -23,7 +23,7 @@ import uuid
 
 import storage_guard as g
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 POLICY = "assessed-artifact-relocation-v1"
 EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".mp4", ".mov", ".mkv",
               ".webm", ".wav", ".mp3", ".m4a", ".zip", ".7z", ".tar", ".gz"}
@@ -39,6 +39,9 @@ DARWIN = None
 def darwin_metadata(path):
     """Apple libc APIs: no xattr body reads and no permission changes. Untested on device."""
     global DARWIN
+    before = g.plain(path)
+    if not (stat.S_ISREG(before.st_mode) or stat.S_ISDIR(before.st_mode)):
+        raise g.GuardError("macOS ACL inspection requires an ordinary file or directory")
     if DARWIN is None:
         DARWIN = ctypes.CDLL("/usr/lib/libSystem.B.dylib", use_errno=True)
         DARWIN.listxattr.argtypes = [ctypes.c_char_p, ctypes.c_void_p, ctypes.c_size_t, ctypes.c_int]
@@ -56,9 +59,19 @@ def darwin_metadata(path):
         raise OSError(ctypes.get_errno(), "Cannot verify macOS xattrs/resource forks", str(path))
     if size:
         raise g.GuardError(f"macOS xattrs/resource forks/compression metadata refused: {path}")
+    ctypes.set_errno(0)
     acl = DARWIN.acl_get_link_np(encoded, 0x100)  # ACL_TYPE_EXTENDED; no following the leaf
     if not acl:
         code = ctypes.get_errno()
+        if code == errno.ENOENT:
+            # Apple filesec_get_property(FILESEC_ACL) also returns ENOENT when
+            # a present object has no ACL property. Never hide disappearance
+            # or replacement under the same error code.
+            after = g.plain(path)
+            if (stat.S_IFMT(after.st_mode) != stat.S_IFMT(before.st_mode)
+                    or g.fingerprint(after) != g.fingerprint(before)):
+                raise g.GuardError("Object changed during macOS ACL inspection")
+            return ""  # Verified absence, distinct from unknown/unsupported None.
         if code in {errno.ENOTSUP, getattr(errno, "EOPNOTSUPP", errno.ENOTSUP)}:
             return None  # Portable export can adopt this; preserve will refuse unverified ACLs.
         raise OSError(code, "Cannot inspect macOS ACL", str(path))
