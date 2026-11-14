@@ -37,7 +37,9 @@ Analysis-only requests remain read-only. Existing authorization for a clearly de
 | Redundant inactive artifacts with a usable retained copy | Verify the retained copy and purpose before releasing the redundant files |
 | Other build systems, shared caches, dependencies, and worktrees | Diagnosis and tool- or host-specific proposals; no generic directory deletion |
 
-The native cache adapter currently accepts only qualifying pip **25.0.1 or 26.1.1** caches. uv and npm are advice-only. Existing caches cannot qualify by adding a marker or fabricating a production receipt after the fact.
+Native adapters accept separately qualified project-exclusive pip **25.0.1 or 26.1.1** caches and npm **10.9.2** content caches. uv, shared/default caches and unsupported versions remain advice-only. Existing caches cannot qualify by adding a marker or fabricating a production receipt after the fact. See the [npm contract](references/npm-cache.md).
+
+Version 1.4 adds a separate [disposable test-data lifecycle](references/retired-runtime.md) for positively proven synthetic PostgreSQL test data. It retains producers, inputs, logs and results; it never clears a whole runtime directory or business database. The profile now ranks major occupancy groups for further evidence review. A small bytecode plan must not conceal large unqualified test or cache stores. Occupancy, qualified planned release, conditional potential and actual release are reported separately. See [upgrade notes](docs/RELEASE_NOTES_v1.4.0.md).
 
 Reconstructible intermediates do not need a second retained copy of the same output. They do need retained inputs, genuine production evidence, available reconstruction dependencies, and a supported deterministic operation. Unique AI outputs, delivery files, visual baselines, acceptance evidence, and recovery material remain protected.
 
@@ -79,7 +81,9 @@ No tool can infer every private format, prove every external reference, or elimi
 
 ## Validation status
 
-The v1.3.0 Windows regression run executed **116 tests: 114 passed and 2 were explicitly skipped** because the fixture filesystem could not create the required links. Independent checks included a new isolated pip-cache purge and a frozen-version fictional-project cleanup with retained-file verification.
+The local 1.4 candidate completed **246 checks on Windows / Python 3.13.13: 237 passed and 9 were explicitly skipped** for platform or fixture-filesystem link limitations. A separate independent review passed 32 targeted groups. New 1.4 code has not run a new hosted Mac matrix; this local result does not inherit the older public CI result.
+
+The historical v1.3.0 Windows regression run executed **116 tests: 114 passed and 2 were explicitly skipped** because the fixture filesystem could not create the required links. Independent checks included a new isolated pip-cache purge and a frozen-version fictional-project cleanup with retained-file verification.
 
 The public version runs isolated fixtures in GitHub-hosted Windows/macOS and Python 3.10/3.13 environments. Check the CI link above for the actual result and revision. The first Mac run exposed an empty-ACL compatibility error; that failure is retained, and a narrow fix and regression tests were added. **Personal Mac devices, external drives, and actual business workflows have not been accepted.** Hosted fixture results do not establish all-filesystem support. Exact component hashes, historical evidence, and limitations are in [the verification record](references/verification.json). Release-tool and ACL tests are separate from the original 116-test record.
 

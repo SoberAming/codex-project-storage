@@ -33,6 +33,9 @@ python -I -B tests/test_generated_artifacts.py --work-root ABS_TEST_PARENT
 python -I -B tests/test_native_cache.py --work-root ABS_TEST_PARENT
 python -I -B tests/test_state_boundaries.py --work-root ABS_TEST_PARENT
 python -I -B tests/test_release_tools.py --work-root ABS_TEST_PARENT
+python -I -B tests/test_macos_acl.py --work-root ABS_TEST_PARENT
+python -I -B tests/test_retired_runtime_guard.py --work-root ABS_TEST_PARENT
+python -I -B tests/test_npm_cache_guard.py --work-root ABS_TEST_PARENT
 ```
 
 `ABS_TEST_PARENT` is a placeholder for your explicitly selected, project-external test parent. These commands create isolated fixtures under it. Tests may retain evidence; inspect their output before removing only your own test directories. Use each test's `--help` where applicable. Never change a user's file timestamps to make cleanup qualify.
@@ -42,7 +45,7 @@ The optional cross-volume suite requires two explicitly selected fixture parents
 ## Requirements for changes
 
 - Keep analysis, user choice, planning, execution, and acceptance distinct. Respect the existing task scope and authorization.
-- Protect source, original inputs, credentials, sessions/indexes/databases, dependencies, delivery/acceptance/baseline records, unique outputs, and recovery material.
+- Protect source, original inputs, credentials, sessions/indexes/business and state databases, dependencies, delivery/acceptance/baseline records, unique outputs, and recovery material. Disposable synthetic test data needs a separate positive lifecycle qualification; a test-like name is insufficient.
 - Treat shared and external data separately. An explicit metadata scan does not authorize deletion. A missing reference in one project does not prove global non-use.
 - Bind plans to exact paths, identities, content and applicable evidence. Recheck before mutation; stop on drift, I/O errors, locks, disconnection, or uncertain results. Do not introduce silent retries or broaden a partially completed batch.
 - Keep file-deletion plans distinct from native-tool range operations. A native `clean` command can run project code or affect other environments; review its actual semantics and version.

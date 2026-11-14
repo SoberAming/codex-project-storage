@@ -33,6 +33,34 @@ jobs:
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: ${{ matrix.python }}
+      - name: Set up fixed native cache integration runtime
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22.14.0'
+      - name: Select real Node and npm 10.9.2 implementation
+        run: |
+          $probe = @'
+          import json, os, pathlib, platform, shutil, subprocess, sys
+          node = pathlib.Path(shutil.which('node')).resolve(strict=True)
+          choices = [node.parent / 'node_modules/npm/bin/npm-cli.js', node.parent.parent / 'lib/node_modules/npm/bin/npm-cli.js']
+          cli = next((p.resolve(strict=True) for p in choices if p.is_file()), None)
+          if cli is None:
+              raise SystemExit('Fixed Node distribution lacks npm-cli.js')
+          version = json.loads((cli.parent.parent / 'package.json').read_text(encoding='utf-8'))['version']
+          if version != '10.9.2':
+              raise SystemExit('Expected reviewed npm 10.9.2; native integration must not silently skip')
+          print(json.dumps({'node': str(node), 'npm_cli': str(cli), 'npm_version': version,
+              'node_version': subprocess.check_output([str(node), '--version'], text=True).strip(),
+              'python': platform.python_version(), 'system': sys.platform, 'machine': platform.machine(),
+              'runner_os': os.environ.get('RUNNER_OS'), 'runner_arch': os.environ.get('RUNNER_ARCH'),
+              'image_os': os.environ.get('ImageOS'), 'image_version': os.environ.get('ImageVersion')}))
+          '@
+          $paths = ($probe | python -I -B -) | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value ('STORAGE_TEST_NODE=' + $paths.node)
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value ('STORAGE_TEST_NPM_CLI=' + $paths.npm_cli)
+          Write-Output ('Native cache integration: Node22.14.0 / npm' + $paths.npm_version)
+          Write-Output ('RUNTIME_ENVIRONMENT=' + ($paths | Select-Object python,system,machine,runner_os,runner_arch,image_os,image_version,node_version,npm_version | ConvertTo-Json -Compress))
       - name: Install validation-only dependency
         run: python -m pip install --disable-pip-version-check --no-input -r requirements-dev.txt
       - name: Validate public repository
@@ -41,11 +69,15 @@ jobs:
         run: |
           $testRoot = Join-Path $env:RUNNER_TEMP ('storage-skill-tests-' + [guid]::NewGuid().ToString('N'))
           New-Item -ItemType Directory -Path $testRoot | Out-Null
-          $suites = @('test_storage_guard', 'test_storage_modes', 'test_project_profiler', 'test_generated_artifacts', 'test_native_cache', 'test_state_boundaries', 'test_release_tools', 'test_macos_acl')
+          $suites = @('test_storage_guard', 'test_storage_modes', 'test_project_profiler', 'test_generated_artifacts', 'test_native_cache', 'test_state_boundaries', 'test_release_tools', 'test_macos_acl', 'test_retired_runtime_guard', 'test_npm_cache_guard')
           foreach ($suite in $suites) {
             $suiteRoot = Join-Path $testRoot $suite
             New-Item -ItemType Directory -Path $suiteRoot | Out-Null
-            python -I -B ('tests/' + $suite + '.py') --work-root $suiteRoot
+            if ($suite -eq 'test_npm_cache_guard') {
+              python -I -B ('tests/' + $suite + '.py') --work-root $suiteRoot --integration-node $env:STORAGE_TEST_NODE --integration-npm-cli $env:STORAGE_TEST_NPM_CLI
+            } else {
+              python -I -B ('tests/' + $suite + '.py') --work-root $suiteRoot
+            }
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
       - name: Build curated distribution outside source tree

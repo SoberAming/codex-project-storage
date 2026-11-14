@@ -1,8 +1,8 @@
 {
   "skill": "codex-project-storage",
-  "bundle_version": "1.3.0",
+  "bundle_version": "1.4.0",
   "user_date": "2026-11-14",
-  "recorded_at_utc": "2026-11-13T18:36:54.479668+00:00",
+  "recorded_at_utc": "2026-11-14T03:42:27.514090+00:00",
   "runtime": {
     "os": "Windows",
     "python": "3.13.13",
@@ -10,6 +10,30 @@
     "scope_note": "Original local maintainer environment, not the later hosted GitHub matrix."
   },
   "components": {
+    "generated_artifact_guard.py": {
+      "version": "1.3.0",
+      "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+    },
+    "native_cache_guard.py": {
+      "version": "1.3.0",
+      "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+    },
+    "npm_cache_guard.py": {
+      "version": "1.4.0",
+      "sha256": "a05493bf042b2041ec5d8374b5dfdc80bfbdf2ec6b0877b760a4d84c4c697282"
+    },
+    "project_profiler.py": {
+      "version": "1.4.0",
+      "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
+    },
+    "relocation_guard.py": {
+      "version": "1.3.0",
+      "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+    },
+    "retired_runtime_guard.py": {
+      "version": "1.4.0",
+      "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
+    },
     "storage_guard.py": {
       "version": "1.3.0",
       "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
@@ -17,22 +41,6 @@
     "volume_advisor.py": {
       "version": "2.0.0",
       "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
-    },
-    "relocation_guard.py": {
-      "version": "1.3.0",
-      "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
-    },
-    "native_cache_guard.py": {
-      "version": "1.3.0",
-      "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
-    },
-    "project_profiler.py": {
-      "version": "1.3.0",
-      "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
-    },
-    "generated_artifact_guard.py": {
-      "version": "1.3.0",
-      "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
     }
   },
   "independent_review": {
@@ -109,20 +117,26 @@
       "verified locally rebuildable deterministic media-intermediate deletion",
       "strict proven project-exclusive supported-pip native purge",
       "verified inactive-artifact migration",
-      "verified redundant artifact release"
+      "verified redundant artifact release",
+      "strict proven project-exclusive npm 10.9.2 detached _cacache native clean",
+      "exact positively reviewed disposable synthetic PostgreSQL test-data retirement"
     ],
     "native_execution_versions": [
       "pip 25.0.1",
-      "pip 26.1.1"
+      "pip 26.1.1",
+      "npm 10.9.2"
     ],
-    "uv_and_npm": "advice_only",
     "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
     "no_recursive_disk_cleanup": true,
-    "no_automatic_config_links_or_background_tasks": true
+    "no_automatic_config_links_or_background_tasks": true,
+    "uv": "advice_only",
+    "npm": "Separate guarded npm 10.9.2 adapter only; shared/default caches, installed dependencies, unsupported versions and unproven ownership/refetchability remain outside execution.",
+    "retired_runtime": "Separate exact synthetic PostgreSQL data-unit mode only; current JS/TS producer eligibility and retained historical proof are required. No database is started or connected; business/state databases and recovery stores remain protected.",
+    "node_version_admission": "Native Node major versions 18, 20, 22 and 24 are admission rules, not individually verified runtime versions or upstream-support claims."
   },
   "limits": [
     "Hosted macOS fixture CI, when passing, is separate from end-user device, external-drive and full APFS acceptance.",
-    "Only Python 3.13.13 was run; Python 3.10 grammar was checked.",
+    "The original local maintainer runs used Windows/Python 3.13.13; Python 3.10 received grammar checks there. New v1.4 Windows/macOS Python 3.10/3.13 hosted outcomes remain pending until an actual exact-revision run is recorded.",
     "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
     "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
     "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
@@ -131,7 +145,9 @@
     "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
     "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
     "Real NTFS features and APFS clone/snapshot semantics are not qualified by the exFAT fixture regressions.",
-    "External targets can disconnect after acceptance; future reachability is not guaranteed."
+    "External targets can disconnect after acceptance; future reachability is not guaranteed.",
+    "Only the reviewed npm 10.9.2 cache-clean implementation is executable; optional native integration must be explicitly enabled with selected installed native Node/npm paths. Mocked tests or skipped native cases do not establish native npm qualification.",
+    "Synthetic PostgreSQL retirement requires positive source/input/completion/reference/activity evidence for one exact generated data unit; fictional-layout CLI tests do not qualify a started PostgreSQL server or arbitrary historical databases."
   ],
   "real_existing_user_project_data_modified": false,
   "only_new_isolated_test_data_modified": true,
@@ -239,5 +255,189 @@
     "fix": "Distinguish absent extended ACL from a missing or changed ordinary object; refuse actual errors. No skipped relocation suite or weakened preserve policy.",
     "acl_regression_suite": "tests/test_macos_acl.py",
     "true_user_device_acceptance": false
+  },
+  "historical_v1_3_component_registry": {
+    "storage_guard.py": {
+      "version": "1.3.0",
+      "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+    },
+    "volume_advisor.py": {
+      "version": "2.0.0",
+      "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+    },
+    "relocation_guard.py": {
+      "version": "1.3.0",
+      "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+    },
+    "native_cache_guard.py": {
+      "version": "1.3.0",
+      "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+    },
+    "project_profiler.py": {
+      "version": "1.3.0",
+      "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
+    },
+    "generated_artifact_guard.py": {
+      "version": "1.3.0",
+      "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+    }
+  },
+  "upgrade_1_4": {
+    "status": "local_candidate_validated",
+    "platform": "Windows",
+    "python": "3.13.13",
+    "fixture_filesystem": "exFAT",
+    "suites": [
+      {
+        "suite": "test_storage_guard",
+        "tests": 25,
+        "skipped": 2,
+        "passed": 23
+      },
+      {
+        "suite": "test_storage_modes",
+        "tests": 22,
+        "skipped": 0,
+        "passed": 22
+      },
+      {
+        "suite": "test_project_profiler",
+        "tests": 21,
+        "skipped": 0,
+        "passed": 21
+      },
+      {
+        "suite": "test_generated_artifacts",
+        "tests": 17,
+        "skipped": 0,
+        "passed": 17
+      },
+      {
+        "suite": "test_native_cache",
+        "tests": 25,
+        "skipped": 0,
+        "passed": 25
+      },
+      {
+        "suite": "test_state_boundaries",
+        "tests": 10,
+        "skipped": 0,
+        "passed": 10
+      },
+      {
+        "suite": "test_release_tools",
+        "tests": 19,
+        "skipped": 0,
+        "passed": 19
+      },
+      {
+        "suite": "test_macos_acl",
+        "tests": 15,
+        "skipped": 2,
+        "passed": 13
+      },
+      {
+        "suite": "test_npm_cache_guard",
+        "tests": 52,
+        "skipped": 2,
+        "passed": 50
+      },
+      {
+        "suite": "test_retired_runtime_guard",
+        "tests": 40,
+        "skipped": 3,
+        "passed": 37
+      }
+    ],
+    "tests_run": 246,
+    "skipped": 9,
+    "remaining_must_fix": [],
+    "independent_forward_use": {
+      "scope": "analysis only on an existing project snapshot with bounded producer/log review",
+      "user_project_files_deleted": 0,
+      "user_project_files_migrated": 0,
+      "actual_user_project_released_bytes": 0,
+      "occupancy_not_promised_reclaim": true
+    },
+    "native_npm_integration": {
+      "node": "22.14.0",
+      "npm": "10.9.2",
+      "new_local_offline_package_and_exclusive_cache": true,
+      "removed_files": 2,
+      "removed_logical_bytes": 764,
+      "retained_package_producer_and_original_debug_log": true,
+      "real_user_or_shared_cache_modified": false
+    },
+    "retired_runtime_cli_integration": {
+      "native_postgresql_started": false,
+      "new_fictional_pg_layout_only": true,
+      "actual_guarded_file_deletion": true,
+      "removed_files": 6,
+      "removed_logical_bytes": 29461707,
+      "retained_producer_inputs_logs_results_and_business_fixture": true,
+      "native_activity_query": true
+    },
+    "independent_review_scope": [
+      "source-scoped non-replayable claims and unknown member refusal",
+      "no credential/customer-document body reads during reference discovery",
+      "OS-derived trusted activity executable and clean child environment",
+      "fixed native npm and content-addressed cache qualification",
+      "evidence identity/content binding and guarded handles throughout release",
+      "linear scan count and durable pending batches for large small-file sets"
+    ],
+    "independent_current_target_groups_passed": 32,
+    "independent_review_is_separate_from_unit_test_counts": true,
+    "limitations": [
+      "New 1.4 code has not run on actual macOS, APFS or a new hosted CI matrix.",
+      "POSIX locks are advisory and do not exclude noncooperating writers.",
+      "Only npm 10.9.2 command implementation is supported; other Node majors are admission rules, not individually tested versions.",
+      "PG retirement is only for positively reviewed disposable synthetic data, not business/state databases or retained recovery stores.",
+      "Code citations and hashes bind real evidence; they do not automatically prove arbitrary program semantics or historical ownership.",
+      "Logical deletion bytes and volume free-space changes are different measurements."
+    ],
+    "published_to_github": false,
+    "new_hosted_ci_run": false,
+    "previous_runs_and_failed_qa_preserved": true
+  },
+  "historical_v1_3_scope_and_limits": {
+    "bundle_version": "1.3.0",
+    "scope": {
+      "actual_project_volume": true,
+      "no_predefined_drive_or_mount_name": true,
+      "no_default_user_free_space_goal": true,
+      "multi_ecosystem_diagnosis_is_not_universal_execution": true,
+      "no_manifest_fallback": true,
+      "related_metadata_is_not_delete_permission": true,
+      "shared_candidates_default_size_unknown": true,
+      "actions": [
+        "strict CPython cache deletion",
+        "verified locally rebuildable deterministic media-intermediate deletion",
+        "strict proven project-exclusive supported-pip native purge",
+        "verified inactive-artifact migration",
+        "verified redundant artifact release"
+      ],
+      "native_execution_versions": [
+        "pip 25.0.1",
+        "pip 26.1.1"
+      ],
+      "uv_and_npm": "advice_only",
+      "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
+      "no_recursive_disk_cleanup": true,
+      "no_automatic_config_links_or_background_tasks": true
+    },
+    "limits": [
+      "Hosted macOS fixture CI, when passing, is separate from end-user device, external-drive and full APFS acceptance.",
+      "Only Python 3.13.13 was run; Python 3.10 grammar was checked.",
+      "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
+      "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
+      "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
+      "Large original reconstruction inputs are metadata-checked, not fully hashed; producer-evidence overlap reads are explicitly counted.",
+      "Profile semantic coverage remains incomplete; independently complete candidate scopes may qualify separately.",
+      "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
+      "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
+      "Real NTFS features and APFS clone/snapshot semantics are not qualified by the exFAT fixture regressions.",
+      "External targets can disconnect after acceptance; future reachability is not guaranteed."
+    ],
+    "scope_note": "Exact prior scope and limits retained as historical v1.3 declarations; they do not describe the new v1.4 npm or synthetic-PG execution modes."
   }
 }

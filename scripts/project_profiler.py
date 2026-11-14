@@ -20,7 +20,7 @@ import re
 import stat
 import sys
 
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 SCHEMA = "project-storage-profile-v1"
 MAX_CONFIG_FILES = 256
 MAX_CONFIG_FILE_BYTES = 256 * 1024
@@ -383,6 +383,12 @@ def classify_directory(relative):
     parts = relative.parts
     name = parts[-1].lower()
     lower = [x.lower() for x in parts]
+    if (name == "data" and len(parts) >= 3 and parts[-3].lower() == ".runtime"
+            and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]*-pg-[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}", parts[-2])):
+        return ("isolated_runtime_clue", "isolated PostgreSQL test producer (path clue only)",
+                "possible generated test data; contents, producer and current role are unverified",
+                "protected_pending_lifecycle_review",
+                "review real producer, synthetic inputs, per-run completion, retained results and current references; only a separately qualified retired_runtime_guard plan can authorize disposal")
     if name == ".git":
         return "version_control", "Git", "repository objects, worktree metadata and recovery history", "protected", "retain; inspect repository/worktree relationships and native object statistics"
     if name in STATE_DIRS:
@@ -445,9 +451,70 @@ def route(category, external=False):
             "reason": "generated_artifact_guard only supports separately assessed decoded-frames/render-preview/deterministic-transform intermediates with retained local inputs and producer, 48h age and verified absence of references; never originals, finished/unique AI results or unknown build outputs. relocation_guard only supports its separately verified inactive media/archive artifacts. No eligibility or releasable bytes follows from this category"}
     if category == "archives_and_backups":
         return {"status": "conditional_evidence_route", "executor": "relocation_guard.py", "reason": "only its supported inactive media/archive artifacts; requires provenance, inactivity, references, retained-copy/use acceptance and exact plans; a profile is not a plan"}
+    if category == "isolated_runtime_clue":
+        return {"status": "conditional_lifecycle_review", "executor": None,
+                "executors_to_evaluate": ["retired_runtime_guard.py"],
+                "reason": "a generated-looking PG path is not proof of disposable data; independently verify synthetic provenance, retained inputs/results, per-run completion, reference and activity evidence; business databases and recovery stores remain protected"}
+    if category in {"tool_managed_cache", "unverified_cache_name"}:
+        return {"status": "conditional_native_review", "executor": None,
+                "executors_to_evaluate": ["native_cache_guard.py", "npm_cache_guard.py"],
+                "reason": "verify actual producer and project exclusivity; only the independently qualified pip/npm adapters may execute; all other/shared/mixed caches remain advice only"}
     if category in {"dependencies", "tool_managed_cache", "framework_cache_and_build", "browser_downloads", "unverified_cache_name"}:
         return {"status": "native_advice_only", "executor": None, "reason": "current executors do not support this directory; verify manager scope before a separate proposal"}
     return {"status": "protected_or_unproven", "executor": None, "reason": "no supported general action; preserve data and obtain specific evidence"}
+
+
+def review_priorities(nodes, project_totals):
+    """Rank existing, mutually exclusive metadata partitions without a new read.
+
+    This is an evidence queue, never an eligibility or free-space estimate.
+    A tiny supported cache must not conceal a much larger unexplained runtime.
+    """
+    groups = {}
+    total = project_totals["logical_bytes"]
+    for node in nodes:
+        if node["scope"] != "project":
+            continue
+        category = node["category"]
+        group = groups.setdefault(category, {"category": category, "logical_bytes": 0,
+            "partition_count": 0, "representative_paths": [], "release_authorized": False})
+        group["logical_bytes"] += node["measurement"]["logical_bytes"]
+        group["partition_count"] += 1
+        if len(group["representative_paths"]) < 5:
+            group["representative_paths"].append(node["path"])
+    ordered = sorted(groups.values(), key=lambda x: (-x["logical_bytes"], x["category"]))
+    checks = {
+        "isolated_runtime_clue": "establish each run's producer, synthetic inputs, completion and inactivity; retain logs/results; qualified disposable data may be retired, otherwise state the precise missing evidence and retention route",
+        "database_and_records": "distinguish current business/state/recovery data from positively proven disposable synthetic test stores; never infer disposal from a test-like name",
+        "tool_managed_cache": "verify effective cache path, producer/version, exclusive ownership and offline-use cost; evaluate the dedicated pip/npm adapter without running project hooks",
+        "unverified_cache_name": "identify the actual writer and layout first; evaluate a supported native adapter only after exclusive ownership is proven",
+        "state_and_history": "explain the application owner and retention requirements; no direct session/index/database deletion",
+        "sensitive_metadata": "retain; explain purpose without reading secrets",
+        "dependencies": "establish shared references, lockfiles, local edits and recreate cost; retain until a separate supported lifecycle exists",
+    }
+    selected = []
+    cumulative = 0
+    for group in ordered:
+        group["share_of_observed_project"] = group["logical_bytes"] / total if total else 0.0
+        group["next_read_only_check"] = checks.get(group["category"],
+            "establish actual producer, original/generated role, current consumers and business retention value; select an independently supported operation or give a concrete protection reason")
+        # Keep the queue small but account for at least 80% of observed bytes.
+        # With <=5 classes, retain all so even a small project is explained.
+        if len(selected) < 5 or cumulative < total * .8:
+            selected.append(group)
+            cumulative += group["logical_bytes"]
+    pyc = groups.get("python_bytecode", {}).get("logical_bytes", 0)
+    return {"schema": "project-storage-review-priorities-v1",
+        "basis": "existing exclusive metadata partitions; no additional traversal or body read",
+        "groups": selected, "covered_logical_bytes": cumulative,
+        "covered_share_of_observed_project": cumulative / total if total else 0.0,
+        "observed_project_logical_bytes": total,
+        "bytecode_shaped_occupancy_bytes": pyc,
+        "small_cache_only_plan_risk": bool(total >= 1024 * 1024 and 0 < pyc < total * .01),
+        "requires_semantic_review_before_final_recommendation": bool(total),
+        "approved_release_bytes": 0, "executed_release_bytes": 0,
+        "interpretation": "occupancy and review priority only; no group has been established as removable. Explain major groups before presenting a small-cache-only result. Exact plans, user authorization and receipts determine promised and actual release separately.",
+        "scope_limit": "if verified project-only release cannot meet the user's goal, state the shortfall and propose a bounded related-root or volume attribution audit; do not expand deletion scope or attribute unrelated volume growth to this project"}
 
 
 class Profiler:
@@ -987,6 +1054,16 @@ def markdown(report):
             lines.append(f"| `{cell(node['path'])}` | {cell(node['category'])} / {cell(node['producer'])} | {m['logical_bytes']} | {m['allocated_bytes_known']} ({m['allocation_unknown_files']} unknown files) | {cell(node['protection'])}; {cell(node['action_support']['status'])} |")
     if len(project_nodes) > 100:
         lines += ["", f"Only the largest 100 of {len(project_nodes)} project attribution partitions appear here; JSON contains all bounded rows."]
+    priorities = report["review_priorities"]
+    lines += ["", "## Priorities for meaningful optimization", "",
+        "These are measured bytes requiring an explanation, not removable-byte promises. A cache-shaped file is not yet eligible. Real plans and receipts must report promised and actual release separately.", "",
+        "| Measured class | Logical bytes | Share of observed project | Next evidence |",
+        "|---|---:|---:|---|"]
+    for group in priorities["groups"]:
+        lines.append(f"| {cell(group['category'])} | {group['logical_bytes']} | {group['share_of_observed_project']:.1%} | {cell(group['next_read_only_check'])} |")
+    if priorities["small_cache_only_plan_risk"]:
+        lines += ["", "**Small-cache-only result risk:** bytecode-shaped occupancy is less than 1% of this observed project. Explain the major groups, including any lifecycle/capability gaps, before finishing with a small bytecode plan. This warning does not imply any other data can be removed."]
+    lines += ["", priorities["scope_limit"]]
     lines += ["", "## External roots and shared candidates", "",
         "External observations are listed separately. An explicit related root is observation scope only; it does not prove project exclusivity. Default/config candidates are not recursively scanned.", ""]
     for root in report["related_roots"]:
@@ -1001,6 +1078,8 @@ def markdown(report):
         "- `generated_artifact_guard.py`: only separately assessed decoded frames, render previews or deterministic media intermediates with retained local inputs/producer, age and reference checks; originals, finished outputs, unique AI results and unknown build outputs remain protected.",
         "- `relocation_guard.py`: only its supported inactive media/archive artifact cases after its separate provenance, reference, identity, copy and use acceptance checks.",
         "- `native_cache_guard.py`: only its independently verified project-exclusive pip adapter; shared pip defaults remain advice only. This profile does not establish adapter eligibility.",
+        "- `npm_cache_guard.py`: separately qualified project-exclusive npm cache only; native cleaning uses a fixed trusted tool and an isolated cache namespace, not project hooks. Default/shared caches remain advice only.",
+        "- `retired_runtime_guard.py`: only positively qualified disposable synthetic PG test data; retain sibling logs, results, inputs and producers. Names, UUIDs and no PID file do not prove safety; business databases remain protected.",
         "- Dependencies, framework caches, browser downloads, build systems and shared caches: native inspection/advice only; no generic executable deletion rule.",
         "", "## Native inspection suggestions (not executed)", ""]
     for item in report["native_cache_probes"]:
@@ -1089,6 +1168,7 @@ def inspect(args):
     report = {"schema": SCHEMA, "tool_version": VERSION, "created_at": utc(), "project": scrub(root),
         "root_identity": identity(plain(root, True)), "operation": "read_only_profile", "commands_executed": [],
         "ecosystems": ecosystems, "nodes": nodes, "project_measurement": project_totals,
+        "review_priorities": review_priorities(nodes, project_totals),
         "related_root_measurement_excluding_project_hardlink_duplicates": external_totals,
         "measurement_notes": ["all category rows are exclusive partitions, not overlapping subtree totals",
             "hardlinks are deduplicated by device/FileID across all explicitly measured roots and attributed to first observed path; project is measured first",

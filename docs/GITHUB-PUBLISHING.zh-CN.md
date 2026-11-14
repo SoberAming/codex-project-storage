@@ -1,13 +1,13 @@
 # 首次发布到GitHub
 
-这份指南用于本项目及其后续版本的GitHub发布。所有者已于2026-11-14确认MIT许可证、仓库名和直接公开发布。仓库、远端测试、安全功能和Release的完成状态仍以GitHub实际结果为准。
+本页保留以1.3.0首次发布为例的流程。所有者已于2026-11-14确认MIT许可证、仓库名和首次直接公开发布。后续版本请以`references/verification.json`的版本及[维护发布说明](RELEASING.md)为准，使用新tag和新产物，不覆盖旧Release。仓库、远端测试、安全功能和Release的完成状态仍以GitHub实际结果为准；本地升级包不等于新版本已公开。
 
 | 项目 | 已确认的发布配置 |
 | --- | --- |
 | GitHub账号 | `SoberAming` |
 | 仓库名 | `codex-project-storage` |
 | 仓库地址 | `https://github.com/SoberAming/codex-project-storage` |
-| 版本tag | `v1.3.0` |
+| 首次发布tag | `v1.3.0` |
 | 中文名称 | 项目磁盘管家 |
 | 许可证 | MIT；署名为`Copyright (c) 2026 SoberAming` |
 | 首次发布状态建议 | 先发布带明确限制的Pre-release，Mac尚未真机验收 |

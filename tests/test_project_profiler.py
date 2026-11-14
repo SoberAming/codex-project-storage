@@ -326,6 +326,59 @@ class ProjectProfilerTests(unittest.TestCase):
                 with mock.patch.dict(os.environ, self.env, clear=True), self.assertRaises(PROFILE.ProfileError):
                     PROFILE.selected_root(target, self.codex)
 
+    def test_dominant_generated_runtime_is_prioritized_without_reading_its_body(self):
+        runtime = ".runtime/analytics-pg-00000000-0000-4000-8000-000000000001/data"
+        self.put(runtime + "/base/1/12345", b"x" * (2 * 1024 * 1024))
+        self.put("src/__pycache__/example.cpython-313.pyc", b"tiny unqualified bytecode")
+        real_reader = PROFILE.read_bounded
+        def no_database_body(path, limit):
+            self.assertNotIn("data/base", Path(path).as_posix())
+            return real_reader(path, limit)
+        with mock.patch.dict(os.environ, self.env, clear=True), mock.patch.object(PROFILE, "read_bounded", side_effect=no_database_body):
+            profiler = self.profiler()
+            profiler.walk(self.project, "project")
+            profiler.parse_configs()
+        nodes = list(profiler.nodes.values())
+        total = {"logical_bytes": self.logical_size()}
+        queue = PROFILE.review_priorities(nodes, total)
+        self.assertEqual(queue["groups"][0]["category"], "isolated_runtime_clue")
+        self.assertGreater(queue["groups"][0]["share_of_observed_project"], .99)
+        self.assertTrue(queue["small_cache_only_plan_risk"])
+        self.assertEqual(queue["approved_release_bytes"], 0)
+        self.assertEqual(queue["executed_release_bytes"], 0)
+        runtime_node = next(n for n in nodes if n["category"] == "isolated_runtime_clue")
+        self.assertIsNone(runtime_node["action_support"]["executor"])
+        self.assertIn("retired_runtime_guard.py", runtime_node["action_support"]["executors_to_evaluate"])
+        self.assertNotEqual(runtime_node["protection"], "eligible")
+
+    def test_business_pgdata_does_not_become_a_disposable_test_runtime(self):
+        self.put(".runtime/pgdata/base/1/12345", b"retain business data")
+        report, _ = self.cli()
+        self.assertFalse(any(n["category"] == "isolated_runtime_clue" for n in report["nodes"]))
+        self.assertTrue(all(not group["release_authorized"] for group in report["review_priorities"]["groups"]))
+
+    def test_review_queue_accounts_for_major_bytes_without_external_totals(self):
+        self.put("node_modules/example/index.js", b"d" * 10000)
+        self.put("assets/original.png", b"a" * 1000)
+        external = self.area / "related"
+        external.mkdir()
+        self.put("other.bin", b"unrelated" * 10000, root=external)
+        report, _ = self.cli("--related-root", external)
+        queue = report["review_priorities"]
+        self.assertEqual(queue["observed_project_logical_bytes"], 11000)
+        self.assertEqual(sum(x["logical_bytes"] for x in queue["groups"]), 11000)
+        self.assertEqual(queue["covered_share_of_observed_project"], 1)
+        self.assertEqual(queue["groups"][0]["category"], "dependencies")
+        self.assertIn("lockfiles", queue["groups"][0]["next_read_only_check"])
+
+    def test_empty_project_priority_does_not_invent_capacity_or_work(self):
+        report, _ = self.cli()
+        queue = report["review_priorities"]
+        self.assertEqual(queue["groups"], [])
+        self.assertEqual(queue["covered_share_of_observed_project"], 0)
+        self.assertFalse(queue["small_cache_only_plan_risk"])
+        self.assertFalse(queue["requires_semantic_review_before_final_recommendation"])
+
 
 if __name__ == "__main__":
     print("Isolated profiler fixtures retained at: " + str(RUN), flush=True)

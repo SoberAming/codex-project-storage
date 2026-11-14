@@ -9,6 +9,8 @@
 | `storage_guard.py` | 窄范围缓存扫描、选中ID、精确计划 | 合格CPython缓存逐文件删除 |
 | `generated_artifact_guard.py` | 真实生成依据、输入、精确媒体中间件范围 | 满足条件的媒体中间产物逐文件删除 |
 | `native_cache_guard.py` | 真正项目独占的专用pip缓存与生产证据 | 固定可信原生命令，范围快照和单次消费 |
+| `npm_cache_guard.py` | 项目独占npm内容缓存、可信工具和保留的真实生产证据 | 同卷隔离后原生清理，保留日志；单次计划、失败位置与字节回执 |
+| `retired_runtime_guard.py` | 正向证明可丢弃的合成PG测试data及保留证据 | 完整清单、阶段复核和逐项保护，不逐文件重扫全树 |
 | `relocation_guard.py` | 已停用产物、保留目标、用途证据 | 复制、验收和逐文件释放分阶段 |
 
 ```mermaid
@@ -30,6 +32,8 @@ flowchart TD
 
 画像的`nodes`是互斥归属分区。项目、明确关联目录与全局共享线索分列，硬链接按已知身份去重。外部候选默认只发现存在性，不默认递归测量。`coverage.complete=false`表示全局语义/归属未全部完成；元数据遍历完整程度另列，独立核验完整的候选子树仍可进入执行器。
 
+`review_priorities`按类别汇总已有分区，确保主要占用得到解释。它不证明可丢弃，不输出授权收益，也不读取更多正文。大项缺少受支持操作或生命周期证据时，报告明确缺口、保留方案和可继续核实的步骤，避免只返回很小的pyc方案。
+
 ## 执行合同
 
 - 计划固定具体源、保留结果、卷/目录/文件身份、成员、预算和相应内容证据。
@@ -38,7 +42,7 @@ flowchart TD
 - 输入和生产依据不等于无条件可重建证明，Agent仍需核实业务语义与依赖。
 - 迁移内容校验成功后仍有用途验收，不能把copy成功当项目已经可用。
 
-逐项合同与CLI用法见[操作说明](../references/operations.md)、[生成产物](../references/generated-artifacts.md)、[原生缓存](../references/native-cache.md)和[迁移](../references/relocation.md)。
+逐项合同与CLI用法见[操作说明](../references/operations.md)、[生成产物](../references/generated-artifacts.md)、[pip缓存](../references/native-cache.md)、[npm缓存](../references/npm-cache.md)、[测试运行退役](../references/retired-runtime.md)和[迁移](../references/relocation.md)。
 
 ## 扩展原则
 

@@ -4,7 +4,7 @@
 
 ## 本版执行能力
 
-仅支持 **pip 25.0.1 / 26.1.1**、已存在且真实证明为当前项目独占的缓存。其他版本、默认/共享/混合/项目外缓存、证据不足均只给建议。uv、npm目前明确为`advice_only`，不是未检测就可以手工删。
+本执行器仅支持 **pip 25.0.1 / 26.1.1**、已存在且真实证明为当前项目独占的缓存。其他版本、默认/共享/混合/项目外缓存、证据不足均只给建议。uv仍为`advice_only`。npm自1.4使用独立的[npm适配器](npm-cache.md)，其合同不放宽pip规则，也不允许未检测就手工删。
 
 必须有真实使用历史：事先存在的CACHEDIR.TAG、专用配置、成功生产收据、最近7天的归属和引用审计。标记本身不是独占证明；pip不自动生成这个标记。**不得给既有缓存临时补标记、倒填生产收据或捏造审计来获得可执行状态。** 以后新建专用缓存可在真实使用前建立规范，但这不是清理现有缓存的捷径。
 
@@ -48,7 +48,7 @@ python -I -B ABS_SKILL/scripts/native_cache_guard.py apply --plan ABS_PLAN.json 
 
 - [pip cache](https://pip.pypa.io/en/stable/cli/pip_cache/) 提供本工具实际调用的管理命令；[隔离参数](https://pip.pypa.io/en/stable/cli/pip/)与[配置加载](https://pip.pypa.io/en/stable/topics/configuration/)单独核实。受支持版本来自已审查实现，不据此保证未来版本。
 - [uv cache](https://docs.astral.sh/uv/concepts/cache/)要求用uv管理，部分环境可能使用symlink链接；清掉仍依赖的cache可能破坏环境。prune亦有范围和环境影响，不能一律称作安全无副作用。
-- [npm cache](https://docs.npmjs.com/cli/v11/commands/npm-cache/)通常是跨项目共享；其清空需要force语义，本版不替用户默认强制执行。
+- [npm cache](https://docs.npmjs.com/cli/v11/commands/npm-cache/)通常是跨项目共享；清空所需force仅属于原生命令语义，不能用于绕过锁、范围或授权。默认共享目录仍不进入新增的独占缓存路线。
 - [Cargo home](https://doc.rust-lang.org/cargo/guide/cargo-home.html)含凭据和安装记录，不能把整个根当下载缓存；[Go module cache](https://go.dev/ref/mod#module-cache)也是共享资料。
 
 验证记录区分模拟、只读真实探测和一次全新隔离缓存的真实purge；后者只证明受测Windows/pip组合，不等于用户既有缓存可清理，也不代替macOS实机验收。
