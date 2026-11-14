@@ -70,6 +70,7 @@ jobs:
           $testRoot = Join-Path $env:RUNNER_TEMP ('storage-skill-tests-' + [guid]::NewGuid().ToString('N'))
           New-Item -ItemType Directory -Path $testRoot | Out-Null
           $suites = @('test_storage_guard', 'test_storage_modes', 'test_project_profiler', 'test_generated_artifacts', 'test_native_cache', 'test_state_boundaries', 'test_release_tools', 'test_macos_acl', 'test_retired_runtime_guard', 'test_npm_cache_guard', 'test_agent_waste_discovery', 'test_agent_artifact_guard', 'test_agent_state_boundaries')
+          $failedSuites = @()
           foreach ($suite in $suites) {
             Write-Output ('STORAGE_SUITE=' + $suite)
             $suiteRoot = Join-Path $testRoot $suite
@@ -79,7 +80,15 @@ jobs:
             } else {
               python -I -B ('tests/' + $suite + '.py') --work-root $suiteRoot
             }
-            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            $suiteExit = $LASTEXITCODE
+            if ($suiteExit -ne 0) {
+              $failedSuites += $suite
+              Write-Output ('STORAGE_SUITE_FAILED=' + $suite + ';exit=' + $suiteExit)
+            }
+          }
+          if ($failedSuites.Count -ne 0) {
+            Write-Output ('Failed suites: ' + ($failedSuites -join ', '))
+            exit 1
           }
       - name: Build curated distribution outside source tree
         run: |

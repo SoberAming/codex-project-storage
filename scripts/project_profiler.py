@@ -722,6 +722,21 @@ class Profiler:
                     "reason": "bytecode is inside a protected/tool-managed ancestor; existing storage_guard policy remains controlling"}
         return nk
 
+    def retain_shared_identity(self, nk):
+        """A first-observed accounting owner is never a cleanup owner.
+
+        Block the entire metadata partition conservatively: an exact executor
+        must not be suggested for a tree containing a known shared identity.
+        The accounting remains mutually exclusive and does not move bytes to a
+        preferred category or infer whether an unseen alias is valuable.
+        """
+        node = self.nodes[nk]
+        node["hardlink_cross_boundary"] = True
+        node["protection"] = "protected_shared_file_identity"
+        node["action_support"] = {"status": "retained_shared_file_identity", "executor": None,
+            "executors_to_evaluate": [],
+            "reason": "known multiple-link/shared FileID; retain this partition. First-observed byte attribution proves neither ownership nor reclaimable space; generic task cleanup is not available"}
+
     def load_scan(self, path):
         if not path:
             return
@@ -838,8 +853,9 @@ class Profiler:
                                 if file_id in self.seen:
                                     prior = self.seen[file_id]
                                     node["measurement"]["hardlink_duplicates"] += 1
+                                    self.retain_shared_identity(nk)
                                     if prior["node"] != nk:
-                                        node["hardlink_cross_boundary"] = self.nodes[prior["node"]]["hardlink_cross_boundary"] = True
+                                        self.retain_shared_identity(prior["node"])
                                     if prior["fingerprint"] != fingerprint(s):
                                         self.gap(rel.as_posix(), "same FileID changed during metadata snapshot", scope)
                                     continue
@@ -858,7 +874,7 @@ class Profiler:
                                 if not s.st_ino:
                                     self.gap(rel.as_posix(), "FileID unavailable; cross-path hardlink deduplication unknown", scope)
                                 if s.st_nlink > 1:
-                                    node["hardlink_cross_boundary"] = True
+                                    self.retain_shared_identity(nk)
                                 if self.aborted_io:
                                     break
                             except (OSError, ProfileError) as exc:

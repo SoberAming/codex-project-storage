@@ -5,6 +5,7 @@ All fictional files and reports are retained beneath --work-root.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import importlib.util
 import json
 import os
@@ -200,17 +201,76 @@ class AgentWasteDiscoveryTests(unittest.TestCase):
         self.assertNotIn('agent_artifact_guard.py',items[0]['action_support'].get('executors_to_evaluate',[]))
 
     def test_linked_entries_are_not_followed_and_hardlinks_count_once(self):
-        source=self.put('scratch/one.bin',b'fictional'*100)
+        payload=b'fictional'*100
+        source=self.put('scratch/one.bin',payload)
         other=self.project/'scratch/two.bin'
         try:
             os.link(source,other)
         except OSError as exc:
             self.skipTest('fixture filesystem lacks hardlinks: '+str(exc))
         report,_=self.cli()
-        self.assertEqual(report['agent_residue_review']['project_candidate_logical_bytes'],800)
-        self.assertTrue(report['agent_residue_review']['items'][0]['hardlink_cross_boundary'])
+        self.assertEqual(report['agent_residue_review']['project_candidate_logical_bytes'],len(payload))
+        item=report['agent_residue_review']['items'][0]
+        self.assertTrue(item['hardlink_cross_boundary'])
+        self.assertEqual(item['action_support']['status'],'retained_shared_file_identity')
+        self.assertIsNone(item['action_support']['executor'])
+        self.assertEqual(item['action_support']['executors_to_evaluate'],[])
+        self.assertFalse(item['disposal_authorized'])
+        self.assertEqual(report['project_measurement']['logical_bytes'],len(payload))
         self.assertEqual(report['project_measurement']['unique_files'],1)
         self.assertEqual(report['project_measurement']['hardlink_duplicates'],1)
+        self.assertEqual(report['agent_residue_review']['approved_release_bytes'],0)
+        self.assertEqual(report['agent_residue_review']['executed_release_bytes'],0)
+        self.assertEqual(source.read_bytes(),payload)
+        self.assertEqual(other.read_bytes(),payload)
+
+    def test_source_alias_is_retained_in_both_real_hardlink_traversal_orders(self):
+        payload=b'fictional shared protected source'*31
+        protected=self.put('src/keep.py',payload)
+        candidate=self.project/'scratch/capture.png'
+        candidate.parent.mkdir()
+        try:
+            os.link(protected,candidate)
+        except OSError as exc:
+            self.skipTest('fixture filesystem lacks hardlinks: '+str(exc))
+        native_scandir=os.scandir
+        for candidate_first in (True,False):
+            with self.subTest(candidate_first=candidate_first):
+                @contextlib.contextmanager
+                def ordered_scandir(anchor):
+                    # Only traversal order is controlled; DirEntry/stat/FileID,
+                    # link counts and payloads are from the real filesystem.
+                    with native_scandir(anchor) as iterator:
+                        entries=list(iterator)
+                        sid=(os.fstat(anchor) if isinstance(anchor,int) else os.stat(anchor))
+                        root_stat=os.stat(self.project)
+                        if (sid.st_dev,sid.st_ino)==(root_stat.st_dev,root_stat.st_ino):
+                            entries.sort(key=lambda e: e.name,reverse=candidate_first)
+                        yield iter(entries)
+                with mock.patch.dict(os.environ,self.env,clear=True),mock.patch.object(PROFILE.os,'scandir',side_effect=ordered_scandir):
+                    profiler=PROFILE.Profiler(SimpleNamespace(max_files=100000,max_config_bytes=1048576),self.project,self.codex,[])
+                    profiler.walk(self.project,'project')
+                nodes=list(profiler.nodes.values())
+                for i,node in enumerate(nodes):
+                    node['id']=f'fixture-{i}'
+                queue=PROFILE.agent_residue_review(nodes)
+                self.assertEqual(sum(n['measurement']['logical_bytes'] for n in nodes),len(payload))
+                self.assertEqual(sum(n['measurement']['unique_files'] for n in nodes),1)
+                self.assertEqual(sum(n['measurement']['hardlink_duplicates'] for n in nodes),1)
+                candidate_node=next(n for n in nodes if n['category']=='agent_task_residue_clue')
+                source_node=next(n for n in nodes if n['category']=='source_and_other')
+                self.assertEqual(candidate_node['measurement']['logical_bytes'],len(payload) if candidate_first else 0)
+                self.assertEqual(source_node['measurement']['logical_bytes'],0 if candidate_first else len(payload))
+                for node in (candidate_node,source_node):
+                    self.assertEqual(node['action_support']['status'],'retained_shared_file_identity')
+                    self.assertIsNone(node['action_support']['executor'])
+                for item in queue['items']:
+                    self.assertFalse(item['disposal_authorized'])
+                    self.assertEqual(item['action_support']['executors_to_evaluate'],[])
+                self.assertEqual(queue['approved_release_bytes'],0)
+                self.assertEqual(queue['executed_release_bytes'],0)
+                self.assertEqual(protected.read_bytes(),payload)
+                self.assertEqual(candidate.read_bytes(),payload)
 
     def test_bounded_scan_never_claims_complete_lifecycle_coverage(self):
         for i in range(8):
