@@ -10,7 +10,7 @@ build_artifact_guard.py 是独立政策。针对 .tmp、task-runs、candidates �
 
 ## 选择和保护粒度
 
-- 选择 .next/server、.next/static 中限定扩展名的编译代码、样式与 source map，以及已识别 webpack pack。
+- 选择 .next/server、.next/static 中限定扩展名的编译代码、样式与 source map，以及已识别 webpack pack。也支持 Next 隔离开发输出 .next/dev 下对应的 server、static、cache/webpack 布局，使用相同的来源和保护条件。
 - 多硬链接、未知身份、只读/特殊属性、无法确认权限的文件逐个保留。同单元的其他独立生成文件继续核验。
 - 原始/预渲染页面、RSC/未知内容、图片字体、媒体、JSON数据、数据库、来源标记附加流、构建身份及清单保持原位。
 - 文件、目录、保留证据和卷变化立即停止。执行只删除冻结清单中的文件，不清空目录、不递归删除、不移动源码和状态。
@@ -58,4 +58,4 @@ python ABS_SKILL/scripts/build_artifact_guard.py apply --plan ABS_PLAN.json --au
 
 该工具不证明全世界没有引用，也不能排除未来启动。macOS锁为协作锁，须持续确认静止。APFS共享块/快照等会影响真实回收量。Windows/macOS实际验证状态看当前提交检查；CI合成场景通过不等于已对真实项目执行清理。
 
-机制依据：[Next.js构建缓存文档](https://nextjs.org/docs/app/guides/ci-build-caching)。框架目录名称只用于路由，具体清理资格由上述来源、保留、运行和文件核验共同决定。
+机制依据：[Next.js构建缓存文档](https://nextjs.org/docs/app/guides/ci-build-caching)及[隔离开发构建](https://nextjs.org/docs/app/api-reference/config/next-config-js/isolatedDevBuild)。框架目录名称只用于路由，具体清理资格由上述来源、保留、运行和文件核验共同决定。

@@ -95,10 +95,14 @@ def classification(relative, s):
         return "protected_file_attributes"
     if name in ROOT_MANIFESTS and len(parts)==1:
         return "retained_build_identity_or_manifest"
+    # Next separates dev outputs from production outputs under .next/dev.
+    # This is the same app-scoped generated layout, never a second project.
+    # State/data and individual file protection above apply before this route.
+    layout=parts[1:] if parts[0]=="dev" else parts
     # Compiled code only; original media, prerendered content and data stay.
-    if parts[0] in {"server","static"} and Path(name).suffix.lower() in GENERATED_CODE:
+    if layout and layout[0] in {"server","static"} and Path(name).suffix.lower() in GENERATED_CODE:
         return "generated_compiled_code"
-    if (len(parts)>=3 and parts[:2]==["cache","webpack"]
+    if (len(layout)>=3 and layout[:2]==["cache","webpack"]
             and re.fullmatch(r"(?:index|[0-9]+)\.pack(?:\.gz)?(?:\.old)?",name)):
         return "generated_webpack_cache"
     return "protected_unrecognized_or_unique_output"

@@ -46,7 +46,7 @@
     },
     "build_artifact_guard.py": {
       "version": "1.6.0",
-      "sha256": "74a89667c556e233a533c6fc689a0cab5c19c94ecaa8c6dbc0600e6aa2a0063e"
+      "sha256": "11ecdf9695802587d6b16183b8d45d78486ede15ffc4eebe521a1e69cff09c7d"
     }
   },
   "verification_policy": {

@@ -98,6 +98,20 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(p["snapshot"]["retained"]["server/chunks/main.js"]["reason"],"protected_shared_identity")
         result=self.apply();self.assertEqual(result["deleted_files"],2)
         self.assertEqual(sha(shared),before);self.assertEqual(sha(alias),before);self.assert_protected()
+    def test_inactive_next_dev_layout_selects_code_and_packs_but_retains_content(self):
+        code=self.put("dev/server/chunks/compiled.js",b"synthetic generated dev code")
+        pack=self.put("dev/cache/webpack/client-development/1.pack.gz",b"synthetic generated webpack pack")
+        keep=[self.put("dev/server/app/unique.json",b'{"fixture":"retained"}'),
+              self.put("dev/server/app/page.rsc",b"fixture retained prerender"),
+              self.put("dev/BUILD_ID",b"fixture retained dev identity"),
+              self.put("dev/cache/webpack/client-development/unknown.pack.gz",b"unknown layout kept")]
+        before={str(p):p.read_bytes() for p in keep}
+        p=self.make_plan();self.assertEqual(p["planned_files"],5)
+        self.assertIn("dev/server/chunks/compiled.js",p["snapshot"]["selected"])
+        result=self.apply();self.assertEqual(result["deleted_files"],5)
+        self.assertFalse(code.exists());self.assertFalse(pack.exists())
+        for name,data in before.items():self.assertEqual(Path(name).read_bytes(),data)
+        self.assert_protected()
     def test_new_member_after_plan_refuses_before_delete(self):
         self.make_plan();self.put("static/chunks/new.js",b"new")
         with self.assertRaises(T.g.GuardError):self.apply()
@@ -189,6 +203,10 @@ class BuildTests(unittest.TestCase):
         self.apply();self.assertEqual(outside.read_bytes(),b"outside")
     def test_native_cli_plan_apply_and_live_writer_refusal(self):
         if os.name!="nt" and sys.platform!="darwin":self.skipTest("Native Windows/macOS only")
+        self.put("dev/static/chunks/generated.js",b"synthetic dev compiled output")
+        self.put("dev/cache/webpack/server-development/0.pack.gz",b"synthetic dev webpack output")
+        kept=self.put("dev/server/app/retained.json",b'{"fixture":"retain this data"}')
+        self.protected.append(kept);self.expected[str(kept)]=kept.read_bytes()
         if options.runtime_bindings:
             self.value["runtime_bindings"]=json.loads(Path(options.runtime_bindings).read_text(encoding="utf-8"))
             self.save()
@@ -201,7 +219,7 @@ class BuildTests(unittest.TestCase):
         run("plan","--project",self.project,"--source",self.relative,"--assessment",self.assessment,
             "--output",self.plan,"--confirm-idle")
         run("apply","--plan",self.plan,"--authorize-plan",sha(self.plan),"--receipt",self.receipt,"--confirm-idle")
-        result=json.loads(self.receipt.read_text());self.assertEqual(result["deleted_files"],3);self.assert_protected()
+        result=json.loads(self.receipt.read_text());self.assertEqual(result["deleted_files"],5);self.assert_protected()
         # A real test-owned writer must be refused and never terminated by cleaner.
         self.put("server/chunks/new.js",b"new generated fixture")
         writer=self.area/"writer.py";writer.write_text("import sys,time\nf=open(sys.argv[1],'ab');time.sleep(35)\n")
@@ -213,7 +231,7 @@ class BuildTests(unittest.TestCase):
             self.assertIsNone(child.poll())
         finally:
             child.terminate();child.wait(timeout=10) # Only this test-owned writer.
-        print("BUILD_NATIVE_INTEGRATION="+json.dumps({"deleted_files":3,
+        print("BUILD_NATIVE_INTEGRATION="+json.dumps({"deleted_files":5,"dev_layout_executed":True,
             "protected_sentinels_unchanged":len(self.protected),"live_writer_refused":True,"cleaner_killed_processes":False}))
 
 
