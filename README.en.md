@@ -6,7 +6,12 @@ Clean up positively identified obsolete artifacts left by Agent-driven developme
 
 The task may have been initiated by Codex, WorkBuddy, Claude Code, Kimi Code or another Agent. The actual writer may be npm, a browser, test runner or renderer. Product names do not establish ownership or disposal eligibility. The selected project is the scope boundary, not a reason to archive ordinary business documents.
 
-## 1.5 capabilities
+## 1.6 capabilities
+
+- A [persistent metadata inventory](references/batched-inventory.md) resumes within bounded batches and retains exact paths and file identities. Completed units can proceed while other units remain pending or fail. Build-focused exclusions remain explicitly unmeasured.
+- Shared files are retained individually; independent files in the same directory can still be reviewed. Overview aggregation is not treated as an executable cleanup unit.
+- A separate [inactive Next build guard](references/historical-builds.md) verifies retained source, genuine build IDs, reviewed launch/configuration inputs and native/loopback runtime bindings. It selects independent compiled code and webpack cache files while preserving shared files, prerendered content, manifests and unknown data. Reactivating that candidate requires a rebuild.
+- Legacy builds use an explicit current-state review when historical terminal records are unavailable. No historical evidence is fabricated; other cleanup policies keep their own evidence requirements.
 
 - A bounded metadata profiler exposes an additive `agent_residue_review` queue for scratch runs, failed-download fragments, captures/traces and testing/output clues. It reuses exclusive measurements and never converts names, age or size into deletion permission.
 - The [task artifact guard](references/agent-artifacts.md) plans and precisely deletes supported disposable units of completed tasks. It binds real producer and terminal evidence, retained results, current references/activity, complete membership, identities and content.
@@ -31,4 +36,4 @@ CI runs Windows/macOS × Python 3.10/3.13 with isolated fixtures, real exact-cle
 
 No project code, install, build, process termination or background cleanup is automatically performed. Unknown ownership, active references, changed members/content, unsupported state or storage errors stop the operation. A large or old file is not automatically disposable.
 
-MIT licensed, independent of the Agent vendors. See [release notes](docs/RELEASE_NOTES_v1.5.0.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).
+MIT licensed, independent of the Agent vendors. See [release notes](docs/RELEASE_NOTES_v1.6.0.md), [contributing](CONTRIBUTING.md) and [security](SECURITY.md).

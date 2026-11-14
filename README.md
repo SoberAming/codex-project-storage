@@ -30,10 +30,17 @@ flowchart TD
 
 画像新增 `agent_residue_review`，复用已有互斥计量生成残留审查队列，优先解释大的运行产物。名称、年龄、扩展名和体积都只是线索。报告分别记录候选占用、已核实计划收益和实际释放。
 
+### 大项目也能逐批完成
+
+1.6 新增[可续扫清单](references/batched-inventory.md)：扫描达到预算后保留准确路径、文件身份和进度，下一批继续；已完成的独立单元可以先核验，无需等全项目扫完。构建聚焦模式会跳过无关依赖和素材，并明确标注未测量范围。
+
+同目录里的共享文件逐个保留，不再因为一个硬链接就放弃分析其他独立文件。[历史 Next 构建路线](references/historical-builds.md)结合真实构建身份、保留源码、当前启动配置和运行服务，形成精确清理计划。没有旧任务结束日志时采用明确的现状核验，不补造记录；此规则不扩大数据库、一般任务残留等其他执行器的范围。
+
 ## 当前可执行的路线
 
 | 产物 | 支持范围 |
 | --- | --- |
+| 停用独立 Next 候选的构建 | [build_artifact_guard](references/historical-builds.md)：只处理核实后的独立编译代码和 webpack 缓存；源码、当前/回退应用、共享文件、构建身份、预渲染内容及未知数据保留。旧候选再次使用前需要重新构建 |
 | 已结束 Agent 任务的限定残留单元 | 新的 [agent_artifact_guard](references/agent-artifacts.md)：限定截图/录制/轨迹、下载碎片、暂存类型；真实生产与终止证据、保留成果、无引用与读写、完整成员和哈希核验后精确处理 |
 | CPython 缓存 | 对应源码存在，满足解释器格式、年龄、身份和保护规则 |
 | 可在本地确定重建的媒体中间产物 | 保留输入和生产依据，按原有专用规则处理 |
@@ -75,4 +82,4 @@ flowchart TD
 
 MIT 许可证。独立社区项目，与各 Agent 厂商无隶属关系。
 
-[贡献指南](CONTRIBUTING.md) · [安全报告](SECURITY.md) · [支持](SUPPORT.md) · [1.5 升级说明](docs/RELEASE_NOTES_v1.5.0.md)
+[贡献指南](CONTRIBUTING.md) · [安全报告](SECURITY.md) · [支持](SUPPORT.md) · [1.6 升级说明](docs/RELEASE_NOTES_v1.6.0.md)

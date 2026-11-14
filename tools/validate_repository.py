@@ -62,6 +62,10 @@ def collect(root, errors):
         for name in sorted(names):
             path = Path(directory) / name
             relative = path.relative_to(root).as_posix()
+            # A linked Git worktree stores this administrative pointer as a
+            # file. Like a .git directory it is neither public content nor read.
+            if relative == ".git":
+                continue
             info = os.lstat(path)
             if (not stat.S_ISREG(info.st_mode) or stat.S_ISLNK(info.st_mode)
                     or getattr(info, "st_file_attributes", 0) & 0x400 or info.st_nlink != 1):

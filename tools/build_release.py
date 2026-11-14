@@ -26,6 +26,8 @@ RUNTIME_FILES = (
     "scripts/native_cache_guard.py", "scripts/project_profiler.py",
     "scripts/retired_runtime_guard.py", "scripts/npm_cache_guard.py",
     "scripts/agent_artifact_guard.py", "references/agent-artifacts.md",
+    "scripts/project_batches.py", "scripts/build_artifact_guard.py",
+    "references/batched-inventory.md", "references/historical-builds.md",
     "references/storage-map.md", "references/operations.md",
     "references/mature-patterns.md", "references/relocation.md",
     "references/verification.json", "references/project-types.md",
@@ -42,6 +44,7 @@ PUBLIC_DOCS = (
     "docs/RELEASING.md", "docs/GITHUB-PUBLISHING.zh-CN.md",
     "docs/RELEASE_NOTES_v1.3.0.md", "docs/RELEASE_NOTES_v1.4.0.md", "docs/ROADMAP.md",
     "docs/RELEASE_NOTES_v1.5.0.md",
+    "docs/RELEASE_NOTES_v1.6.0.md",
 )
 MAX_FILE_BYTES = 4 * 1024 * 1024
 MAX_BUNDLE_BYTES = 16 * 1024 * 1024

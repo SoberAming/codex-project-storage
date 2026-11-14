@@ -264,6 +264,12 @@ class ReleaseToolTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertFalse(report.exists())
 
+    def test_validator_does_not_read_worktree_git_pointer(self):
+        (self.repo / ".git").write_bytes(b"private administrative pointer, not UTF-8: \xff")
+        with mock.patch.object(V, "yaml_loader", return_value=None):
+            result = V.validate(self.repo)
+        self.assertFalse(any(x.get("file") == ".git" for x in result["errors"]))
+
     def test_validator_report_is_outside_and_not_overwritten(self):
         report = self.area / "validation.json"
         argv = [sys.executable, "-I", "-B", str(ROOT / "tools/validate_repository.py"), "--repo", str(self.repo), "--output", str(report)]

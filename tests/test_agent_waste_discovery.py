@@ -290,6 +290,25 @@ class AgentWasteDiscoveryTests(unittest.TestCase):
         self.assertEqual(queue['approved_release_bytes'],0)
 
 
+    def test_shared_and_independent_files_in_one_partition_are_split_for_review(self):
+        payload=b'fictional shared'*37
+        shared=self.put('scratch/shared.bin',payload)
+        try:
+            os.link(shared,self.project/'scratch/alias.bin')
+        except OSError:
+            self.skipTest('Actual hardlinks unavailable')
+        independent=b'fictional independent payload'
+        self.put('scratch/independent.bin',independent)
+        report,_=self.cli()
+        item=next(n for n in report['nodes'] if n['category']=='agent_task_residue_clue')
+        self.assertEqual(item['file_protection']['independent_review_logical_bytes'],len(independent))
+        self.assertEqual(item['file_protection']['shared_retained_unique_logical_bytes'],len(payload))
+        self.assertEqual(item['action_support']['status'],'requires_file_level_split')
+        self.assertIsNone(item['action_support']['executor'])
+        self.assertEqual(report['agent_residue_review']['approved_release_bytes'],0)
+        self.assertEqual(shared.read_bytes(),payload)
+
+
 if __name__=='__main__':
     print('Isolated Agent residue discovery fixtures retained at: '+str(RUN),flush=True)
     unittest.main(argv=[sys.argv[0],*remaining])

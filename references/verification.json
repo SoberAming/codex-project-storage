@@ -1,8 +1,8 @@
 {
   "skill": "codex-project-storage",
-  "bundle_version": "1.5.0",
+  "bundle_version": "1.6.0",
   "user_date": "2026-11-14",
-  "scope": "Agent-generated task residue discovery and exact supported cleanup; retain useful project/state data",
+  "scope": "Resumable exact project inventory, inactive Next build cleanup and individually retained shared/state files",
   "components": {
     "storage_guard.py": {
       "version": "1.5.0",
@@ -25,8 +25,8 @@
       "sha256": "2cbe84dfec59bf32b62992d7eb861e912064402ab6715f9344a1d47e201ce9db"
     },
     "project_profiler.py": {
-      "version": "1.5.0",
-      "sha256": "bef9886d3da1db0a4177d8fa0beb775009ae2fe644ad510b99d4fa6a7ceb68b0"
+      "version": "1.6.0",
+      "sha256": "ed8e34705c718a0cda36bc74f5c39fdc93e5a34e3160cdba8a683c092403259d"
     },
     "retired_runtime_guard.py": {
       "version": "1.5.0",
@@ -39,6 +39,14 @@
     "agent_artifact_guard.py": {
       "version": "1.5.0",
       "sha256": "f48ff624242325e682535c022229a5387575ecbe603241f439b32744743bfdcb"
+    },
+    "project_batches.py": {
+      "version": "1.6.0",
+      "sha256": "579d33d28a65b3d8432ab52a35a4d7b72235dd04ffa22b971b24d6190b51ff98"
+    },
+    "build_artifact_guard.py": {
+      "version": "1.6.0",
+      "sha256": "74a89667c556e233a533c6fc689a0cab5c19c94ecaa8c6dbc0600e6aa2a0063e"
     }
   },
   "verification_policy": {
@@ -50,9 +58,9 @@
       "3.10",
       "3.13"
     ],
-    "suite_count": 13,
+    "suite_count": 15,
     "exact_commit_required": true,
-    "evidence_location": "GitHub exact-commit checks and ci-verification-1.5.0.json release asset",
+    "evidence_location": "GitHub exact-commit Windows/macOS checks; content identity is not a CI pass claim",
     "this_manifest_is_content_identity_not_a_claim_that_any_ci_has_passed": true,
     "not_certified": [
       "every Agent host",
@@ -1246,6 +1254,79 @@
           "new_hosted_ci_run": false,
           "previous_runs_and_failed_qa_preserved": true
         }
+      }
+    },
+    "1.5.0": {
+      "skill": "codex-project-storage",
+      "bundle_version": "1.5.0",
+      "user_date": "2026-11-14",
+      "scope": "Agent-generated task residue discovery and exact supported cleanup; retain useful project/state data",
+      "components": {
+        "storage_guard.py": {
+          "version": "1.5.0",
+          "sha256": "94d43e32c97170e22c9e890f98e538beede8cba43dfce27ccd9fc7322422059e"
+        },
+        "volume_advisor.py": {
+          "version": "2.0.0",
+          "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+        },
+        "relocation_guard.py": {
+          "version": "1.3.0",
+          "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+        },
+        "generated_artifact_guard.py": {
+          "version": "1.3.0",
+          "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+        },
+        "native_cache_guard.py": {
+          "version": "1.5.0",
+          "sha256": "2cbe84dfec59bf32b62992d7eb861e912064402ab6715f9344a1d47e201ce9db"
+        },
+        "project_profiler.py": {
+          "version": "1.6.0",
+          "sha256": "ed8e34705c718a0cda36bc74f5c39fdc93e5a34e3160cdba8a683c092403259d"
+        },
+        "retired_runtime_guard.py": {
+          "version": "1.5.0",
+          "sha256": "da7c2773cf34e7f8f04846b5a76b330175a7f83a22055068fc8d336b14af240b"
+        },
+        "npm_cache_guard.py": {
+          "version": "1.5.0",
+          "sha256": "862336414ec4dc0a23fe4dc626540ae6a5db62a24208bbeec1acecbb3f0dbe2e"
+        },
+        "agent_artifact_guard.py": {
+          "version": "1.5.0",
+          "sha256": "f48ff624242325e682535c022229a5387575ecbe603241f439b32744743bfdcb"
+        },
+        "project_batches.py": {
+          "version": "1.6.0",
+          "sha256": "579d33d28a65b3d8432ab52a35a4d7b72235dd04ffa22b971b24d6190b51ff98"
+        },
+        "build_artifact_guard.py": {
+          "version": "1.6.0",
+          "sha256": "74a89667c556e233a533c6fc689a0cab5c19c94ecaa8c6dbc0600e6aa2a0063e"
+        }
+      },
+      "verification_policy": {
+        "required_os": [
+          "windows-latest",
+          "macos-latest"
+        ],
+        "required_python": [
+          "3.10",
+          "3.13"
+        ],
+        "suite_count": 15,
+        "exact_commit_required": true,
+        "evidence_location": "GitHub exact-commit Windows/macOS checks; content identity is not a CI pass claim",
+        "this_manifest_is_content_identity_not_a_claim_that_any_ci_has_passed": true,
+        "not_certified": [
+          "every Agent host",
+          "personal external disks",
+          "all APFS sharing/snapshot semantics",
+          "real business project cleanup"
+        ],
+        "real_user_files_deleted_by_validation": 0
       }
     }
   }

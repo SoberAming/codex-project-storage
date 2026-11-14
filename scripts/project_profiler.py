@@ -21,7 +21,7 @@ import re
 import stat
 import sys
 
-VERSION = "1.5.0"
+VERSION = "1.6.0"
 SCHEMA = "project-storage-profile-v1"
 MAX_CONFIG_FILES = 256
 MAX_CONFIG_FILE_BYTES = 256 * 1024
@@ -660,6 +660,7 @@ def agent_residue_review(nodes):
             "actual_producer_clue": node["producer"], "producer_verified": False,
             "lifecycle_status": "unverified_retain", "disposal_authorized": False,
             "hardlink_cross_boundary": node["hardlink_cross_boundary"],
+            "file_protection": dict(node.get("file_protection", {})),
             "evidence_required": checks, "action_support": dict(node["action_support"]),
             "next_step": "inspect this exact producing task and retained evidence without running it; preserve until a supported exact plan qualifies"})
     items.sort(key=lambda x: (-x["measurement"]["logical_bytes"], x["scope"], x["path"], x["category"]))
@@ -717,6 +718,9 @@ class Profiler:
                 "protection": protection, "rebuild_or_retrieve": recovery, "action_support": route(category, scope != "project"),
                 "evidence": evidence or [{"kind": "path_and_filesystem_metadata", "conclusion": "classification clue only; no deletion permission"}],
                 "measurement": empty_measurement(), "measurement_basis": "exclusive attribution partition; child buckets are not included again", "hardlink_cross_boundary": False}
+            self.nodes[nk]["file_protection"] = {"independent_review_logical_bytes": 0,
+                "shared_retained_unique_logical_bytes": 0, "unknown_identity_logical_bytes": 0,
+                "shared_observed_paths": 0}
             if category == "python_bytecode" and any(p.lower() in DEPENDENCY_DIRS | STATE_DIRS | {".git", "dist", "build", "out", "assets", "media", "public", "static", "prepared", "backup", "backups", "recovery", "release", "releases", "rollback", "worktrees"} for p in Path(rel).parts[:-1]):
                 self.nodes[nk]["action_support"] = {"status": "protected_or_unproven", "executor": None,
                     "reason": "bytecode is inside a protected/tool-managed ancestor; existing storage_guard policy remains controlling"}
@@ -725,13 +729,17 @@ class Profiler:
     def retain_shared_identity(self, nk):
         """A first-observed accounting owner is never a cleanup owner.
 
-        Block the entire metadata partition conservatively: an exact executor
-        must not be suggested for a tree containing a known shared identity.
-        The accounting remains mutually exclusive and does not move bytes to a
-        preferred category or infer whether an unseen alias is valuable.
+        Shared identities stay protected. Independent files in the same
+        accounting partition remain eligible for separate, exact review.
         """
         node = self.nodes[nk]
         node["hardlink_cross_boundary"] = True
+        if node["file_protection"]["independent_review_logical_bytes"]:
+            node["protection"] = "mixed_requires_file_level_review"
+            node["action_support"] = {"status": "requires_file_level_split", "executor": None,
+                "executors_to_evaluate": ["build_artifact_guard.py"] if node["category"] == "framework_cache_and_build" else [],
+                "reason": "Shared files stay protected individually. Review independent files through complete exact units; this partition is never a deletion unit."}
+            return
         node["protection"] = "protected_shared_file_identity"
         node["action_support"] = {"status": "retained_shared_file_identity", "executor": None,
             "executors_to_evaluate": [],
@@ -853,6 +861,12 @@ class Profiler:
                                 if file_id in self.seen:
                                     prior = self.seen[file_id]
                                     node["measurement"]["hardlink_duplicates"] += 1
+                                    node["file_protection"]["shared_observed_paths"] += 1
+                                    if not prior["shared"]:
+                                        owner = self.nodes[prior["node"]]["file_protection"]
+                                        owner["independent_review_logical_bytes"] -= prior["fingerprint"]["size"]
+                                        owner["shared_retained_unique_logical_bytes"] += prior["fingerprint"]["size"]
+                                        prior["shared"] = True
                                     self.retain_shared_identity(nk)
                                     if prior["node"] != nk:
                                         self.retain_shared_identity(prior["node"])
@@ -870,10 +884,16 @@ class Profiler:
                                     except (OSError, ProfileError) as exc:
                                         self.error(rel.as_posix(), exc, scope)
                                 add_measurement(node["measurement"], s.st_size, allocation, not bool(s.st_ino))
-                                self.seen[file_id] = {"node": nk, "fingerprint": fingerprint(s)}
+                                field = ("unknown_identity_logical_bytes" if not s.st_ino else
+                                         "shared_retained_unique_logical_bytes" if s.st_nlink > 1 else "independent_review_logical_bytes")
+                                node["file_protection"][field] += s.st_size
+                                self.seen[file_id] = {"node": nk, "fingerprint": fingerprint(s), "shared": s.st_nlink > 1}
                                 if not s.st_ino:
                                     self.gap(rel.as_posix(), "FileID unavailable; cross-path hardlink deduplication unknown", scope)
                                 if s.st_nlink > 1:
+                                    node["file_protection"]["shared_observed_paths"] += 1
+                                    self.retain_shared_identity(nk)
+                                elif node["hardlink_cross_boundary"]:
                                     self.retain_shared_identity(nk)
                                 if self.aborted_io:
                                     break
@@ -1372,6 +1392,12 @@ def inspect(args):
         "review_priorities": review_priorities(nodes, project_totals),
         "agent_residue_review": agent_residue_review(nodes),
         "related_root_measurement_excluding_project_hardlink_duplicates": external_totals,
+        "batched_continuation": {
+            "required": bool(profiler.limit_hit or profiler.node_overflow_reported),
+            "tool": "project_batches.py",
+            "reason": "Use durable exact task/file paths when the overview budget is reached; completed units can be reviewed while other units remain pending.",
+            "scope": "discover outside-project ledger, scan bounded batches, report exact build roots; no deletion authority",
+            "anonymous_overflow_rows_are_not_cleanup_units": True},
         "measurement_notes": ["all category rows are exclusive partitions, not overlapping subtree totals",
             "hardlinks are deduplicated by device/FileID across all explicitly measured roots and attributed to first observed path; project is measured first",
             "outside-root hardlinks and filesystem sharing are unknown; occupancy is not reclaimable space",
@@ -1406,7 +1432,8 @@ def inspect(args):
                 "native_cache_guard.py independently verified project-exclusive pip adapter only",
                 "npm_cache_guard.py independently verified project-exclusive npm adapter only",
                 "retired_runtime_guard.py independently qualified synthetic stopped PG fixtures only",
-                "agent_artifact_guard.py separately assessed supported disposable task scratch payloads only"],
+                "agent_artifact_guard.py separately assessed supported disposable task scratch payloads only",
+                "build_artifact_guard.py separately reviewed inactive isolated Next build files; shared/protected members retained"],
             "releasable_bytes": None, "releasable_bytes_reason": "a storage profile is evidence, not an executable or authorized cleanup plan"}}
     # Serialize redacted values only; no raw configuration content is retained in this report.
     write_new(output, report, json_value=True)
