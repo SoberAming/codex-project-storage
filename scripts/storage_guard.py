@@ -23,11 +23,11 @@ import stat
 import sys
 import time
 
-VERSION = "1.3.0"
+VERSION = "1.5.0"
 POLICY = "project-cache-exact-v1"
 MIN_AGE = 48.0
 CACHE_MAX_BYTES = 64 * 1024 * 1024
-PRUNE = {".codex", ".agents", ".git", "sessions", "archived_sessions",
+PRUNE = {".codex", ".claude", ".kimi", ".kimi-code", ".workbuddy", ".codebuddy", ".agents", ".git", "sessions", "archived_sessions",
          "thread_history", "credentials", "secrets"}
 MANAGED_DIRS = {"node_modules", ".venv", "venv", "site-packages", "__pypackages__",
                 ".uv-cache", ".pnpm-store", ".npm", ".yarn", ".tox", ".nox", ".conda"}
@@ -101,6 +101,105 @@ def ancestors(path, missing=False):
                 raise
 
 
+def _agent_state_entries(codex_home=None):
+    """Known/explicit state boundaries only; never enumerate or read their data.
+
+    The name-based defaults are conservative protected locations, not a claim
+    that every host uses exactly these paths. Unknown hosts can declare their
+    discovered real roots in this tool's JSON-array environment setting.
+    """
+    home = absolute(Path.home())
+    entries = [("default-codex", home / ".codex")]
+    entries.extend(("conservative-name", home / name) for name in
+                   (".claude", ".kimi", ".kimi-code", ".workbuddy", ".codebuddy"))
+    for name in ("CODEX_HOME", "CODEX_SQLITE_HOME", "CLAUDE_CONFIG_DIR", "KIMI_CODE_HOME"):
+        value = os.environ.get(name)
+        if value is not None:
+            if not value.strip() or "\x00" in value or not Path(value).is_absolute():
+                raise GuardError("Configured Agent state root must be a nonempty absolute path: " + name)
+            entries.append((name, absolute(value)))
+    if codex_home is not None:
+        if not str(codex_home).strip() or "\x00" in str(codex_home) or not Path(codex_home).is_absolute():
+            raise GuardError("Explicit Codex state root must be an absolute path")
+        entries.append(("explicit-codex", absolute(codex_home)))
+    configured = os.environ.get("PROJECT_STORAGE_STATE_ROOTS")
+    if configured is not None:
+        try:
+            if len(configured) > 65536:
+                raise ValueError()
+            values = json.loads(configured)
+            if not isinstance(values, list) or len(values) > 64:
+                raise ValueError()
+            for value in values:
+                if (not isinstance(value, str) or not value.strip() or "\x00" in value
+                        or not Path(value).is_absolute()):
+                    raise ValueError()
+                entries.append(("PROJECT_STORAGE_STATE_ROOTS", absolute(value)))
+        except (ValueError, TypeError, OSError):
+            raise GuardError("PROJECT_STORAGE_STATE_ROOTS must be a bounded JSON array of absolute paths") from None
+    return entries
+
+
+def agent_state_roots(codex_home=None):
+    """Return deduplicated absolute state roots without reading file contents."""
+    result, seen = [], set()
+    for _, path in _agent_state_entries(codex_home):
+        k = key(path)
+        if k not in seen:
+            seen.add(k)
+            result.append(path)
+    return result
+
+
+def _same_state_entry(left, right):
+    try:
+        return os.path.samefile(left, right)
+    except FileNotFoundError:
+        return False
+
+
+def _state_boundary_below(path, root):
+    # Be conservative before future roots exist: samefile cannot identify a
+    # differently cased future path on a case-insensitive APFS/Windows volume.
+    # This case folding applies only to protected boundaries, not data scope.
+    left, right = str(absolute(path)).casefold(), str(absolute(root)).casefold()
+    try:
+        return os.path.commonpath((left, right)) == right
+    except ValueError:
+        return False
+
+
+def _protect_agent_state_path(path, entries, include_containing=False, allowed_names=()):
+    path = absolute(path)
+    names = PRUNE | {"state", "index", "indexes", "indices", "memories"}
+    if any(part.casefold() in names and part.casefold() not in allowed_names for part in path.parts):
+        raise GuardError("Agent state/name boundary refused before content access or creation")
+    physical = absolute(os.path.realpath(path))
+    candidates = (path, *path.parents, physical, *physical.parents)
+    for label, state in entries:
+        known = (state, absolute(os.path.realpath(state)))
+        if any(_state_boundary_below(candidate, root) for candidate in (path, physical) for root in known):
+            raise GuardError("Agent state root refused before content access or creation: " + label)
+        if any(_same_state_entry(candidate, root) for candidate in candidates for root in known):
+            raise GuardError("Agent state identity alias refused before content access or creation: " + label)
+        if include_containing:
+            if any(_state_boundary_below(root, candidate) for root in known for candidate in (path, physical)):
+                raise GuardError("Selected project contains configured Agent state: " + label)
+            if any(_same_state_entry(candidate, parent) for candidate in (path, physical)
+                   for root in known for parent in (root, *root.parents)):
+                raise GuardError("Selected project aliases an ancestor containing Agent state: " + label)
+    return path
+
+
+def protect_agent_state_path(path, codex_home=None, include_containing=False):
+    """Reject state names, roots and metadata aliases before administrative IO.
+
+    No body reads, directory enumeration or creation takes place. This is also
+    used by destructive executors; caller-selected JSON schemas grant no waiver.
+    """
+    return _protect_agent_state_path(path, _agent_state_entries(codex_home), include_containing)
+
+
 def project_root(path, codex_home=None):
     root = absolute(path)
     ancestors(root)
@@ -152,6 +251,16 @@ def project_root(path, codex_home=None):
         raise GuardError("A dependency/environment/cache subtree cannot be selected as a standalone project")
     if (below(root, codex) and not worktree) or (not worktree and any(p.lower() in PRUNE for p in root.parts)):
         raise GuardError("Project cannot be inside Codex, Git, agent, session, or credential storage")
+    if worktree:
+        # The pre-existing explicit Codex worktree exception admits payload
+        # selection only. Other hosts/explicit state declarations still win;
+        # administrative IO always uses the public helper with no exception.
+        entries = [(label, state) for label, state in _agent_state_entries(codex_home)
+                   if not (label in {"default-codex", "CODEX_HOME", "explicit-codex"}
+                           and (key(state) == key(codex) or _same_state_entry(state, codex)))]
+        _protect_agent_state_path(root, entries, include_containing=True, allowed_names={".codex"})
+    else:
+        protect_agent_state_path(root, codex_home, include_containing=True)
     return root
 
 
@@ -308,7 +417,7 @@ def validate_cache_fd(fd):
 
 
 def safe_output(path, directory=False):
-    p = absolute(path)
+    p = protect_agent_state_path(path)
     ancestors(p if directory and p.exists() else p.parent, missing=True)
     if not directory and os.path.lexists(p):
         raise GuardError(f"Output already exists; choose a new path: {p}")
@@ -330,7 +439,7 @@ def write_json(path, value):
 
 
 def read_json(path):
-    p = absolute(path)
+    p = protect_agent_state_path(path)
     ancestors(p.parent)
     plain(p, False)
     if p.stat().st_size > 128 * 1024 * 1024:

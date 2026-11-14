@@ -34,7 +34,7 @@ _guard_spec = importlib.util.spec_from_file_location("_native_storage_guard", _g
 guard = importlib.util.module_from_spec(_guard_spec)
 _guard_spec.loader.exec_module(guard)
 
-VERSION = "1.3.0"
+VERSION = "1.5.0"
 SCHEMA = "project-native-cache-v1"
 OPERATION = "native-pip-cache-purge"
 BINDING = ".storage-cache/pip-binding.json"
@@ -106,6 +106,7 @@ def fingerprint(s):
 
 def file_record(path, limit=None, deadline=None):
     """Hash ordinary, single-link bytes under anchored ancestors, in bounded RAM."""
+    guard.protect_agent_state_path(path)
     with guard.guarded_file(path) as (fd, _):
         before = fingerprint(os.fstat(fd))
         if limit is not None and before["size"] > limit:
@@ -130,6 +131,7 @@ def file_record(path, limit=None, deadline=None):
 
 
 def read_small(path):
+    guard.protect_agent_state_path(path)
     record = file_record(path, MAX_EVIDENCE)
     with guard.guarded_file(path) as (fd, _):
         data = os.read(fd, MAX_EVIDENCE + 1)

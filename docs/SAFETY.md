@@ -37,3 +37,14 @@ npm路线使用独立原生命令合同，保留cache根的日志及其他数据
 逻辑字节、已知分配估计、复制量和源卷空闲差值分别说明。硬链接、压缩/稀疏、APFS共享块/快照、回收站和同期进程写入会影响实际回收。复制留源、同卷换目录、计划生成和同卷回收站不算已释放空间。
 
 本工具不提供对所有设备的零风险保证。当前测试平台与跳过项见[兼容性](COMPATIBILITY.md)。漏洞或潜在误删反馈见[安全报告](../SECURITY.md)。
+
+
+## 1.5 跨 Agent 状态与任务产物
+
+`.codex`、`.agents`、`.claude`、`.kimi`、`.kimi-code`、`.workbuddy`、`.codebuddy` 等名称是保守保护线索，不声称列尽厂商实际路径。已配置的 `CODEX_HOME`、`CODEX_SQLITE_HOME`、`CLAUDE_CONFIG_DIR`、`KIMI_CODE_HOME` 及工具自有 `PROJECT_STORAGE_STATE_ROOTS` 均只检查路径和身份元数据，不读取其中会话/凭据正文。后者为绝对路径JSON数组，供Agent把运行时发现的自定义状态根加入保护；无效配置拒绝执行，不静默忽略。不要把普通项目目录加入此列表，除非确认它确实是状态根。
+
+管理评估、计划和回执也不得写入或从保护状态目录读取。显式Codex工作树项目选择保留原有限定，不据此给其他状态根添加任意例外。发现未识别或外部状态路径时先保护并查明，不按品牌名猜固定位置。
+
+配置根依据：[Claude Code 设置与目录](https://code.claude.com/docs/en/settings)、[Kimi Code 数据路径](https://www.kimi.com/code/docs/en/kimi-code-cli/configuration/data-locations.html)。`PROJECT_STORAGE_STATE_ROOTS`为本工具自己的保护参数，不是任何宿主官方环境变量。
+
+新的任务残留路线不要求对已证实可丢弃的产物先做同体积备份；必须保留独立结果和真实生产/终止证据。支持类型、来源限制、活动与引用核验、成员/哈希及停止条件见[任务产物规则](../references/agent-artifacts.md)。终止证明不等于来源证明，名字叫trace也可能是唯一诊断证据。不能通过临时补写一份历史声明把未知文件转成可删。

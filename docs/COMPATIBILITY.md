@@ -1,5 +1,19 @@
 # 兼容性与验证状态
 
+## 1.5.0 当前验证规则
+
+1.5代码和新增隔离测试必须在Windows/macOS各Python3.10与3.13四个托管组合通过。每次以[对应提交的CI](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml)为准，发布附件记录精确commit、run、各suite结果及平台跳过；旧版计数不证明新版通过。核心运行代码指纹见[verification.json](../references/verification.json)。
+
+新增任务残留、画像及状态保护测试会核验真实精确清理和源码/会话/索引等保留样本。Windows强制共享拒绝与macOS协作锁语义分别验证，后者仍需确认静止。原有原生npm10.9.2缓存集成保持执行，不按新增功能跳过旧路线。
+
+Codex、Claude Code、Kimi Code、WorkBuddy等是任务产物来源及潜在调用宿主；本次操作系统测试不构成每个宿主的端到端验收。个人Mac、外盘、全量APFS共享/快照、真实业务项目未因此取得验收。不会拿用户的真实会话或数据库做删除试验。
+
+---
+
+以下1.4记录为历史，不能用于证明1.5新组件或修订通过。
+
+# 1.4 历史兼容性记录
+
 当前版本：1.4.0。验证记录日期：2026-11-14。[修复后四格CI](https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569)已在修订`b75a54ccd85f8cb55561bc84c6db1eba89877f15`完成，四格均成功。下列结果只绑定该修订；最终发布tag仍须对应其精确修订通过的[发布检查](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml)，不能由这次运行代替后续文档提交的最终检查。
 
 ## 1.4托管验证

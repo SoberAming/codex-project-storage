@@ -13,6 +13,7 @@ import contextlib
 import datetime as dt
 import errno
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -20,15 +21,33 @@ import re
 import stat
 import sys
 
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 SCHEMA = "project-storage-profile-v1"
 MAX_CONFIG_FILES = 256
 MAX_CONFIG_FILE_BYTES = 256 * 1024
 MAX_REPORT_BYTES = 128 * 1024 * 1024
 MAX_DEPTH = 64
 MAX_ATTRIBUTION_NODES = 4096
-STATE_DIRS = {".codex", ".agents", "sessions", "archived_sessions", "thread_history",
+STATE_DIRS = {".codex", ".agents", ".claude", ".kimi", ".kimi-code", ".workbuddy", ".codebuddy",
+              "sessions", "archived_sessions", "thread_history",
               "credentials", "secrets", "state", "index", "indexes", "indices"}
+SOURCE_DIRS = {"src", "source", "sources"}
+RETAIN_DIRS = {"original", "originals", "inputs", "素材", "原件",
+              "final", "finals", "deliverables", "delivery", "approved", "published", "成片", "交付", "定稿",
+              "backup", "backups", "recovery", "rollback", "releases", "release", "备份", "发布",
+              "acceptance", "evidence", "audit", "baselines", "baseline", "golden", "__snapshots__",
+              "__image_snapshots__", "验收", "证据", "基准", "pgdata"}
+RESIDUE_DIRS = {"scratch", ".scratch", "tmp", ".tmp", "temp", ".temp", "task-temp", "task_tmp",
+                "task-scratch", "run-scratch", "staging", "download-fragments", "partial-downloads",
+                "test-results", "test-output", "test-outputs", "playwright-report", "traces", "trace",
+                "screenshots", "captures", "recordings", "previews", "preview", "decoded-frames"}
+RETAIN_FILE = re.compile(r"(?:^|[_. -])(?:final|deliverable|approved|published|release|master|backup|recovery|baseline|evidence|原件|成片|交付|定稿)(?:[_. -]|$)", re.I)
+RESIDUE_CATEGORIES = {"agent_task_residue_clue", "task_download_fragment_clue", "task_scratch_file_clue", "isolated_runtime_clue",
+                      "python_bytecode", "tool_managed_cache", "unverified_cache_name", "framework_cache_and_build", "build_outputs"}
+PROTECTED_PARTITIONS = {"dependencies", "version_control", "state_and_history", "browser_profile",
+                        "retained_project_material", "media_and_assets", "data_and_models",
+                        "tool_managed_cache", "browser_downloads", "framework_cache_and_build",
+                        "build_outputs", "unverified_cache_name"}
 DEPENDENCY_DIRS = {"node_modules", ".venv", "venv", "env", "site-packages", "__pypackages__",
                    ".tox", ".nox", ".conda", "pods", ".dart_tool"}
 MANIFEST_NAMES = {"package.json", "pyproject.toml", "requirements.txt", "pipfile", "uv.lock",
@@ -59,6 +78,32 @@ TOKEN = re.compile(r"(?:\b(?:sk|pk)-[A-Za-z0-9_-]{16,}|\b(?:gh[pousr]_|github_pa
 
 class ProfileError(Exception):
     pass
+
+
+def shared_state_guard():
+    """Load only the adjacent reviewed helper; never resolve through sys.path."""
+    path = Path(__file__).absolute().with_name("storage_guard.py")
+    for entry in (path, *path.parents):
+        s = os.lstat(entry)
+        if stat.S_ISLNK(s.st_mode) or getattr(s, "st_file_attributes", 0) & 0x400:
+            raise ProfileError("state guard implementation cannot be loaded through links")
+    spec = importlib.util.spec_from_file_location("_project_profiler_state_guard", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_state_guard = None
+
+
+def protect_state(path, codex_home=None, include_containing=False):
+    global _state_guard
+    if _state_guard is None:
+        _state_guard = shared_state_guard()
+    try:
+        _state_guard.protect_agent_state_path(path, codex_home, include_containing=include_containing)
+    except _state_guard.GuardError as exc:
+        raise ProfileError(str(exc)) from exc
 
 
 def utc():
@@ -191,6 +236,21 @@ def anchored_directory(path):
 
 def read_bounded(path, limit):
     path = absolute(path)
+    try:
+        protect_state(path)
+    except ProfileError:
+        git_project = (path.parent if path.name.lower() == ".git" else
+            path.parent.parent if path.name.lower() == "commondir" and path.parent.name.lower() == ".git" else None)
+        if git_project is not None:
+            # These two pre-existing, bounded pointer formats are project
+            # metadata. Validate their owning project against all Agent-state
+            # roots; never exempt arbitrary .git files or follow the pointer.
+            try:
+                _state_guard.project_root(git_project)
+            except _state_guard.GuardError as exc:
+                raise ProfileError(str(exc)) from exc
+        else:
+            validate_worktree_manifest(path)
     fd = None
     with anchored_directory(path.parent) as parent:
         before = plain(path, False)
@@ -225,6 +285,24 @@ def read_bounded(path, limit):
         finally:
             if fd is not None:
                 os.close(fd)
+
+
+def validate_worktree_manifest(path):
+    # The existing explicit Codex worktree payload exception permits only
+    # allowlisted project manifests, never arbitrary state/report bodies.
+    codex = absolute(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
+    if not below(path, codex):
+        raise ProfileError("content path crosses an Agent-state boundary")
+    parts = path.relative_to(codex).parts
+    if len(parts) < 4 or parts[0].lower() != "worktrees":
+        raise ProfileError("content path crosses an Agent-state boundary")
+    project = codex.joinpath(*parts[:3])
+    if not manifest_kind(path) or blocked_manifest(path.relative_to(project)) or not content_allowed(path):
+        raise ProfileError("worktree content is not an allowlisted project manifest")
+    try:
+        _state_guard.project_root(project, codex)
+    except _state_guard.GuardError as exc:
+        raise ProfileError(str(exc)) from exc
 
 
 def allocated(path, s):
@@ -280,8 +358,20 @@ def selected_root(path, codex, related=False):
         if not allowed_worktree:
             raise ProfileError("Codex state/related roots cannot be recursively profiled")
         plain((codex_alias_ancestor or codex).joinpath(*parts[:3]) / ".git")
+    if not allowed_worktree:
+        protect_state(root, codex, include_containing=True)
+    else:
+        # Keep the explicit metadata worktree exception, while still checking
+        # every other configured host/state root through the shared guard.
+        global _state_guard
+        if _state_guard is None:
+            _state_guard = shared_state_guard()
+        try:
+            _state_guard.project_root(root, codex)
+        except _state_guard.GuardError as exc:
+            raise ProfileError(str(exc)) from exc
     if related:
-        if any(p.lower() in {"sessions", "archived_sessions", "credentials", "secrets", ".codex", ".agents"} for p in root.parts):
+        if any(p.lower() in STATE_DIRS for p in root.parts):
             raise ProfileError("session/credential/agent roots cannot be selected as related roots")
     else:
         protected_parts = STATE_DIRS | {".git"}
@@ -306,6 +396,7 @@ def new_output(path):
 
 
 def output_outside_observation(path, roots):
+    protect_state(path)
     # All existing ancestors have already passed the no-link checks. Also catch
     # root aliases when an output ancestor has an observed root's device/FileID.
     protected_ids = set()
@@ -392,7 +483,9 @@ def classify_directory(relative):
     if name == ".git":
         return "version_control", "Git", "repository objects, worktree metadata and recovery history", "protected", "retain; inspect repository/worktree relationships and native object statistics"
     if name in STATE_DIRS:
-        return "state_and_history", "Codex/application (not established by name alone)", "session, index, application state or sensitive boundary", "protected", "retain; application-specific backup and recovery procedure required"
+        return "state_and_history", "Agent/application state boundary clue (owner unverified)", "session, index, application state or sensitive boundary", "protected", "retain; application-specific backup and recovery procedure required"
+    if name in RETAIN_DIRS:
+        return "retained_project_material", "unknown/project workflow", "source, input, deliverable, evidence, business database or recovery boundary", "protected", "retain; task-generated origin would not remove independent project/retention value"
     if name in {"node_modules", "site-packages", "__pypackages__", ".venv", "venv", ".tox", ".nox", ".conda", "pods", ".dart_tool"}:
         producer = "Node package manager" if name == "node_modules" else "Python environment manager" if name in {"site-packages", "__pypackages__", ".venv", "venv", ".tox", ".nox", ".conda"} else "CocoaPods" if name == "pods" else "Dart/Flutter"
         return "dependencies", producer, "installed dependencies/environment; may contain local edits or native builds", "protected", "recreate only with verified manifests, lockfiles, toolchain and local-edit preservation"
@@ -416,6 +509,16 @@ def classify_directory(relative):
         return "unverified_cache_name", "unknown", "directory name suggests cache; provenance and recoverability unknown", "protected", "establish writer, contents and native policy; name/age/Git-ignore is insufficient"
     if name in {"media", "assets", "public", "static", "素材"}:
         return "media_and_assets", "unknown/source or media pipeline", "source assets or produced media; value and references unknown", "protected", "preserve originals; inspect producer/input/output relationships and retained delivery copies"
+    if name in RESIDUE_DIRS:
+        if any(part in SOURCE_DIRS for part in lower[:-1]):
+            return "retained_project_material", "source-tree boundary", "scratch-shaped name inside a source tree; current role unknown", "protected", "retain source-tree material; a temporary name is not proof of a detached task output"
+        return ("agent_task_residue_clue", "task/tool producer unverified (directory metadata clue only)",
+                "possible scratch, capture, trace, preview, failed download or test-run output; completion and value unknown",
+                "protected_pending_task_review", "establish exact initiating task and actual producer, retained inputs/results, completion, current references and readers/writers; only a separate exact supported cleanup plan can authorize deletion")
+    if len(parts) >= 2 and lower[-2] in {".runtime", ".runs", "task-runs"}:
+        return ("agent_task_residue_clue", "per-run directory clue; initiating Agent and tool unverified",
+                "possible individual runtime/task output; may still contain current valuable data",
+                "protected_pending_task_review", "review this exact run and its descendants separately; do not treat the mixed runtime parent as disposable")
     if name in {"exports", "export", "outputs", "renders", "render", "artifacts", "archive", "archives", "backup", "backups", "recovery", "releases", "rollback", "备份", "发布"}:
         return "outputs_archives_recovery", "unknown/export, render or release task", "potential outputs, archives, backups or recovery material; inactivity unverified", "protected", "verify producer, inactivity, references and independent usable copy before relocation_guard routing"
     if name in {"data", "datasets", "checkpoints", "models"}:
@@ -429,6 +532,13 @@ def file_class(path):
         return "version_control", "Git worktree pointer", "repository location pointer; target is not recursively followed", "protected", "verify worktree/common-directory relationships and preserve repository history"
     if ext in DATABASE_EXT or re.search(r"\.(?:db|sqlite3?)-(?:wal|shm|journal)$", name):
         return "database_and_records", "application/data store", "database, records or session-like storage; metadata only", "protected", "application-consistent backup/export and recovery checks required"
+    if (name.startswith(".env") or SENSITIVE.search(name) or name in {"auth.json", "history.jsonl"}
+            or RETAIN_FILE.search(name)):
+        return "sensitive_metadata", "application/project", "sensitive, final, baseline or recovery-shaped file; content not read", "protected", "retain; no generic storage action"
+    if ext in {".part", ".partial", ".crdownload", ".download"}:
+        return "task_download_fragment_clue", "download tool unverified", "possible partial download; actual writer, resume value and completion unknown", "protected_pending_task_review", "verify task failure/completion, source availability, references and no active download before separately supported cleanup"
+    if ext in {".tmp", ".temp"}:
+        return "task_scratch_file_clue", "task/tool producer unverified", "temporary-shaped file; current purpose and producer unknown", "protected_pending_task_review", "verify exact task, retained results, current references and no active writer before separately supported cleanup"
     if ext in MEDIA_EXT:
         return "media_files", "unknown/media task", "source or generated media; extension does not establish replaceability", "protected", "preserve until source/output relationship and references are proven"
     if ext in DATA_EXT:
@@ -445,6 +555,10 @@ def route(category, external=False):
         return {"status": "evidence_only", "executor": None, "reason": "explicit related-root measurement does not prove project ownership or authorize action"}
     if category == "python_bytecode":
         return {"status": "exact_rule_available_after_validation", "executor": "storage_guard.py scan/plan/apply", "reason": "only exact CPython files accepted by the existing source, age, header, identity and activity rules"}
+    if category in {"agent_task_residue_clue", "task_download_fragment_clue", "task_scratch_file_clue"}:
+        return {"status": "conditional_task_lifecycle_review", "executor": None,
+                "executors_to_evaluate": ["agent_artifact_guard.py"],
+                "reason": "names and partial-download extensions are clues only; separately prove task provenance, completion/failure, retained valuable results, no references or writers, and executor-supported payloads before any exact authorized plan"}
     if category in {"outputs_archives_recovery", "media_files", "media_and_assets"}:
         return {"status": "conditional_evidence_route", "executor": None,
             "executors_to_evaluate": ["generated_artifact_guard.py", "relocation_guard.py"],
@@ -515,6 +629,48 @@ def review_priorities(nodes, project_totals):
         "approved_release_bytes": 0, "executed_release_bytes": 0,
         "interpretation": "occupancy and review priority only; no group has been established as removable. Explain major groups before presenting a small-cache-only result. Exact plans, user authorization and receipts determine promised and actual release separately.",
         "scope_limit": "if verified project-only release cannot meet the user's goal, state the shortfall and propose a bounded related-root or volume attribution audit; do not expand deletion scope or attribute unrelated volume growth to this project"}
+
+
+def agent_residue_review(nodes):
+    """Reuse exclusive observations as a task-lifecycle evidence work queue.
+
+    The queue never classifies a file as waste, proves its initiating Agent, or
+    grants an operation. Related roots remain visibly separate from the project.
+    """
+    items, project_bytes, related_bytes = [], 0, 0
+    missing = ["real initiating task/run and actual tool producer",
+        "retained producer, required inputs and valuable results",
+        "that run's completion/failure evidence and retention purpose",
+        "current references, readers/writers and shared ownership",
+        "exact executor payload/version eligibility and user-selected scope"]
+    for node in nodes:
+        if node["category"] not in RESIDUE_CATEGORIES or not node["measurement"]["logical_bytes"]:
+            continue
+        amount = node["measurement"]["logical_bytes"]
+        if node["scope"] == "project":
+            project_bytes += amount
+        else:
+            related_bytes += amount
+        checks = list(missing)
+        if node["hardlink_cross_boundary"]:
+            checks.append("hardlink ownership/physical-space ambiguity; do not claim ordinary independent payload")
+        items.append({"node_id": node["id"], "scope": node["scope"], "path": node["path"],
+            "category": node["category"], "measurement": dict(node["measurement"]),
+            "initiating_agent": {"name": None, "status": "not_established_by_metadata"},
+            "actual_producer_clue": node["producer"], "producer_verified": False,
+            "lifecycle_status": "unverified_retain", "disposal_authorized": False,
+            "hardlink_cross_boundary": node["hardlink_cross_boundary"],
+            "evidence_required": checks, "action_support": dict(node["action_support"]),
+            "next_step": "inspect this exact producing task and retained evidence without running it; preserve until a supported exact plan qualifies"})
+    items.sort(key=lambda x: (-x["measurement"]["logical_bytes"], x["scope"], x["path"], x["category"]))
+    return {"schema": "agent-task-residue-review-v1", "operation": "read_only_candidate_triage",
+        "basis": "existing exclusive metadata partitions; no additional traversal or body reads",
+        "candidate_partition_count": len(items), "items": items[:100], "items_truncated": len(items) > 100,
+        "project_candidate_logical_bytes": project_bytes, "related_candidate_logical_bytes": related_bytes,
+        "approved_release_bytes": 0, "executed_release_bytes": 0,
+        "protection": "source, inputs, originals, current deliverables, state/session/index, unknown/business databases, evidence and recovery boundaries are retained; isolated test-store clues still need independent lifecycle evidence",
+        "interpretation": "candidate occupancy only; Agent/tool names, directory names, ages and sizes never establish invalidity. Track real run provenance and lifecycle before cleanup. No cross-host runtime compatibility is established by this report.",
+        "scope_limit": "related roots are explicit observation scope only; no whole Agent home or whole-disk cleanup, and no project ownership inferred from their measurements"}
 
 
 class Profiler:
@@ -620,9 +776,10 @@ class Profiler:
             directory, inherited, depth = stack.pop()
             rel_dir = directory.relative_to(root)
             definition = classify_directory(rel_dir) if rel_dir.parts else None
-            locked = inherited and self.nodes[inherited]["category"] in {"dependencies", "version_control", "state_and_history", "browser_profile"}
+            locked = inherited and self.nodes[inherited]["category"] in PROTECTED_PARTITIONS
             if definition and not locked:
                 inherited = self.node(scope, rel_dir.as_posix(), definition)
+            locked = inherited and self.nodes[inherited]["category"] in PROTECTED_PARTITIONS
             if depth > MAX_DEPTH:
                 self.gap(rel_dir.as_posix(), "maximum directory depth reached", scope)
                 continue
@@ -660,7 +817,21 @@ class Profiler:
                                     else:
                                         self.gap(rel.as_posix(), "manifest discovery budget reached")
                                 # The nearest named boundary takes precedence; otherwise use extension metadata.
-                                nk = inherited or self.node(scope, rel_dir.as_posix() if rel_dir.parts else ".", file_class(path))
+                                definition = file_class(path)
+                                if (definition[0] in {"task_download_fragment_clue", "task_scratch_file_clue"}
+                                        and any(part.lower() in SOURCE_DIRS for part in rel.parts[:-1])):
+                                    definition = ("retained_project_material", "source-tree boundary", "temporary-shaped source-tree file; role unknown", "protected", "retain pending source-specific review")
+                                # Critical files inside scratch-like roots stay separately
+                                # protected. A parent task label cannot absorb live source,
+                                # database/session, input/config or final-shaped material.
+                                critical = (definition[0] in {"sensitive_metadata", "database_and_records", "version_control"}
+                                    or path.suffix.lower() in SOURCE_EXT | DATA_EXT | {".sql", ".ipynb", ".pem", ".key"})
+                                if inherited and self.nodes[inherited]["category"] == "agent_task_residue_clue" and critical:
+                                    nk = self.node(scope, rel_dir.as_posix() if rel_dir.parts else ".", definition)
+                                elif definition[0] in {"task_download_fragment_clue", "task_scratch_file_clue"} and not locked:
+                                    nk = self.node(scope, rel.as_posix(), definition)
+                                else:
+                                    nk = inherited or self.node(scope, rel_dir.as_posix() if rel_dir.parts else ".", definition)
                                 node = self.nodes[nk]
                                 node["measurement"]["files"] += 1
                                 file_id = (s.st_dev, s.st_ino) if s.st_ino else ("unknown", key(path))
@@ -1054,6 +1225,19 @@ def markdown(report):
             lines.append(f"| `{cell(node['path'])}` | {cell(node['category'])} / {cell(node['producer'])} | {m['logical_bytes']} | {m['allocated_bytes_known']} ({m['allocation_unknown_files']} unknown files) | {cell(node['protection'])}; {cell(node['action_support']['status'])} |")
     if len(project_nodes) > 100:
         lines += ["", f"Only the largest 100 of {len(project_nodes)} project attribution partitions appear here; JSON contains all bounded rows."]
+    residues = report["agent_residue_review"]
+    lines += ["", "## Agent task residue review queue", "",
+        "Prioritize possible task leftovers before proposing valuable-document migration. Each row is an exclusive measured partition requiring real task/tool/lifecycle evidence, never a disposable directory or free-space promise. Initiating Agent is not established by metadata.", "",
+        "| Scope / path | Candidate clue | Logical bytes | Next action |",
+        "|---|---|---:|---|"]
+    for item in residues["items"]:
+        lines.append(f"| {cell(item['scope'])} / `{cell(item['path'])}` | {cell(item['category'])}; actual producer unverified | {item['measurement']['logical_bytes']} | retain; establish real run, producer, completion, valuable results, references and idle status |")
+    if not residues["items"]:
+        lines.append("No supported residue clue was observed in this bounded snapshot. This does not prove that no leftovers exist.")
+    if residues["items_truncated"]:
+        lines.append(f"Only the largest 100 of {residues['candidate_partition_count']} candidate partitions are shown; omitted partitions are still included in the separately scoped observed amounts.")
+    lines += ["", f"Project candidate occupancy: {residues['project_candidate_logical_bytes']} logical bytes; explicit related roots: {residues['related_candidate_logical_bytes']} logical bytes. Approved release: 0; actual release: 0.",
+        "Protected source/input/final/state/database/evidence/recovery material is retained. A mixed `.runtime`/`outputs` root cannot be deleted from this report. Name, age, location and lack of a search hit do not establish invalidity."]
     priorities = report["review_priorities"]
     lines += ["", "## Priorities for meaningful optimization", "",
         "These are measured bytes requiring an explanation, not removable-byte promises. A cache-shaped file is not yet eligible. Real plans and receipts must report promised and actual release separately.", "",
@@ -1080,6 +1264,7 @@ def markdown(report):
         "- `native_cache_guard.py`: only its independently verified project-exclusive pip adapter; shared pip defaults remain advice only. This profile does not establish adapter eligibility.",
         "- `npm_cache_guard.py`: separately qualified project-exclusive npm cache only; native cleaning uses a fixed trusted tool and an isolated cache namespace, not project hooks. Default/shared caches remain advice only.",
         "- `retired_runtime_guard.py`: only positively qualified disposable synthetic PG test data; retain sibling logs, results, inputs and producers. Names, UUIDs and no PID file do not prove safety; business databases remain protected.",
+        "- `agent_artifact_guard.py`: only separately assessed supported scratch payloads from completed/failed tasks, with retained producer, inputs/results, lifecycle and idle/reference evidence. No mixed runtime root, source, session/index, database, final or recovery deletion.",
         "- Dependencies, framework caches, browser downloads, build systems and shared caches: native inspection/advice only; no generic executable deletion rule.",
         "", "## Native inspection suggestions (not executed)", ""]
     for item in report["native_cache_probes"]:
@@ -1169,6 +1354,7 @@ def inspect(args):
         "root_identity": identity(plain(root, True)), "operation": "read_only_profile", "commands_executed": [],
         "ecosystems": ecosystems, "nodes": nodes, "project_measurement": project_totals,
         "review_priorities": review_priorities(nodes, project_totals),
+        "agent_residue_review": agent_residue_review(nodes),
         "related_root_measurement_excluding_project_hardlink_duplicates": external_totals,
         "measurement_notes": ["all category rows are exclusive partitions, not overlapping subtree totals",
             "hardlinks are deduplicated by device/FileID across all explicitly measured roots and attributed to first observed path; project is measured first",
@@ -1190,6 +1376,7 @@ def inspect(args):
             "max_single_config_bytes": MAX_CONFIG_FILE_BYTES, "max_config_files": MAX_CONFIG_FILES,
             "reason_not_comprehensive": "external/shared sizes, active configuration, runtime writers, references, ownership and recoverability are not fully established; see gaps"},
         "next_evidence_checks": [
+            "Prioritize Agent/task leftover clues: map each exact producing task to its actual tool, retained inputs/results, real completion/failure and current references/writers. Keep unknowns; never fabricate historical lifecycle evidence.",
             "Start with the largest measured partitions; confirm their producing task, exact inputs/outputs, current readers/writers and business retention value.",
             "For dependencies/build caches, verify installed manager, effective cache/output path, lockfiles, local changes and re-creation cost; prepare a separate native proposal without assuming deletion support.",
             "For media/data/archives, distinguish original inputs, current deliverables and inactive outputs; prove inactivity and an independent usable retained copy before any supported exact relocation/redundancy plan.",
@@ -1200,7 +1387,10 @@ def inspect(args):
             "supported_executors": ["storage_guard.py exact validated CPython bytecode",
                 "generated_artifact_guard.py separately assessed supported media intermediates",
                 "relocation_guard.py separately validated inactive supported media/archive artifacts",
-                "native_cache_guard.py independently verified project-exclusive pip adapter only"],
+                "native_cache_guard.py independently verified project-exclusive pip adapter only",
+                "npm_cache_guard.py independently verified project-exclusive npm adapter only",
+                "retired_runtime_guard.py independently qualified synthetic stopped PG fixtures only",
+                "agent_artifact_guard.py separately assessed supported disposable task scratch payloads only"],
             "releasable_bytes": None, "releasable_bytes_reason": "a storage profile is evidence, not an executable or authorized cleanup plan"}}
     # Serialize redacted values only; no raw configuration content is retained in this report.
     write_new(output, report, json_value=True)

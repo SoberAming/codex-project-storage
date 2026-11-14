@@ -45,7 +45,7 @@ finally:
     else:
         sys.modules["storage_guard"] = _previous_guard
 
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 POLICY = "retired-synthetic-pg-v1"
 ASSESSMENT = "retired-synthetic-pg-assessment-v1"
 SOURCE = re.compile(r"^\.runtime/([a-z][a-z0-9-]{0,63}-pg-([0-9a-f-]{36}))/data$")
@@ -114,7 +114,7 @@ def source_path(root, relative):
 
 def administrative_path(path, codex_home=None):
     """Reject known sensitive/state admin paths before any body reader runs."""
-    path = g.absolute(path)
+    path = g.protect_agent_state_path(path, codex_home)
     protected = g.PRUNE | {"state", "index", "indexes", "indices"}
     if (any(part.lower() in protected for part in path.parts)
             or path.name.lower().startswith(".env") or PRIVATE_NAME.search(path.name)

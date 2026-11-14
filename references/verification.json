@@ -1,1185 +1,1252 @@
 {
   "skill": "codex-project-storage",
-  "bundle_version": "1.4.0",
+  "bundle_version": "1.5.0",
   "user_date": "2026-11-14",
-  "recorded_at_utc": "2026-11-14T04:45:57.391361+00:00",
-  "runtime": {
-    "os": "Windows",
-    "python": "3.13.13",
-    "real_macos_tested": false,
-    "scope_note": "Original local maintainer environment, not the later hosted GitHub matrix."
-  },
+  "scope": "Agent-generated task residue discovery and exact supported cleanup; retain useful project/state data",
   "components": {
+    "storage_guard.py": {
+      "version": "1.5.0",
+      "sha256": "94d43e32c97170e22c9e890f98e538beede8cba43dfce27ccd9fc7322422059e"
+    },
+    "volume_advisor.py": {
+      "version": "2.0.0",
+      "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+    },
+    "relocation_guard.py": {
+      "version": "1.3.0",
+      "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+    },
     "generated_artifact_guard.py": {
       "version": "1.3.0",
       "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
     },
     "native_cache_guard.py": {
-      "version": "1.3.0",
-      "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
-    },
-    "npm_cache_guard.py": {
-      "version": "1.4.0",
-      "sha256": "3fa70c6ed5517975678de38a6b41272dd81047b76ecf23e79bcc8c36a017b648"
+      "version": "1.5.0",
+      "sha256": "2cbe84dfec59bf32b62992d7eb861e912064402ab6715f9344a1d47e201ce9db"
     },
     "project_profiler.py": {
-      "version": "1.4.0",
-      "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
-    },
-    "relocation_guard.py": {
-      "version": "1.3.0",
-      "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+      "version": "1.5.0",
+      "sha256": "3ba82bd590a05070e6508a70a47658cf93f788892f3740ad12fea520dfc8272e"
     },
     "retired_runtime_guard.py": {
-      "version": "1.4.0",
-      "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
+      "version": "1.5.0",
+      "sha256": "da7c2773cf34e7f8f04846b5a76b330175a7f83a22055068fc8d336b14af240b"
     },
-    "storage_guard.py": {
-      "version": "1.3.0",
-      "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+    "npm_cache_guard.py": {
+      "version": "1.5.0",
+      "sha256": "862336414ec4dc0a23fe4dc626540ae6a5db62a24208bbeec1acecbb3f0dbe2e"
     },
-    "volume_advisor.py": {
-      "version": "2.0.0",
-      "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+    "agent_artifact_guard.py": {
+      "version": "1.5.0",
+      "sha256": "f48ff624242325e682535c022229a5387575ecbe603241f439b32744743bfdcb"
     }
   },
-  "independent_review": {
-    "native_engine_current_sha_groups_passed": 9,
-    "generated_engine_current_sha_groups_passed": 9,
-    "profiler_final_sensitive_input_gates_passed": true,
-    "profiler_previous_seven_group_review_is_historical": true,
-    "final_state_boundary_cases_passed": 10,
-    "remaining_must_fix": [],
-    "generated_initial_lock_assertion_corrected": "Python PermissionError errno13 correctly blocked fixture writes; original assertion expected winerror32. Both evidence records retained.",
-    "prior_cache_growth_test_adapted": "Cache scan now prunes protected media; growth test retains same net-growth assertions on unprotected task-output. Full protected-size coverage is tested in profiler.",
-    "scope_note": "Prepublication component reviews, except the current macOS ACL fix reviewed separately."
-  },
-  "real_native_cache_integration": {
-    "status": "real_native_purge_verified",
-    "platform": "Windows",
-    "pip_version": "26.1.1",
-    "python_version": "3.13.13",
-    "native_engine_sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c",
-    "new_isolated_project_only": true,
-    "producer_command": "download",
-    "producer_outer_calls": 1,
-    "producer_timeout_seconds": 60,
-    "internal_http_retries_allowed_inside_single_call": true,
-    "purge_calls": 1,
-    "readonly_probes": 9,
-    "install_calls": 0,
-    "removed_files": 6,
-    "observed_removed_logical_bytes": 87982,
-    "volume_free_delta_bytes": 393216,
-    "volume_delta_is_not_exact_delete_bytes": true,
-    "retained_tag_bytes": 115,
-    "retained_inputs_config_receipt_download_full_hashes_unchanged": true,
-    "trusted_python_and_pip_package_hashes_unchanged": true,
-    "shared_caches_modified": false,
-    "scope_note": "Native engine unchanged since real run; shared project-root guard subsequently tightened and final combined regressions passed. This is not a second real purge of the final bundle."
-  },
-  "historical_v1_2": {
-    "bundle_version": "1.2.0",
-    "current_relocation_engine_sha256_unchanged": false,
-    "real_cross_volume_smoke": {
-      "passed": true,
-      "source_filesystem": "NTFS",
-      "target_filesystem": "exFAT",
-      "copy_kept_source_before_acceptance": true,
-      "portable_permissions_and_initial_timestamps_explicitly_accepted": true,
-      "deleted_only_planned_fixture_files": true,
-      "files": 2,
-      "logical_bytes": 153,
-      "binary_control_bytes_covered": [
-        "LF",
-        "CRLF",
-        "NUL",
-        "0x1a",
-        "0xff"
-      ],
-      "real_ntfs_hardlink_refused": true,
-      "real_ntfs_ads_refused": true,
-      "final_script_sha256_unchanged": true
-    },
-    "scope_note": "Historical Windows NTFS to exFAT small fixture. Both the shared guard and macOS relocation helper changed afterward; not current cross-volume or all-platform acceptance.",
-    "original_relocation_engine_sha256": "2ccb91c8df368c339c2ae97645282ceb82999c82a3cbf64e0d789c3685f71ee5"
-  },
-  "scope": {
-    "actual_project_volume": true,
-    "no_predefined_drive_or_mount_name": true,
-    "no_default_user_free_space_goal": true,
-    "multi_ecosystem_diagnosis_is_not_universal_execution": true,
-    "no_manifest_fallback": true,
-    "related_metadata_is_not_delete_permission": true,
-    "shared_candidates_default_size_unknown": true,
-    "actions": [
-      "strict CPython cache deletion",
-      "verified locally rebuildable deterministic media-intermediate deletion",
-      "strict proven project-exclusive supported-pip native purge",
-      "verified inactive-artifact migration",
-      "verified redundant artifact release",
-      "strict proven project-exclusive npm 10.9.2 detached _cacache native clean",
-      "exact positively reviewed disposable synthetic PostgreSQL test-data retirement"
+  "verification_policy": {
+    "required_os": [
+      "windows-latest",
+      "macos-latest"
     ],
-    "native_execution_versions": [
-      "pip 25.0.1",
-      "pip 26.1.1",
-      "npm 10.9.2"
+    "required_python": [
+      "3.10",
+      "3.13"
     ],
-    "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
-    "no_recursive_disk_cleanup": true,
-    "no_automatic_config_links_or_background_tasks": true,
-    "uv": "advice_only",
-    "npm": "Separate guarded npm 10.9.2 adapter only; shared/default caches, installed dependencies, unsupported versions and unproven ownership/refetchability remain outside execution.",
-    "retired_runtime": "Separate exact synthetic PostgreSQL data-unit mode only; current JS/TS producer eligibility and retained historical proof are required. No database is started or connected; business/state databases and recovery stores remain protected.",
-    "node_version_admission": "Native Node major versions 18, 20, 22 and 24 are admission rules, not individually verified runtime versions or upstream-support claims."
-  },
-  "limits": [
-    "Hosted macOS fixture CI, when passing, is separate from end-user device, external-drive and full APFS acceptance.",
-    "The current 1.4 hosted matrix includes Python 3.10.11 and 3.13.17 on Windows x64 and macOS ARM64; exact environment and native outcomes are recorded in upgrade_1_4.",
-    "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
-    "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
-    "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
-    "Large original reconstruction inputs are metadata-checked, not fully hashed; producer-evidence overlap reads are explicitly counted.",
-    "Profile semantic coverage remains incomplete; independently complete candidate scopes may qualify separately.",
-    "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
-    "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
-    "No all-feature NTFS/APFS portability, clone/snapshot or external-drive acceptance is inferred from ordinary fixture results.",
-    "External targets can disconnect after acceptance; future reachability is not guaranteed.",
-    "Only the reviewed npm 10.9.2 cache-clean implementation is executable; optional native integration must be explicitly enabled with selected installed native Node/npm paths. Mocked tests or skipped native cases do not establish native npm qualification.",
-    "Synthetic PostgreSQL retirement requires positive source/input/completion/reference/activity evidence for one exact generated data unit; fictional-layout CLI tests do not qualify a started PostgreSQL server or arbitrary historical databases."
-  ],
-  "real_existing_user_project_data_modified": false,
-  "only_new_isolated_test_data_modified": true,
-  "maintainer_evidence_kept_outside_distribution": true,
-  "historical_prepublication_regressions": {
-    "suites": {
-      "cache_guard": {
-        "run": 25,
-        "passed": 23,
-        "skipped": 2
-      },
-      "volume_and_relocation": {
-        "run": 22,
-        "passed": 22,
-        "simulated_cross_volume_cases": 2
-      },
-      "generated_artifacts": {
-        "run": 17,
-        "passed": 17
-      },
-      "native_cache": {
-        "run": 25,
-        "passed": 25,
-        "real_purge_in_suite": false
-      },
-      "project_profiler": {
-        "run": 17,
-        "passed": 17
-      },
-      "state_boundaries": {
-        "run": 10,
-        "passed": 10,
-        "alias_cases_simulated": true
-      }
-    },
-    "total_run": 116,
-    "total_passed": 114,
-    "total_skipped": 2,
-    "skip_reason": "Fixture filesystem lacks native symlink/hardlink creation; skips are not native qualification.",
-    "all_suite_exit_codes_zero": true,
-    "components_unchanged_during_run": true,
-    "components": {
-      "storage_guard.py": {
-        "version": "1.3.0",
-        "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
-      },
-      "volume_advisor.py": {
-        "version": "2.0.0",
-        "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
-      },
-      "relocation_guard.py": {
-        "version": "1.2.0",
-        "sha256": "2ccb91c8df368c339c2ae97645282ceb82999c82a3cbf64e0d789c3685f71ee5"
-      },
-      "native_cache_guard.py": {
-        "version": "1.3.0",
-        "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
-      },
-      "project_profiler.py": {
-        "version": "1.3.0",
-        "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
-      },
-      "generated_artifact_guard.py": {
-        "version": "1.3.0",
-        "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
-      }
-    },
-    "scope_note": "Historical prepublication run; relocation helper subsequently changed for confirmed macOS empty-ACL semantics. Does not qualify the changed helper."
-  },
-  "historical_prepublication_forward_use": {
-    "status": "frozen_fixture_execution_and_root_postcheck_passed",
-    "production_scripts_hashed_before_and_after": 6,
-    "entrypoint_and_applicable_references_hashed_before_and_after": 4,
-    "unchanged": true,
-    "implementation_text_read_by_forward_agent": false,
-    "project_scripts_executed": false,
-    "new_isolated_fixture_only": true,
-    "planned_files": 2,
-    "deleted_files": 2,
-    "deleted_logical_bytes": 136,
-    "retained_project_files_full_hash_unchanged": 11,
-    "fictional_state_index_unchanged": true,
-    "added_project_files": 0,
-    "source_volume_free_delta_bytes": 65536,
-    "volume_delta_is_not_exact_delete_bytes": true,
-    "input_content_bytes_read": 0,
-    "rebuild_executed": false,
-    "remaining_items": 0,
-    "earlier_use_not_frozen": "Earlier separate fictional sample retained as historical only; not replayed.",
-    "user_new_technical_decisions": 0,
-    "implementation_required_documentation_gaps": 0,
-    "scope_note": "Historical prepublication independent fixture. Current relocation helper changed afterward; not a frozen-current-bundle claim."
-  },
-  "release_ci": {
-    "workflow_url": "https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml",
-    "evidence_policy": "Read actual runs for the exact release revision; a workflow declaration is not a passing result.",
-    "matrix": [
-      "windows-latest / Python 3.10",
-      "windows-latest / Python 3.13",
-      "macos-latest / Python 3.10",
-      "macos-latest / Python 3.13"
+    "suite_count": 13,
+    "exact_commit_required": true,
+    "evidence_location": "GitHub exact-commit checks and ci-verification-1.5.0.json release asset",
+    "this_manifest_is_content_identity_not_a_claim_that_any_ci_has_passed": true,
+    "not_certified": [
+      "every Agent host",
+      "personal external disks",
+      "all APFS sharing/snapshot semantics",
+      "real business project cleanup"
     ],
-    "pre_fix_run_url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43534331248",
-    "pre_fix_result": "Both Windows jobs passed. Mac jobs passed cache tests, then rejected ordinary no-ACL files in relocation; failure retained.",
-    "fix": "Distinguish absent extended ACL from a missing or changed ordinary object; refuse actual errors. No skipped relocation suite or weakened preserve policy.",
-    "acl_regression_suite": "tests/test_macos_acl.py",
-    "true_user_device_acceptance": false,
-    "scope_note": "Historical 1.3 public CI context. Current 1.4 runtime qualification is upgrade_1_4; the final release-revision gate is linked from the actual Release."
+    "real_user_files_deleted_by_validation": 0
   },
-  "historical_v1_3_component_registry": {
-    "storage_guard.py": {
-      "version": "1.3.0",
-      "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
-    },
-    "volume_advisor.py": {
-      "version": "2.0.0",
-      "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
-    },
-    "relocation_guard.py": {
-      "version": "1.3.0",
-      "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
-    },
-    "native_cache_guard.py": {
-      "version": "1.3.0",
-      "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
-    },
-    "project_profiler.py": {
-      "version": "1.3.0",
-      "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
-    },
-    "generated_artifact_guard.py": {
-      "version": "1.3.0",
-      "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
-    }
-  },
-  "upgrade_1_4": {
-    "status": "cross_platform_fixture_qualified",
-    "qualification_revision": "b75a54ccd85f8cb55561bc84c6db1eba89877f15",
-    "run_id": 43557649569,
-    "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569",
-    "qualification_kind": "GitHub-hosted Windows x64 and macOS ARM64, Python 3.10/3.13, actual isolated native npm and guarded fictional-PG-layout CLI",
-    "runtime_components": {
-      "generated_artifact_guard.py": {
-        "version": "1.3.0",
-        "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+  "historical_verification": {
+    "1.4.0": {
+      "skill": "codex-project-storage",
+      "bundle_version": "1.4.0",
+      "user_date": "2026-11-14",
+      "recorded_at_utc": "2026-11-14T04:45:57.391361+00:00",
+      "runtime": {
+        "os": "Windows",
+        "python": "3.13.13",
+        "real_macos_tested": false,
+        "scope_note": "Original local maintainer environment, not the later hosted GitHub matrix."
       },
-      "native_cache_guard.py": {
-        "version": "1.3.0",
-        "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
-      },
-      "npm_cache_guard.py": {
-        "version": "1.4.0",
-        "sha256": "3fa70c6ed5517975678de38a6b41272dd81047b76ecf23e79bcc8c36a017b648"
-      },
-      "project_profiler.py": {
-        "version": "1.4.0",
-        "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
-      },
-      "relocation_guard.py": {
-        "version": "1.3.0",
-        "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
-      },
-      "retired_runtime_guard.py": {
-        "version": "1.4.0",
-        "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
-      },
-      "storage_guard.py": {
-        "version": "1.3.0",
-        "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
-      },
-      "volume_advisor.py": {
-        "version": "2.0.0",
-        "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
-      }
-    },
-    "jobs": [
-      {
-        "id": 132334018114,
-        "name": "macos-latest / Python 3.13",
-        "status": "completed",
-        "conclusion": "success",
-        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018114",
-        "suites": [
-          {
-            "suite": "test_storage_guard",
-            "tests": 25,
-            "seconds": 3.646,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_storage_modes",
-            "tests": 22,
-            "seconds": 2.826,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 22
-          },
-          {
-            "suite": "test_project_profiler",
-            "tests": 21,
-            "seconds": 0.971,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 21
-          },
-          {
-            "suite": "test_generated_artifacts",
-            "tests": 17,
-            "seconds": 1.844,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 17
-          },
-          {
-            "suite": "test_native_cache",
-            "tests": 25,
-            "seconds": 0.257,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_state_boundaries",
-            "tests": 10,
-            "seconds": 0.048,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 10
-          },
-          {
-            "suite": "test_release_tools",
-            "tests": 19,
-            "seconds": 1.46,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 19
-          },
-          {
-            "suite": "test_macos_acl",
-            "tests": 15,
-            "seconds": 0.014,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 15
-          },
-          {
-            "suite": "test_retired_runtime_guard",
-            "tests": 40,
-            "seconds": 4.798,
-            "skipped": 3,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK (skipped=3)",
-            "passed": 37
-          },
-          {
-            "suite": "test_npm_cache_guard",
-            "tests": 64,
-            "seconds": 2.129,
-            "skipped": 1,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK (skipped=1)",
-            "passed": 63
-          }
-        ],
-        "environment": {
-          "python": "3.13.17",
-          "system": "darwin",
-          "machine": "arm64",
-          "runner_os": "macOS",
-          "runner_arch": "ARM64",
-          "image_os": "macos26",
-          "image_version": "20261102.0473.1",
-          "node_version": "v22.14.0",
-          "npm_version": "10.9.2"
+      "components": {
+        "generated_artifact_guard.py": {
+          "version": "1.3.0",
+          "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
         },
-        "native_npm": {
-          "npm": "10.9.2",
-          "node_version": "v22.14.0",
-          "native_child_pid": 20346,
-          "released_logical_bytes": 894,
-          "removed_file_count": 2,
-          "source_volume_free_delta": 12288,
-          "status": "native_completed_verified_detached_scope",
-          "real_user_cache_touched": false
+        "native_cache_guard.py": {
+          "version": "1.3.0",
+          "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
         },
-        "runtime_retirement": {
-          "platform": "darwin",
-          "status": "completed",
-          "deleted_files": 6,
-          "logical_deleted_bytes": 29461707,
-          "volume_free_delta_bytes": 25780224,
-          "database_connected": false,
-          "project_code_executed": false
+        "npm_cache_guard.py": {
+          "version": "1.4.0",
+          "sha256": "3fa70c6ed5517975678de38a6b41272dd81047b76ecf23e79bcc8c36a017b648"
         },
-        "skips": [
-          {
-            "test": "test_actual_psmodulepath_injection_is_not_loaded",
-            "reason": "Actual Windows PowerShell injection regression"
-          },
-          {
-            "test": "test_cim_stale_row_ignored_only_after_os_confirmed_exit",
-            "reason": "Windows process lifetime verification"
-          },
-          {
-            "test": "test_live_project_process_and_inaccessible_runtime_refused",
-            "reason": "Windows CIM parser test"
-          },
-          {
-            "test": "test_evidence_is_write_protected_until_native_returns",
-            "reason": "Windows mandatory sharing denial only"
-          }
-        ],
-        "tests": 258,
-        "passed": 254,
-        "skipped": 4
-      },
-      {
-        "id": 132334018298,
-        "name": "windows-latest / Python 3.13",
-        "status": "completed",
-        "conclusion": "success",
-        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018298",
-        "suites": [
-          {
-            "suite": "test_storage_guard",
-            "tests": 25,
-            "seconds": 5.078,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_storage_modes",
-            "tests": 22,
-            "seconds": 4.57,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 22
-          },
-          {
-            "suite": "test_project_profiler",
-            "tests": 21,
-            "seconds": 1.792,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 21
-          },
-          {
-            "suite": "test_generated_artifacts",
-            "tests": 17,
-            "seconds": 2.86,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 17
-          },
-          {
-            "suite": "test_native_cache",
-            "tests": 25,
-            "seconds": 1.454,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_state_boundaries",
-            "tests": 10,
-            "seconds": 0.165,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 10
-          },
-          {
-            "suite": "test_release_tools",
-            "tests": 19,
-            "seconds": 3.011,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 19
-          },
-          {
-            "suite": "test_macos_acl",
-            "tests": 15,
-            "seconds": 0.011,
-            "skipped": 2,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK (skipped=2)",
-            "passed": 13
-          },
-          {
-            "suite": "test_retired_runtime_guard",
-            "tests": 40,
-            "seconds": 42.186,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 40
-          },
-          {
-            "suite": "test_npm_cache_guard",
-            "tests": 64,
-            "seconds": 9.535,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 64
-          }
-        ],
-        "environment": {
-          "python": "3.13.17",
-          "system": "win32",
-          "machine": "AMD64",
-          "runner_os": "Windows",
-          "runner_arch": "X64",
-          "image_os": "win25-vs2026",
-          "image_version": "20261103.298.1",
-          "node_version": "v22.14.0",
-          "npm_version": "10.9.2"
+        "project_profiler.py": {
+          "version": "1.4.0",
+          "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
         },
-        "native_npm": {
-          "npm": "10.9.2",
-          "node_version": "v22.14.0",
-          "native_child_pid": 3420,
-          "released_logical_bytes": 878,
-          "removed_file_count": 2,
-          "source_volume_free_delta": 4096,
-          "status": "native_completed_verified_detached_scope",
-          "real_user_cache_touched": false
+        "relocation_guard.py": {
+          "version": "1.3.0",
+          "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
         },
-        "runtime_retirement": {
-          "platform": "win32",
-          "status": "completed",
-          "deleted_files": 6,
-          "logical_deleted_bytes": 29461707,
-          "volume_free_delta_bytes": 29462528,
-          "database_connected": false,
-          "project_code_executed": false
+        "retired_runtime_guard.py": {
+          "version": "1.4.0",
+          "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
         },
-        "skips": [
-          {
-            "test": "test_native_new_file_and_directory_metadata",
-            "reason": "Native Apple ACL API requires macOS"
-          },
-          {
-            "test": "test_native_nonempty_acl_is_captured",
-            "reason": "Native ACL fixture requires macOS chmod"
-          }
-        ],
-        "tests": 258,
-        "passed": 256,
-        "skipped": 2
-      },
-      {
-        "id": 132334018302,
-        "name": "windows-latest / Python 3.10",
-        "status": "completed",
-        "conclusion": "success",
-        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018302",
-        "suites": [
-          {
-            "suite": "test_storage_guard",
-            "tests": 25,
-            "seconds": 4.78,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_storage_modes",
-            "tests": 22,
-            "seconds": 4.082,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 22
-          },
-          {
-            "suite": "test_project_profiler",
-            "tests": 21,
-            "seconds": 1.655,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 21
-          },
-          {
-            "suite": "test_generated_artifacts",
-            "tests": 17,
-            "seconds": 2.576,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 17
-          },
-          {
-            "suite": "test_native_cache",
-            "tests": 25,
-            "seconds": 1.306,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_state_boundaries",
-            "tests": 10,
-            "seconds": 0.157,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 10
-          },
-          {
-            "suite": "test_release_tools",
-            "tests": 19,
-            "seconds": 3.128,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 19
-          },
-          {
-            "suite": "test_macos_acl",
-            "tests": 15,
-            "seconds": 0.009,
-            "skipped": 2,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK (skipped=2)",
-            "passed": 13
-          },
-          {
-            "suite": "test_retired_runtime_guard",
-            "tests": 40,
-            "seconds": 32.053,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 40
-          },
-          {
-            "suite": "test_npm_cache_guard",
-            "tests": 64,
-            "seconds": 7.615,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 64
-          }
-        ],
-        "environment": {
-          "python": "3.10.11",
-          "system": "win32",
-          "machine": "AMD64",
-          "runner_os": "Windows",
-          "runner_arch": "X64",
-          "image_os": "win25-vs2026",
-          "image_version": "20261103.298.1",
-          "node_version": "v22.14.0",
-          "npm_version": "10.9.2"
+        "storage_guard.py": {
+          "version": "1.3.0",
+          "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
         },
-        "native_npm": {
-          "npm": "10.9.2",
-          "node_version": "v22.14.0",
-          "native_child_pid": 2996,
-          "released_logical_bytes": 878,
-          "removed_file_count": 2,
-          "source_volume_free_delta": 4096,
-          "status": "native_completed_verified_detached_scope",
-          "real_user_cache_touched": false
-        },
-        "runtime_retirement": {
-          "platform": "win32",
-          "status": "completed",
-          "deleted_files": 6,
-          "logical_deleted_bytes": 29461707,
-          "volume_free_delta_bytes": 29462528,
-          "database_connected": false,
-          "project_code_executed": false
-        },
-        "skips": [
-          {
-            "test": "test_native_new_file_and_directory_metadata",
-            "reason": "Native Apple ACL API requires macOS"
-          },
-          {
-            "test": "test_native_nonempty_acl_is_captured",
-            "reason": "Native ACL fixture requires macOS chmod"
-          }
-        ],
-        "tests": 258,
-        "passed": 256,
-        "skipped": 2
-      },
-      {
-        "id": 132334018357,
-        "name": "macos-latest / Python 3.10",
-        "status": "completed",
-        "conclusion": "success",
-        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018357",
-        "suites": [
-          {
-            "suite": "test_storage_guard",
-            "tests": 25,
-            "seconds": 3.625,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_storage_modes",
-            "tests": 22,
-            "seconds": 3.831,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 22
-          },
-          {
-            "suite": "test_project_profiler",
-            "tests": 21,
-            "seconds": 1.097,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 21
-          },
-          {
-            "suite": "test_generated_artifacts",
-            "tests": 17,
-            "seconds": 1.916,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 17
-          },
-          {
-            "suite": "test_native_cache",
-            "tests": 25,
-            "seconds": 0.352,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 25
-          },
-          {
-            "suite": "test_state_boundaries",
-            "tests": 10,
-            "seconds": 0.066,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 10
-          },
-          {
-            "suite": "test_release_tools",
-            "tests": 19,
-            "seconds": 1.99,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 19
-          },
-          {
-            "suite": "test_macos_acl",
-            "tests": 15,
-            "seconds": 0.04,
-            "skipped": 0,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK",
-            "passed": 15
-          },
-          {
-            "suite": "test_retired_runtime_guard",
-            "tests": 40,
-            "seconds": 5.81,
-            "skipped": 3,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK (skipped=3)",
-            "passed": 37
-          },
-          {
-            "suite": "test_npm_cache_guard",
-            "tests": 64,
-            "seconds": 3.104,
-            "skipped": 1,
-            "failures": 0,
-            "errors": 0,
-            "outcome": "OK (skipped=1)",
-            "passed": 63
-          }
-        ],
-        "environment": {
-          "python": "3.10.11",
-          "system": "darwin",
-          "machine": "arm64",
-          "runner_os": "macOS",
-          "runner_arch": "ARM64",
-          "image_os": "macos26",
-          "image_version": "20261102.0473.1",
-          "node_version": "v22.14.0",
-          "npm_version": "10.9.2"
-        },
-        "native_npm": {
-          "npm": "10.9.2",
-          "node_version": "v22.14.0",
-          "native_child_pid": 2633,
-          "released_logical_bytes": 894,
-          "removed_file_count": 2,
-          "source_volume_free_delta": -36864,
-          "status": "native_completed_verified_detached_scope",
-          "real_user_cache_touched": false
-        },
-        "runtime_retirement": {
-          "platform": "darwin",
-          "status": "completed",
-          "deleted_files": 6,
-          "logical_deleted_bytes": 29461707,
-          "volume_free_delta_bytes": 28323840,
-          "database_connected": false,
-          "project_code_executed": false
-        },
-        "skips": [
-          {
-            "test": "test_actual_psmodulepath_injection_is_not_loaded",
-            "reason": "Actual Windows PowerShell injection regression"
-          },
-          {
-            "test": "test_cim_stale_row_ignored_only_after_os_confirmed_exit",
-            "reason": "Windows process lifetime verification"
-          },
-          {
-            "test": "test_live_project_process_and_inaccessible_runtime_refused",
-            "reason": "Windows CIM parser test"
-          },
-          {
-            "test": "test_evidence_is_write_protected_until_native_returns",
-            "reason": "Windows mandatory sharing denial only"
-          }
-        ],
-        "tests": 258,
-        "passed": 254,
-        "skipped": 4
-      }
-    ],
-    "initial_failed_runs": [
-      {
-        "run_id": 43556855654,
-        "sha": "ad0d00151b51d5d679608e74710c7beed027b5fc",
-        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43556855654",
-        "result": "all four jobs rejected official Node distributions without optional builtin npmrc; all other fixture checks passed",
-        "fix": "Bind the one optional builtin npmrc as verified present or verified absent; all other implementation files remain required"
-      }
-    ],
-    "previous_local_candidate": "historical_initial_v1_4_local_candidate; not treated as an exact-current cross-platform result",
-    "independent_reviews": {
-      "initial_target_groups": 32,
-      "optional_builtin_config_groups": 23,
-      "unit_counts_separate_from_review_groups": true
-    },
-    "publication": {
-      "tag": "v1.4.0",
-      "release_url": "https://github.com/SoberAming/codex-project-storage/releases/tag/v1.4.0",
-      "final_revision_gate": "Final documentation/package revision must independently pass the same four-job matrix before publication. Its exact commit and run are recorded in the Release and ci-verification-1.4.0.json asset."
-    },
-    "limitations": [
-      "Hosted tests do not accept personal devices, every filesystem, external disks, APFS clones/snapshots or all real business workflows.",
-      "PostgreSQL-layout fixtures contain fake bytes. Native process/file queries and guarded deletion ran; no PostgreSQL server was started or connected.",
-      "Native npm tests use a new offline inert package and project-exclusive cache, not any real user/shared cache.",
-      "POSIX locks remain advisory; a noncooperating writer cannot be ruled out universally.",
-      "Skipped tests are platform-specific checks, not successful native behavior on that platform.",
-      "Logical removed bytes and source-volume free-space deltas differ; concurrent writes and filesystem allocation can alter the delta."
-    ],
-    "final_revision_failed_checks": [
-      {
-        "run_id": 43558427122,
-        "sha": "8432430a697a6321cd6c15d984df28eb9ff3d334",
-        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43558427122",
-        "scope": "release-tool minimal fixture, not cleanup runtime",
-        "reason": "Runtime reference gained a relative link to compatibility documentation that was optional in the minimal curated fixture",
-        "fix": "Promote docs/COMPATIBILITY.md to required runtime distribution members; no runtime cleanup policy changed"
-      }
-    ]
-  },
-  "historical_v1_3_scope_and_limits": {
-    "bundle_version": "1.3.0",
-    "scope": {
-      "actual_project_volume": true,
-      "no_predefined_drive_or_mount_name": true,
-      "no_default_user_free_space_goal": true,
-      "multi_ecosystem_diagnosis_is_not_universal_execution": true,
-      "no_manifest_fallback": true,
-      "related_metadata_is_not_delete_permission": true,
-      "shared_candidates_default_size_unknown": true,
-      "actions": [
-        "strict CPython cache deletion",
-        "verified locally rebuildable deterministic media-intermediate deletion",
-        "strict proven project-exclusive supported-pip native purge",
-        "verified inactive-artifact migration",
-        "verified redundant artifact release"
-      ],
-      "native_execution_versions": [
-        "pip 25.0.1",
-        "pip 26.1.1"
-      ],
-      "uv_and_npm": "advice_only",
-      "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
-      "no_recursive_disk_cleanup": true,
-      "no_automatic_config_links_or_background_tasks": true
-    },
-    "limits": [
-      "Hosted macOS fixture CI, when passing, is separate from end-user device, external-drive and full APFS acceptance.",
-      "Only Python 3.13.13 was run; Python 3.10 grammar was checked.",
-      "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
-      "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
-      "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
-      "Large original reconstruction inputs are metadata-checked, not fully hashed; producer-evidence overlap reads are explicitly counted.",
-      "Profile semantic coverage remains incomplete; independently complete candidate scopes may qualify separately.",
-      "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
-      "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
-      "Real NTFS features and APFS clone/snapshot semantics are not qualified by the exFAT fixture regressions.",
-      "External targets can disconnect after acceptance; future reachability is not guaranteed."
-    ],
-    "scope_note": "Exact prior scope and limits retained as historical v1.3 declarations; they do not describe the new v1.4 npm or synthetic-PG execution modes."
-  },
-  "historical_initial_v1_4_local_candidate": {
-    "components": {
-      "generated_artifact_guard.py": {
-        "version": "1.3.0",
-        "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
-      },
-      "native_cache_guard.py": {
-        "version": "1.3.0",
-        "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
-      },
-      "npm_cache_guard.py": {
-        "version": "1.4.0",
-        "sha256": "a05493bf042b2041ec5d8374b5dfdc80bfbdf2ec6b0877b760a4d84c4c697282"
-      },
-      "project_profiler.py": {
-        "version": "1.4.0",
-        "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
-      },
-      "relocation_guard.py": {
-        "version": "1.3.0",
-        "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
-      },
-      "retired_runtime_guard.py": {
-        "version": "1.4.0",
-        "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
-      },
-      "storage_guard.py": {
-        "version": "1.3.0",
-        "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
-      },
-      "volume_advisor.py": {
-        "version": "2.0.0",
-        "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
-      }
-    },
-    "validation": {
-      "status": "local_candidate_validated",
-      "platform": "Windows",
-      "python": "3.13.13",
-      "fixture_filesystem": "exFAT",
-      "suites": [
-        {
-          "suite": "test_storage_guard",
-          "tests": 25,
-          "skipped": 2,
-          "passed": 23
-        },
-        {
-          "suite": "test_storage_modes",
-          "tests": 22,
-          "skipped": 0,
-          "passed": 22
-        },
-        {
-          "suite": "test_project_profiler",
-          "tests": 21,
-          "skipped": 0,
-          "passed": 21
-        },
-        {
-          "suite": "test_generated_artifacts",
-          "tests": 17,
-          "skipped": 0,
-          "passed": 17
-        },
-        {
-          "suite": "test_native_cache",
-          "tests": 25,
-          "skipped": 0,
-          "passed": 25
-        },
-        {
-          "suite": "test_state_boundaries",
-          "tests": 10,
-          "skipped": 0,
-          "passed": 10
-        },
-        {
-          "suite": "test_release_tools",
-          "tests": 19,
-          "skipped": 0,
-          "passed": 19
-        },
-        {
-          "suite": "test_macos_acl",
-          "tests": 15,
-          "skipped": 2,
-          "passed": 13
-        },
-        {
-          "suite": "test_npm_cache_guard",
-          "tests": 52,
-          "skipped": 2,
-          "passed": 50
-        },
-        {
-          "suite": "test_retired_runtime_guard",
-          "tests": 40,
-          "skipped": 3,
-          "passed": 37
+        "volume_advisor.py": {
+          "version": "2.0.0",
+          "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
         }
-      ],
-      "tests_run": 246,
-      "skipped": 9,
-      "remaining_must_fix": [],
-      "independent_forward_use": {
-        "scope": "analysis only on an existing project snapshot with bounded producer/log review",
-        "user_project_files_deleted": 0,
-        "user_project_files_migrated": 0,
-        "actual_user_project_released_bytes": 0,
-        "occupancy_not_promised_reclaim": true
       },
-      "native_npm_integration": {
-        "node": "22.14.0",
-        "npm": "10.9.2",
-        "new_local_offline_package_and_exclusive_cache": true,
-        "removed_files": 2,
-        "removed_logical_bytes": 764,
-        "retained_package_producer_and_original_debug_log": true,
-        "real_user_or_shared_cache_modified": false
+      "independent_review": {
+        "native_engine_current_sha_groups_passed": 9,
+        "generated_engine_current_sha_groups_passed": 9,
+        "profiler_final_sensitive_input_gates_passed": true,
+        "profiler_previous_seven_group_review_is_historical": true,
+        "final_state_boundary_cases_passed": 10,
+        "remaining_must_fix": [],
+        "generated_initial_lock_assertion_corrected": "Python PermissionError errno13 correctly blocked fixture writes; original assertion expected winerror32. Both evidence records retained.",
+        "prior_cache_growth_test_adapted": "Cache scan now prunes protected media; growth test retains same net-growth assertions on unprotected task-output. Full protected-size coverage is tested in profiler.",
+        "scope_note": "Prepublication component reviews, except the current macOS ACL fix reviewed separately."
       },
-      "retired_runtime_cli_integration": {
-        "native_postgresql_started": false,
-        "new_fictional_pg_layout_only": true,
-        "actual_guarded_file_deletion": true,
+      "real_native_cache_integration": {
+        "status": "real_native_purge_verified",
+        "platform": "Windows",
+        "pip_version": "26.1.1",
+        "python_version": "3.13.13",
+        "native_engine_sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c",
+        "new_isolated_project_only": true,
+        "producer_command": "download",
+        "producer_outer_calls": 1,
+        "producer_timeout_seconds": 60,
+        "internal_http_retries_allowed_inside_single_call": true,
+        "purge_calls": 1,
+        "readonly_probes": 9,
+        "install_calls": 0,
         "removed_files": 6,
-        "removed_logical_bytes": 29461707,
-        "retained_producer_inputs_logs_results_and_business_fixture": true,
-        "native_activity_query": true
+        "observed_removed_logical_bytes": 87982,
+        "volume_free_delta_bytes": 393216,
+        "volume_delta_is_not_exact_delete_bytes": true,
+        "retained_tag_bytes": 115,
+        "retained_inputs_config_receipt_download_full_hashes_unchanged": true,
+        "trusted_python_and_pip_package_hashes_unchanged": true,
+        "shared_caches_modified": false,
+        "scope_note": "Native engine unchanged since real run; shared project-root guard subsequently tightened and final combined regressions passed. This is not a second real purge of the final bundle."
       },
-      "independent_review_scope": [
-        "source-scoped non-replayable claims and unknown member refusal",
-        "no credential/customer-document body reads during reference discovery",
-        "OS-derived trusted activity executable and clean child environment",
-        "fixed native npm and content-addressed cache qualification",
-        "evidence identity/content binding and guarded handles throughout release",
-        "linear scan count and durable pending batches for large small-file sets"
+      "historical_v1_2": {
+        "bundle_version": "1.2.0",
+        "current_relocation_engine_sha256_unchanged": false,
+        "real_cross_volume_smoke": {
+          "passed": true,
+          "source_filesystem": "NTFS",
+          "target_filesystem": "exFAT",
+          "copy_kept_source_before_acceptance": true,
+          "portable_permissions_and_initial_timestamps_explicitly_accepted": true,
+          "deleted_only_planned_fixture_files": true,
+          "files": 2,
+          "logical_bytes": 153,
+          "binary_control_bytes_covered": [
+            "LF",
+            "CRLF",
+            "NUL",
+            "0x1a",
+            "0xff"
+          ],
+          "real_ntfs_hardlink_refused": true,
+          "real_ntfs_ads_refused": true,
+          "final_script_sha256_unchanged": true
+        },
+        "scope_note": "Historical Windows NTFS to exFAT small fixture. Both the shared guard and macOS relocation helper changed afterward; not current cross-volume or all-platform acceptance.",
+        "original_relocation_engine_sha256": "2ccb91c8df368c339c2ae97645282ceb82999c82a3cbf64e0d789c3685f71ee5"
+      },
+      "scope": {
+        "actual_project_volume": true,
+        "no_predefined_drive_or_mount_name": true,
+        "no_default_user_free_space_goal": true,
+        "multi_ecosystem_diagnosis_is_not_universal_execution": true,
+        "no_manifest_fallback": true,
+        "related_metadata_is_not_delete_permission": true,
+        "shared_candidates_default_size_unknown": true,
+        "actions": [
+          "strict CPython cache deletion",
+          "verified locally rebuildable deterministic media-intermediate deletion",
+          "strict proven project-exclusive supported-pip native purge",
+          "verified inactive-artifact migration",
+          "verified redundant artifact release",
+          "strict proven project-exclusive npm 10.9.2 detached _cacache native clean",
+          "exact positively reviewed disposable synthetic PostgreSQL test-data retirement"
+        ],
+        "native_execution_versions": [
+          "pip 25.0.1",
+          "pip 26.1.1",
+          "npm 10.9.2"
+        ],
+        "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
+        "no_recursive_disk_cleanup": true,
+        "no_automatic_config_links_or_background_tasks": true,
+        "uv": "advice_only",
+        "npm": "Separate guarded npm 10.9.2 adapter only; shared/default caches, installed dependencies, unsupported versions and unproven ownership/refetchability remain outside execution.",
+        "retired_runtime": "Separate exact synthetic PostgreSQL data-unit mode only; current JS/TS producer eligibility and retained historical proof are required. No database is started or connected; business/state databases and recovery stores remain protected.",
+        "node_version_admission": "Native Node major versions 18, 20, 22 and 24 are admission rules, not individually verified runtime versions or upstream-support claims."
+      },
+      "limits": [
+        "Hosted macOS fixture CI, when passing, is separate from end-user device, external-drive and full APFS acceptance.",
+        "The current 1.4 hosted matrix includes Python 3.10.11 and 3.13.17 on Windows x64 and macOS ARM64; exact environment and native outcomes are recorded in upgrade_1_4.",
+        "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
+        "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
+        "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
+        "Large original reconstruction inputs are metadata-checked, not fully hashed; producer-evidence overlap reads are explicitly counted.",
+        "Profile semantic coverage remains incomplete; independently complete candidate scopes may qualify separately.",
+        "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
+        "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
+        "No all-feature NTFS/APFS portability, clone/snapshot or external-drive acceptance is inferred from ordinary fixture results.",
+        "External targets can disconnect after acceptance; future reachability is not guaranteed.",
+        "Only the reviewed npm 10.9.2 cache-clean implementation is executable; optional native integration must be explicitly enabled with selected installed native Node/npm paths. Mocked tests or skipped native cases do not establish native npm qualification.",
+        "Synthetic PostgreSQL retirement requires positive source/input/completion/reference/activity evidence for one exact generated data unit; fictional-layout CLI tests do not qualify a started PostgreSQL server or arbitrary historical databases."
       ],
-      "independent_current_target_groups_passed": 32,
-      "independent_review_is_separate_from_unit_test_counts": true,
-      "limitations": [
-        "New 1.4 code has not run on actual macOS, APFS or a new hosted CI matrix.",
-        "POSIX locks are advisory and do not exclude noncooperating writers.",
-        "Only npm 10.9.2 command implementation is supported; other Node majors are admission rules, not individually tested versions.",
-        "PG retirement is only for positively reviewed disposable synthetic data, not business/state databases or retained recovery stores.",
-        "Code citations and hashes bind real evidence; they do not automatically prove arbitrary program semantics or historical ownership.",
-        "Logical deletion bytes and volume free-space changes are different measurements."
-      ],
-      "published_to_github": false,
-      "new_hosted_ci_run": false,
-      "previous_runs_and_failed_qa_preserved": true
+      "real_existing_user_project_data_modified": false,
+      "only_new_isolated_test_data_modified": true,
+      "maintainer_evidence_kept_outside_distribution": true,
+      "historical_prepublication_regressions": {
+        "suites": {
+          "cache_guard": {
+            "run": 25,
+            "passed": 23,
+            "skipped": 2
+          },
+          "volume_and_relocation": {
+            "run": 22,
+            "passed": 22,
+            "simulated_cross_volume_cases": 2
+          },
+          "generated_artifacts": {
+            "run": 17,
+            "passed": 17
+          },
+          "native_cache": {
+            "run": 25,
+            "passed": 25,
+            "real_purge_in_suite": false
+          },
+          "project_profiler": {
+            "run": 17,
+            "passed": 17
+          },
+          "state_boundaries": {
+            "run": 10,
+            "passed": 10,
+            "alias_cases_simulated": true
+          }
+        },
+        "total_run": 116,
+        "total_passed": 114,
+        "total_skipped": 2,
+        "skip_reason": "Fixture filesystem lacks native symlink/hardlink creation; skips are not native qualification.",
+        "all_suite_exit_codes_zero": true,
+        "components_unchanged_during_run": true,
+        "components": {
+          "storage_guard.py": {
+            "version": "1.3.0",
+            "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+          },
+          "volume_advisor.py": {
+            "version": "2.0.0",
+            "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+          },
+          "relocation_guard.py": {
+            "version": "1.2.0",
+            "sha256": "2ccb91c8df368c339c2ae97645282ceb82999c82a3cbf64e0d789c3685f71ee5"
+          },
+          "native_cache_guard.py": {
+            "version": "1.3.0",
+            "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+          },
+          "project_profiler.py": {
+            "version": "1.3.0",
+            "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
+          },
+          "generated_artifact_guard.py": {
+            "version": "1.3.0",
+            "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+          }
+        },
+        "scope_note": "Historical prepublication run; relocation helper subsequently changed for confirmed macOS empty-ACL semantics. Does not qualify the changed helper."
+      },
+      "historical_prepublication_forward_use": {
+        "status": "frozen_fixture_execution_and_root_postcheck_passed",
+        "production_scripts_hashed_before_and_after": 6,
+        "entrypoint_and_applicable_references_hashed_before_and_after": 4,
+        "unchanged": true,
+        "implementation_text_read_by_forward_agent": false,
+        "project_scripts_executed": false,
+        "new_isolated_fixture_only": true,
+        "planned_files": 2,
+        "deleted_files": 2,
+        "deleted_logical_bytes": 136,
+        "retained_project_files_full_hash_unchanged": 11,
+        "fictional_state_index_unchanged": true,
+        "added_project_files": 0,
+        "source_volume_free_delta_bytes": 65536,
+        "volume_delta_is_not_exact_delete_bytes": true,
+        "input_content_bytes_read": 0,
+        "rebuild_executed": false,
+        "remaining_items": 0,
+        "earlier_use_not_frozen": "Earlier separate fictional sample retained as historical only; not replayed.",
+        "user_new_technical_decisions": 0,
+        "implementation_required_documentation_gaps": 0,
+        "scope_note": "Historical prepublication independent fixture. Current relocation helper changed afterward; not a frozen-current-bundle claim."
+      },
+      "release_ci": {
+        "workflow_url": "https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml",
+        "evidence_policy": "Read actual runs for the exact release revision; a workflow declaration is not a passing result.",
+        "matrix": [
+          "windows-latest / Python 3.10",
+          "windows-latest / Python 3.13",
+          "macos-latest / Python 3.10",
+          "macos-latest / Python 3.13"
+        ],
+        "pre_fix_run_url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43534331248",
+        "pre_fix_result": "Both Windows jobs passed. Mac jobs passed cache tests, then rejected ordinary no-ACL files in relocation; failure retained.",
+        "fix": "Distinguish absent extended ACL from a missing or changed ordinary object; refuse actual errors. No skipped relocation suite or weakened preserve policy.",
+        "acl_regression_suite": "tests/test_macos_acl.py",
+        "true_user_device_acceptance": false,
+        "scope_note": "Historical 1.3 public CI context. Current 1.4 runtime qualification is upgrade_1_4; the final release-revision gate is linked from the actual Release."
+      },
+      "historical_v1_3_component_registry": {
+        "storage_guard.py": {
+          "version": "1.3.0",
+          "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+        },
+        "volume_advisor.py": {
+          "version": "2.0.0",
+          "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+        },
+        "relocation_guard.py": {
+          "version": "1.3.0",
+          "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+        },
+        "native_cache_guard.py": {
+          "version": "1.3.0",
+          "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+        },
+        "project_profiler.py": {
+          "version": "1.3.0",
+          "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
+        },
+        "generated_artifact_guard.py": {
+          "version": "1.3.0",
+          "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+        }
+      },
+      "upgrade_1_4": {
+        "status": "cross_platform_fixture_qualified",
+        "qualification_revision": "b75a54ccd85f8cb55561bc84c6db1eba89877f15",
+        "run_id": 43557649569,
+        "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569",
+        "qualification_kind": "GitHub-hosted Windows x64 and macOS ARM64, Python 3.10/3.13, actual isolated native npm and guarded fictional-PG-layout CLI",
+        "runtime_components": {
+          "generated_artifact_guard.py": {
+            "version": "1.3.0",
+            "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+          },
+          "native_cache_guard.py": {
+            "version": "1.3.0",
+            "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+          },
+          "npm_cache_guard.py": {
+            "version": "1.4.0",
+            "sha256": "3fa70c6ed5517975678de38a6b41272dd81047b76ecf23e79bcc8c36a017b648"
+          },
+          "project_profiler.py": {
+            "version": "1.4.0",
+            "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
+          },
+          "relocation_guard.py": {
+            "version": "1.3.0",
+            "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+          },
+          "retired_runtime_guard.py": {
+            "version": "1.4.0",
+            "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
+          },
+          "storage_guard.py": {
+            "version": "1.3.0",
+            "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+          },
+          "volume_advisor.py": {
+            "version": "2.0.0",
+            "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+          }
+        },
+        "jobs": [
+          {
+            "id": 132334018114,
+            "name": "macos-latest / Python 3.13",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018114",
+            "suites": [
+              {
+                "suite": "test_storage_guard",
+                "tests": 25,
+                "seconds": 3.646,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_storage_modes",
+                "tests": 22,
+                "seconds": 2.826,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 22
+              },
+              {
+                "suite": "test_project_profiler",
+                "tests": 21,
+                "seconds": 0.971,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 21
+              },
+              {
+                "suite": "test_generated_artifacts",
+                "tests": 17,
+                "seconds": 1.844,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 17
+              },
+              {
+                "suite": "test_native_cache",
+                "tests": 25,
+                "seconds": 0.257,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_state_boundaries",
+                "tests": 10,
+                "seconds": 0.048,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 10
+              },
+              {
+                "suite": "test_release_tools",
+                "tests": 19,
+                "seconds": 1.46,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 19
+              },
+              {
+                "suite": "test_macos_acl",
+                "tests": 15,
+                "seconds": 0.014,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 15
+              },
+              {
+                "suite": "test_retired_runtime_guard",
+                "tests": 40,
+                "seconds": 4.798,
+                "skipped": 3,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK (skipped=3)",
+                "passed": 37
+              },
+              {
+                "suite": "test_npm_cache_guard",
+                "tests": 64,
+                "seconds": 2.129,
+                "skipped": 1,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK (skipped=1)",
+                "passed": 63
+              }
+            ],
+            "environment": {
+              "python": "3.13.17",
+              "system": "darwin",
+              "machine": "arm64",
+              "runner_os": "macOS",
+              "runner_arch": "ARM64",
+              "image_os": "macos26",
+              "image_version": "20261102.0473.1",
+              "node_version": "v22.14.0",
+              "npm_version": "10.9.2"
+            },
+            "native_npm": {
+              "npm": "10.9.2",
+              "node_version": "v22.14.0",
+              "native_child_pid": 20346,
+              "released_logical_bytes": 894,
+              "removed_file_count": 2,
+              "source_volume_free_delta": 12288,
+              "status": "native_completed_verified_detached_scope",
+              "real_user_cache_touched": false
+            },
+            "runtime_retirement": {
+              "platform": "darwin",
+              "status": "completed",
+              "deleted_files": 6,
+              "logical_deleted_bytes": 29461707,
+              "volume_free_delta_bytes": 25780224,
+              "database_connected": false,
+              "project_code_executed": false
+            },
+            "skips": [
+              {
+                "test": "test_actual_psmodulepath_injection_is_not_loaded",
+                "reason": "Actual Windows PowerShell injection regression"
+              },
+              {
+                "test": "test_cim_stale_row_ignored_only_after_os_confirmed_exit",
+                "reason": "Windows process lifetime verification"
+              },
+              {
+                "test": "test_live_project_process_and_inaccessible_runtime_refused",
+                "reason": "Windows CIM parser test"
+              },
+              {
+                "test": "test_evidence_is_write_protected_until_native_returns",
+                "reason": "Windows mandatory sharing denial only"
+              }
+            ],
+            "tests": 258,
+            "passed": 254,
+            "skipped": 4
+          },
+          {
+            "id": 132334018298,
+            "name": "windows-latest / Python 3.13",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018298",
+            "suites": [
+              {
+                "suite": "test_storage_guard",
+                "tests": 25,
+                "seconds": 5.078,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_storage_modes",
+                "tests": 22,
+                "seconds": 4.57,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 22
+              },
+              {
+                "suite": "test_project_profiler",
+                "tests": 21,
+                "seconds": 1.792,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 21
+              },
+              {
+                "suite": "test_generated_artifacts",
+                "tests": 17,
+                "seconds": 2.86,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 17
+              },
+              {
+                "suite": "test_native_cache",
+                "tests": 25,
+                "seconds": 1.454,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_state_boundaries",
+                "tests": 10,
+                "seconds": 0.165,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 10
+              },
+              {
+                "suite": "test_release_tools",
+                "tests": 19,
+                "seconds": 3.011,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 19
+              },
+              {
+                "suite": "test_macos_acl",
+                "tests": 15,
+                "seconds": 0.011,
+                "skipped": 2,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK (skipped=2)",
+                "passed": 13
+              },
+              {
+                "suite": "test_retired_runtime_guard",
+                "tests": 40,
+                "seconds": 42.186,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 40
+              },
+              {
+                "suite": "test_npm_cache_guard",
+                "tests": 64,
+                "seconds": 9.535,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 64
+              }
+            ],
+            "environment": {
+              "python": "3.13.17",
+              "system": "win32",
+              "machine": "AMD64",
+              "runner_os": "Windows",
+              "runner_arch": "X64",
+              "image_os": "win25-vs2026",
+              "image_version": "20261103.298.1",
+              "node_version": "v22.14.0",
+              "npm_version": "10.9.2"
+            },
+            "native_npm": {
+              "npm": "10.9.2",
+              "node_version": "v22.14.0",
+              "native_child_pid": 3420,
+              "released_logical_bytes": 878,
+              "removed_file_count": 2,
+              "source_volume_free_delta": 4096,
+              "status": "native_completed_verified_detached_scope",
+              "real_user_cache_touched": false
+            },
+            "runtime_retirement": {
+              "platform": "win32",
+              "status": "completed",
+              "deleted_files": 6,
+              "logical_deleted_bytes": 29461707,
+              "volume_free_delta_bytes": 29462528,
+              "database_connected": false,
+              "project_code_executed": false
+            },
+            "skips": [
+              {
+                "test": "test_native_new_file_and_directory_metadata",
+                "reason": "Native Apple ACL API requires macOS"
+              },
+              {
+                "test": "test_native_nonempty_acl_is_captured",
+                "reason": "Native ACL fixture requires macOS chmod"
+              }
+            ],
+            "tests": 258,
+            "passed": 256,
+            "skipped": 2
+          },
+          {
+            "id": 132334018302,
+            "name": "windows-latest / Python 3.10",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018302",
+            "suites": [
+              {
+                "suite": "test_storage_guard",
+                "tests": 25,
+                "seconds": 4.78,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_storage_modes",
+                "tests": 22,
+                "seconds": 4.082,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 22
+              },
+              {
+                "suite": "test_project_profiler",
+                "tests": 21,
+                "seconds": 1.655,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 21
+              },
+              {
+                "suite": "test_generated_artifacts",
+                "tests": 17,
+                "seconds": 2.576,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 17
+              },
+              {
+                "suite": "test_native_cache",
+                "tests": 25,
+                "seconds": 1.306,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_state_boundaries",
+                "tests": 10,
+                "seconds": 0.157,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 10
+              },
+              {
+                "suite": "test_release_tools",
+                "tests": 19,
+                "seconds": 3.128,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 19
+              },
+              {
+                "suite": "test_macos_acl",
+                "tests": 15,
+                "seconds": 0.009,
+                "skipped": 2,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK (skipped=2)",
+                "passed": 13
+              },
+              {
+                "suite": "test_retired_runtime_guard",
+                "tests": 40,
+                "seconds": 32.053,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 40
+              },
+              {
+                "suite": "test_npm_cache_guard",
+                "tests": 64,
+                "seconds": 7.615,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 64
+              }
+            ],
+            "environment": {
+              "python": "3.10.11",
+              "system": "win32",
+              "machine": "AMD64",
+              "runner_os": "Windows",
+              "runner_arch": "X64",
+              "image_os": "win25-vs2026",
+              "image_version": "20261103.298.1",
+              "node_version": "v22.14.0",
+              "npm_version": "10.9.2"
+            },
+            "native_npm": {
+              "npm": "10.9.2",
+              "node_version": "v22.14.0",
+              "native_child_pid": 2996,
+              "released_logical_bytes": 878,
+              "removed_file_count": 2,
+              "source_volume_free_delta": 4096,
+              "status": "native_completed_verified_detached_scope",
+              "real_user_cache_touched": false
+            },
+            "runtime_retirement": {
+              "platform": "win32",
+              "status": "completed",
+              "deleted_files": 6,
+              "logical_deleted_bytes": 29461707,
+              "volume_free_delta_bytes": 29462528,
+              "database_connected": false,
+              "project_code_executed": false
+            },
+            "skips": [
+              {
+                "test": "test_native_new_file_and_directory_metadata",
+                "reason": "Native Apple ACL API requires macOS"
+              },
+              {
+                "test": "test_native_nonempty_acl_is_captured",
+                "reason": "Native ACL fixture requires macOS chmod"
+              }
+            ],
+            "tests": 258,
+            "passed": 256,
+            "skipped": 2
+          },
+          {
+            "id": 132334018357,
+            "name": "macos-latest / Python 3.10",
+            "status": "completed",
+            "conclusion": "success",
+            "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43557649569/job/132334018357",
+            "suites": [
+              {
+                "suite": "test_storage_guard",
+                "tests": 25,
+                "seconds": 3.625,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_storage_modes",
+                "tests": 22,
+                "seconds": 3.831,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 22
+              },
+              {
+                "suite": "test_project_profiler",
+                "tests": 21,
+                "seconds": 1.097,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 21
+              },
+              {
+                "suite": "test_generated_artifacts",
+                "tests": 17,
+                "seconds": 1.916,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 17
+              },
+              {
+                "suite": "test_native_cache",
+                "tests": 25,
+                "seconds": 0.352,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 25
+              },
+              {
+                "suite": "test_state_boundaries",
+                "tests": 10,
+                "seconds": 0.066,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 10
+              },
+              {
+                "suite": "test_release_tools",
+                "tests": 19,
+                "seconds": 1.99,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 19
+              },
+              {
+                "suite": "test_macos_acl",
+                "tests": 15,
+                "seconds": 0.04,
+                "skipped": 0,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK",
+                "passed": 15
+              },
+              {
+                "suite": "test_retired_runtime_guard",
+                "tests": 40,
+                "seconds": 5.81,
+                "skipped": 3,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK (skipped=3)",
+                "passed": 37
+              },
+              {
+                "suite": "test_npm_cache_guard",
+                "tests": 64,
+                "seconds": 3.104,
+                "skipped": 1,
+                "failures": 0,
+                "errors": 0,
+                "outcome": "OK (skipped=1)",
+                "passed": 63
+              }
+            ],
+            "environment": {
+              "python": "3.10.11",
+              "system": "darwin",
+              "machine": "arm64",
+              "runner_os": "macOS",
+              "runner_arch": "ARM64",
+              "image_os": "macos26",
+              "image_version": "20261102.0473.1",
+              "node_version": "v22.14.0",
+              "npm_version": "10.9.2"
+            },
+            "native_npm": {
+              "npm": "10.9.2",
+              "node_version": "v22.14.0",
+              "native_child_pid": 2633,
+              "released_logical_bytes": 894,
+              "removed_file_count": 2,
+              "source_volume_free_delta": -36864,
+              "status": "native_completed_verified_detached_scope",
+              "real_user_cache_touched": false
+            },
+            "runtime_retirement": {
+              "platform": "darwin",
+              "status": "completed",
+              "deleted_files": 6,
+              "logical_deleted_bytes": 29461707,
+              "volume_free_delta_bytes": 28323840,
+              "database_connected": false,
+              "project_code_executed": false
+            },
+            "skips": [
+              {
+                "test": "test_actual_psmodulepath_injection_is_not_loaded",
+                "reason": "Actual Windows PowerShell injection regression"
+              },
+              {
+                "test": "test_cim_stale_row_ignored_only_after_os_confirmed_exit",
+                "reason": "Windows process lifetime verification"
+              },
+              {
+                "test": "test_live_project_process_and_inaccessible_runtime_refused",
+                "reason": "Windows CIM parser test"
+              },
+              {
+                "test": "test_evidence_is_write_protected_until_native_returns",
+                "reason": "Windows mandatory sharing denial only"
+              }
+            ],
+            "tests": 258,
+            "passed": 254,
+            "skipped": 4
+          }
+        ],
+        "initial_failed_runs": [
+          {
+            "run_id": 43556855654,
+            "sha": "ad0d00151b51d5d679608e74710c7beed027b5fc",
+            "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43556855654",
+            "result": "all four jobs rejected official Node distributions without optional builtin npmrc; all other fixture checks passed",
+            "fix": "Bind the one optional builtin npmrc as verified present or verified absent; all other implementation files remain required"
+          }
+        ],
+        "previous_local_candidate": "historical_initial_v1_4_local_candidate; not treated as an exact-current cross-platform result",
+        "independent_reviews": {
+          "initial_target_groups": 32,
+          "optional_builtin_config_groups": 23,
+          "unit_counts_separate_from_review_groups": true
+        },
+        "publication": {
+          "tag": "v1.4.0",
+          "release_url": "https://github.com/SoberAming/codex-project-storage/releases/tag/v1.4.0",
+          "final_revision_gate": "Final documentation/package revision must independently pass the same four-job matrix before publication. Its exact commit and run are recorded in the Release and ci-verification-1.4.0.json asset."
+        },
+        "limitations": [
+          "Hosted tests do not accept personal devices, every filesystem, external disks, APFS clones/snapshots or all real business workflows.",
+          "PostgreSQL-layout fixtures contain fake bytes. Native process/file queries and guarded deletion ran; no PostgreSQL server was started or connected.",
+          "Native npm tests use a new offline inert package and project-exclusive cache, not any real user/shared cache.",
+          "POSIX locks remain advisory; a noncooperating writer cannot be ruled out universally.",
+          "Skipped tests are platform-specific checks, not successful native behavior on that platform.",
+          "Logical removed bytes and source-volume free-space deltas differ; concurrent writes and filesystem allocation can alter the delta."
+        ],
+        "final_revision_failed_checks": [
+          {
+            "run_id": 43558427122,
+            "sha": "8432430a697a6321cd6c15d984df28eb9ff3d334",
+            "url": "https://github.com/SoberAming/codex-project-storage/actions/runs/43558427122",
+            "scope": "release-tool minimal fixture, not cleanup runtime",
+            "reason": "Runtime reference gained a relative link to compatibility documentation that was optional in the minimal curated fixture",
+            "fix": "Promote docs/COMPATIBILITY.md to required runtime distribution members; no runtime cleanup policy changed"
+          }
+        ]
+      },
+      "historical_v1_3_scope_and_limits": {
+        "bundle_version": "1.3.0",
+        "scope": {
+          "actual_project_volume": true,
+          "no_predefined_drive_or_mount_name": true,
+          "no_default_user_free_space_goal": true,
+          "multi_ecosystem_diagnosis_is_not_universal_execution": true,
+          "no_manifest_fallback": true,
+          "related_metadata_is_not_delete_permission": true,
+          "shared_candidates_default_size_unknown": true,
+          "actions": [
+            "strict CPython cache deletion",
+            "verified locally rebuildable deterministic media-intermediate deletion",
+            "strict proven project-exclusive supported-pip native purge",
+            "verified inactive-artifact migration",
+            "verified redundant artifact release"
+          ],
+          "native_execution_versions": [
+            "pip 25.0.1",
+            "pip 26.1.1"
+          ],
+          "uv_and_npm": "advice_only",
+          "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
+          "no_recursive_disk_cleanup": true,
+          "no_automatic_config_links_or_background_tasks": true
+        },
+        "limits": [
+          "Hosted macOS fixture CI, when passing, is separate from end-user device, external-drive and full APFS acceptance.",
+          "Only Python 3.13.13 was run; Python 3.10 grammar was checked.",
+          "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
+          "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
+          "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
+          "Large original reconstruction inputs are metadata-checked, not fully hashed; producer-evidence overlap reads are explicitly counted.",
+          "Profile semantic coverage remains incomplete; independently complete candidate scopes may qualify separately.",
+          "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
+          "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
+          "Real NTFS features and APFS clone/snapshot semantics are not qualified by the exFAT fixture regressions.",
+          "External targets can disconnect after acceptance; future reachability is not guaranteed."
+        ],
+        "scope_note": "Exact prior scope and limits retained as historical v1.3 declarations; they do not describe the new v1.4 npm or synthetic-PG execution modes."
+      },
+      "historical_initial_v1_4_local_candidate": {
+        "components": {
+          "generated_artifact_guard.py": {
+            "version": "1.3.0",
+            "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+          },
+          "native_cache_guard.py": {
+            "version": "1.3.0",
+            "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+          },
+          "npm_cache_guard.py": {
+            "version": "1.4.0",
+            "sha256": "a05493bf042b2041ec5d8374b5dfdc80bfbdf2ec6b0877b760a4d84c4c697282"
+          },
+          "project_profiler.py": {
+            "version": "1.4.0",
+            "sha256": "800f23ff04563b51c205d4dde720852ef3ccb9ee8adb13db1ebb5c11e6aabf8b"
+          },
+          "relocation_guard.py": {
+            "version": "1.3.0",
+            "sha256": "e8a43f8c3fbfb8f1cb097e984507f5392ad2f5d1efcccb825823050542eff0d6"
+          },
+          "retired_runtime_guard.py": {
+            "version": "1.4.0",
+            "sha256": "27b29e844ace5c9312ccd339108dc1333aacf078e975949313d6e7d83ee024b5"
+          },
+          "storage_guard.py": {
+            "version": "1.3.0",
+            "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+          },
+          "volume_advisor.py": {
+            "version": "2.0.0",
+            "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+          }
+        },
+        "validation": {
+          "status": "local_candidate_validated",
+          "platform": "Windows",
+          "python": "3.13.13",
+          "fixture_filesystem": "exFAT",
+          "suites": [
+            {
+              "suite": "test_storage_guard",
+              "tests": 25,
+              "skipped": 2,
+              "passed": 23
+            },
+            {
+              "suite": "test_storage_modes",
+              "tests": 22,
+              "skipped": 0,
+              "passed": 22
+            },
+            {
+              "suite": "test_project_profiler",
+              "tests": 21,
+              "skipped": 0,
+              "passed": 21
+            },
+            {
+              "suite": "test_generated_artifacts",
+              "tests": 17,
+              "skipped": 0,
+              "passed": 17
+            },
+            {
+              "suite": "test_native_cache",
+              "tests": 25,
+              "skipped": 0,
+              "passed": 25
+            },
+            {
+              "suite": "test_state_boundaries",
+              "tests": 10,
+              "skipped": 0,
+              "passed": 10
+            },
+            {
+              "suite": "test_release_tools",
+              "tests": 19,
+              "skipped": 0,
+              "passed": 19
+            },
+            {
+              "suite": "test_macos_acl",
+              "tests": 15,
+              "skipped": 2,
+              "passed": 13
+            },
+            {
+              "suite": "test_npm_cache_guard",
+              "tests": 52,
+              "skipped": 2,
+              "passed": 50
+            },
+            {
+              "suite": "test_retired_runtime_guard",
+              "tests": 40,
+              "skipped": 3,
+              "passed": 37
+            }
+          ],
+          "tests_run": 246,
+          "skipped": 9,
+          "remaining_must_fix": [],
+          "independent_forward_use": {
+            "scope": "analysis only on an existing project snapshot with bounded producer/log review",
+            "user_project_files_deleted": 0,
+            "user_project_files_migrated": 0,
+            "actual_user_project_released_bytes": 0,
+            "occupancy_not_promised_reclaim": true
+          },
+          "native_npm_integration": {
+            "node": "22.14.0",
+            "npm": "10.9.2",
+            "new_local_offline_package_and_exclusive_cache": true,
+            "removed_files": 2,
+            "removed_logical_bytes": 764,
+            "retained_package_producer_and_original_debug_log": true,
+            "real_user_or_shared_cache_modified": false
+          },
+          "retired_runtime_cli_integration": {
+            "native_postgresql_started": false,
+            "new_fictional_pg_layout_only": true,
+            "actual_guarded_file_deletion": true,
+            "removed_files": 6,
+            "removed_logical_bytes": 29461707,
+            "retained_producer_inputs_logs_results_and_business_fixture": true,
+            "native_activity_query": true
+          },
+          "independent_review_scope": [
+            "source-scoped non-replayable claims and unknown member refusal",
+            "no credential/customer-document body reads during reference discovery",
+            "OS-derived trusted activity executable and clean child environment",
+            "fixed native npm and content-addressed cache qualification",
+            "evidence identity/content binding and guarded handles throughout release",
+            "linear scan count and durable pending batches for large small-file sets"
+          ],
+          "independent_current_target_groups_passed": 32,
+          "independent_review_is_separate_from_unit_test_counts": true,
+          "limitations": [
+            "New 1.4 code has not run on actual macOS, APFS or a new hosted CI matrix.",
+            "POSIX locks are advisory and do not exclude noncooperating writers.",
+            "Only npm 10.9.2 command implementation is supported; other Node majors are admission rules, not individually tested versions.",
+            "PG retirement is only for positively reviewed disposable synthetic data, not business/state databases or retained recovery stores.",
+            "Code citations and hashes bind real evidence; they do not automatically prove arbitrary program semantics or historical ownership.",
+            "Logical deletion bytes and volume free-space changes are different measurements."
+          ],
+          "published_to_github": false,
+          "new_hosted_ci_run": false,
+          "previous_runs_and_failed_qa_preserved": true
+        }
+      }
     }
   }
 }

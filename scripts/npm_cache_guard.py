@@ -50,7 +50,7 @@ finally:
     else:
         sys.modules["storage_guard"] = _previous_guard_module
 
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 SCHEMA = "project-npm-cache-plan-v1"
 ASSESSMENT = "project-npm-cache-assessment-v1"
 OPERATION = "detached-project-npm-cacache-clean"
@@ -83,7 +83,7 @@ def private_io_path(value):
     the file's contents or its claimed JSON schema. Missing output descendants
     are checked too; resolving an explicitly known root uses path metadata only.
     """
-    path = g.absolute(value)
+    path = g.protect_agent_state_path(value)
     private_parts = {".codex", ".agents", ".git", "sessions", "archived_sessions",
                      "thread_history", "credentials", "secrets", "memories",
                      "state", "indexes", "indices"}

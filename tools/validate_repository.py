@@ -20,7 +20,7 @@ import sys
 from urllib.parse import unquote
 
 SENSITIVE_NAMES = {"auth.json", "history.jsonl", "session_index.jsonl", "id_rsa", "id_ed25519"}
-PRIVATE_DIRS = {".codex", ".agents", "sessions", "archived_sessions", "thread_history",
+PRIVATE_DIRS = {".codex", ".agents", ".claude", ".kimi", ".kimi-code", ".workbuddy", ".codebuddy", "sessions", "archived_sessions", "thread_history",
                 "credentials", "secrets", "private-reports", "qa-runs", "test-runs",
                 ".ssh", ".aws", ".azure", ".gnupg"}
 SKIP_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules", ".pytest_cache"}
