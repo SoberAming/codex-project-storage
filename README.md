@@ -1,6 +1,6 @@
 # Agent 开发产物清理 · Codex Project Storage
 
-[English](README.en.md) · [安装](docs/INSTALLATION.md) · [使用示例](docs/QUICKSTART.md) · [安全边界](docs/SAFETY.md)
+[English](README.en.md) · [English Skill 说明](SKILL.en.md) · [安装](docs/INSTALLATION.md) · [使用示例](docs/QUICKSTART.md) · [安全边界](docs/SAFETY.md)
 
 [![CI](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/SoberAming/codex-project-storage/actions/workflows/ci.yml)
 

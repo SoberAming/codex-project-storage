@@ -71,7 +71,11 @@ class ReleaseToolTests(unittest.TestCase):
         self.area = Path(tempfile.mkdtemp(prefix=self._testMethodName + "-", dir=RUN))
         self.repo = self.area / "fictional-repo"
         self.repo.mkdir()
-        for relative in B.RUNTIME_FILES:
+        # Exercise the maintained distribution, including linked bilingual
+        # public guides, rather than a partial set with dangling doc links.
+        for relative in (*B.RUNTIME_FILES, *B.PUBLIC_DOCS):
+            if not (ROOT / relative).exists():
+                continue
             target = self.repo / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             if relative == "LICENSE":
@@ -97,6 +101,9 @@ class ReleaseToolTests(unittest.TestCase):
         with zipfile.ZipFile(result["outputs"]["archive"]) as archive:
             names = set(archive.namelist())
             self.assertIn(B.PACKAGE + "/SKILL.md", names)
+            self.assertIn(B.PACKAGE + "/SKILL.en.md", names)
+            self.assertIn(B.PACKAGE + "/docs/QUICKSTART.en.md", names)
+            self.assertIn(B.PACKAGE + "/docs/RELEASE_NOTES_v1.6.0.en.md", names)
             self.assertIn(B.PACKAGE + "/LICENSE", names)
             self.assertFalse(any(B.PACKAGE + "/" + rel in names for rel in extra))
         self.assertEqual(before, {rel: sha(self.repo / rel) for rel in extra})

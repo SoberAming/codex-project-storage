@@ -20,7 +20,7 @@ import zipfile
 
 PACKAGE = "codex-project-storage"
 RUNTIME_FILES = (
-    "SKILL.md", "agents/openai.yaml",
+    "SKILL.md", "SKILL.en.md", "agents/openai.yaml",
     "scripts/storage_guard.py", "scripts/volume_advisor.py",
     "scripts/relocation_guard.py", "scripts/generated_artifact_guard.py",
     "scripts/native_cache_guard.py", "scripts/project_profiler.py",
@@ -39,12 +39,12 @@ RUNTIME_FILES = (
 PUBLIC_DOCS = (
     "README.en.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md",
     "SUPPORT.md", "CODE_OF_CONDUCT.md", "ACKNOWLEDGEMENTS.md",
-    "THIRD_PARTY_NOTICES.md", "docs/INSTALLATION.md", "docs/QUICKSTART.md",
+    "THIRD_PARTY_NOTICES.md", "docs/INSTALLATION.md", "docs/QUICKSTART.md", "docs/QUICKSTART.en.md",
     "docs/ARCHITECTURE.md", "docs/SAFETY.md",
     "docs/RELEASING.md", "docs/GITHUB-PUBLISHING.zh-CN.md",
     "docs/RELEASE_NOTES_v1.3.0.md", "docs/RELEASE_NOTES_v1.4.0.md", "docs/ROADMAP.md",
     "docs/RELEASE_NOTES_v1.5.0.md",
-    "docs/RELEASE_NOTES_v1.6.0.md",
+    "docs/RELEASE_NOTES_v1.6.0.md", "docs/RELEASE_NOTES_v1.6.0.en.md",
 )
 MAX_FILE_BYTES = 4 * 1024 * 1024
 MAX_BUNDLE_BYTES = 16 * 1024 * 1024

@@ -5,6 +5,8 @@ description: 清理使用 Codex、WorkBuddy、Claude Code、Kimi Code 等 Agent 
 
 # Agent 开发产物清理
 
+[English instructions](SKILL.en.md) · [English quickstart](docs/QUICKSTART.en.md)
+
 清理 **Agent 开发和执行任务产生、当前已无效或冗余的文件**，及时腾出实际所在卷的空间。项目/任务是确定范围的起点，重点是运行产物与生产入口；不能把普通文档整理或搬走业务素材当成默认优化。区分发起任务的 Agent 与实际写文件的 npm、测试程序、浏览器、渲染器等工具。先清理已核实无效且执行器支持的产物，再保留有效成果；迁移只用于仍有保存价值的合格停用产物。未核实来源、当前用途和引用的数据保留，不承诺任意目录自动清理。
 
 ## 用户决策，agent 负责技术判断
