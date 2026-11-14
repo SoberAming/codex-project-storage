@@ -1,0 +1,3 @@
+# Runtime scripts use only the Python standard library.
+# Development-only YAML parsing for repository validation and CI.
+PyYAML==6.0.3

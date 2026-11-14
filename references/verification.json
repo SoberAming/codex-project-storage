@@ -1,0 +1,197 @@
+{
+  "skill": "codex-project-storage",
+  "bundle_version": "1.3.0",
+  "user_date": "2026-11-14",
+  "recorded_at_utc": "2026-11-13T18:36:54.479668+00:00",
+  "runtime": {
+    "os": "Windows",
+    "python": "3.13.13",
+    "real_macos_tested": false
+  },
+  "components": {
+    "storage_guard.py": {
+      "version": "1.3.0",
+      "sha256": "0e9b52e127e795321d6445506f7ed03a4373bf88f3c0dbccd7f8b191a5622868"
+    },
+    "volume_advisor.py": {
+      "version": "2.0.0",
+      "sha256": "36027afcf34de8f59fb30025793d7e3dac87d6056399bf93b9884893dd680628"
+    },
+    "relocation_guard.py": {
+      "version": "1.2.0",
+      "sha256": "2ccb91c8df368c339c2ae97645282ceb82999c82a3cbf64e0d789c3685f71ee5"
+    },
+    "native_cache_guard.py": {
+      "version": "1.3.0",
+      "sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c"
+    },
+    "project_profiler.py": {
+      "version": "1.3.0",
+      "sha256": "1a2c7404a5355d944cb36893cdfeccfa6fbe493775ab0c8d435d35ff988c149f"
+    },
+    "generated_artifact_guard.py": {
+      "version": "1.3.0",
+      "sha256": "a7fb6b16637263b1b8f11319bf273368f25a1a17ca45d3d8225d3ad3f3d38a37"
+    }
+  },
+  "current_frozen_regressions": {
+    "suites": {
+      "cache_guard": {
+        "run": 25,
+        "passed": 23,
+        "skipped": 2
+      },
+      "volume_and_relocation": {
+        "run": 22,
+        "passed": 22,
+        "simulated_cross_volume_cases": 2
+      },
+      "generated_artifacts": {
+        "run": 17,
+        "passed": 17
+      },
+      "native_cache": {
+        "run": 25,
+        "passed": 25,
+        "real_purge_in_suite": false
+      },
+      "project_profiler": {
+        "run": 17,
+        "passed": 17
+      },
+      "state_boundaries": {
+        "run": 10,
+        "passed": 10,
+        "alias_cases_simulated": true
+      }
+    },
+    "total_run": 116,
+    "total_passed": 114,
+    "total_skipped": 2,
+    "skip_reason": "Fixture filesystem lacks native symlink/hardlink creation; skips are not native qualification.",
+    "all_suite_exit_codes_zero": true,
+    "components_unchanged_during_run": true
+  },
+  "independent_review": {
+    "native_engine_current_sha_groups_passed": 9,
+    "generated_engine_current_sha_groups_passed": 9,
+    "profiler_final_sensitive_input_gates_passed": true,
+    "profiler_previous_seven_group_review_is_historical": true,
+    "final_state_boundary_cases_passed": 10,
+    "remaining_must_fix": [],
+    "generated_initial_lock_assertion_corrected": "Python PermissionError errno13 correctly blocked fixture writes; original assertion expected winerror32. Both evidence records retained.",
+    "prior_cache_growth_test_adapted": "Cache scan now prunes protected media; growth test retains same net-growth assertions on unprotected task-output. Full protected-size coverage is tested in profiler."
+  },
+  "real_native_cache_integration": {
+    "status": "real_native_purge_verified",
+    "platform": "Windows",
+    "pip_version": "26.1.1",
+    "python_version": "3.13.13",
+    "native_engine_sha256": "82d39cd07dc69586d6800cfda08fb57036ab57aef9c96c38401e864576f79e5c",
+    "new_isolated_project_only": true,
+    "producer_command": "download",
+    "producer_outer_calls": 1,
+    "producer_timeout_seconds": 60,
+    "internal_http_retries_allowed_inside_single_call": true,
+    "purge_calls": 1,
+    "readonly_probes": 9,
+    "install_calls": 0,
+    "removed_files": 6,
+    "observed_removed_logical_bytes": 87982,
+    "volume_free_delta_bytes": 393216,
+    "volume_delta_is_not_exact_delete_bytes": true,
+    "retained_tag_bytes": 115,
+    "retained_inputs_config_receipt_download_full_hashes_unchanged": true,
+    "trusted_python_and_pip_package_hashes_unchanged": true,
+    "shared_caches_modified": false,
+    "scope_note": "Native engine unchanged since real run; shared project-root guard subsequently tightened and final combined regressions passed. This is not a second real purge of the final bundle."
+  },
+  "independent_forward_use": {
+    "status": "frozen_fixture_execution_and_root_postcheck_passed",
+    "production_scripts_hashed_before_and_after": 6,
+    "entrypoint_and_applicable_references_hashed_before_and_after": 4,
+    "unchanged": true,
+    "implementation_text_read_by_forward_agent": false,
+    "project_scripts_executed": false,
+    "new_isolated_fixture_only": true,
+    "planned_files": 2,
+    "deleted_files": 2,
+    "deleted_logical_bytes": 136,
+    "retained_project_files_full_hash_unchanged": 11,
+    "fictional_state_index_unchanged": true,
+    "added_project_files": 0,
+    "source_volume_free_delta_bytes": 65536,
+    "volume_delta_is_not_exact_delete_bytes": true,
+    "input_content_bytes_read": 0,
+    "rebuild_executed": false,
+    "remaining_items": 0,
+    "earlier_use_not_frozen": "Earlier separate fictional sample retained as historical only; not replayed.",
+    "user_new_technical_decisions": 0,
+    "implementation_required_documentation_gaps": 0
+  },
+  "historical_v1_2": {
+    "bundle_version": "1.2.0",
+    "current_relocation_engine_sha256_unchanged": true,
+    "real_cross_volume_smoke": {
+      "passed": true,
+      "source_filesystem": "NTFS",
+      "target_filesystem": "exFAT",
+      "copy_kept_source_before_acceptance": true,
+      "portable_permissions_and_initial_timestamps_explicitly_accepted": true,
+      "deleted_only_planned_fixture_files": true,
+      "files": 2,
+      "logical_bytes": 153,
+      "binary_control_bytes_covered": [
+        "LF",
+        "CRLF",
+        "NUL",
+        "0x1a",
+        "0xff"
+      ],
+      "real_ntfs_hardlink_refused": true,
+      "real_ntfs_ads_refused": true,
+      "final_script_sha256_unchanged": true
+    },
+    "scope_note": "Historical Windows NTFS to exFAT small fixture; shared guard has changed in v1.3. Not repeated here, not current all-platform acceptance."
+  },
+  "scope": {
+    "actual_project_volume": true,
+    "no_predefined_drive_or_mount_name": true,
+    "no_default_user_free_space_goal": true,
+    "multi_ecosystem_diagnosis_is_not_universal_execution": true,
+    "no_manifest_fallback": true,
+    "related_metadata_is_not_delete_permission": true,
+    "shared_candidates_default_size_unknown": true,
+    "actions": [
+      "strict CPython cache deletion",
+      "verified locally rebuildable deterministic media-intermediate deletion",
+      "strict proven project-exclusive supported-pip native purge",
+      "verified inactive-artifact migration",
+      "verified redundant artifact release"
+    ],
+    "native_execution_versions": [
+      "pip 25.0.1",
+      "pip 26.1.1"
+    ],
+    "uv_and_npm": "advice_only",
+    "host_worktree_management": "Conditional documented routing, no real host archive invoked in tests.",
+    "no_recursive_disk_cleanup": true,
+    "no_automatic_config_links_or_background_tasks": true
+  },
+  "limits": [
+    "macOS native implementation has not run on a real Mac.",
+    "Only Python 3.13.13 was run; Python 3.10 grammar was checked.",
+    "POSIX advisory locks cannot prevent noncooperating writers; no universal concurrency guarantee.",
+    "No universal duplicate scanner, dependency cleaner, ownership oracle, semantic content validator or reconstruction proof.",
+    "Agent must truthfully establish purpose, ownership, references, idle state and reconstruction dependencies; JSON assertions cannot create evidence.",
+    "Large original reconstruction inputs are metadata-checked, not fully hashed; producer-evidence overlap reads are explicitly counted.",
+    "Profile semantic coverage remains incomplete; independently complete candidate scopes may qualify separately.",
+    "Shared state, sessions, indexes, credentials, source, original assets, databases, recovery, delivery and unique AI outputs remain protected by default.",
+    "Project roots enclosing configured state roots are refused by executors; configured sqlite_home must be supplied as the tool process CODEX_SQLITE_HOME protection hint.",
+    "Real NTFS features and APFS clone/snapshot semantics are not qualified by the exFAT fixture regressions.",
+    "External targets can disconnect after acceptance; future reachability is not guaranteed."
+  ],
+  "real_existing_user_project_data_modified": false,
+  "only_new_isolated_test_data_modified": true,
+  "maintainer_evidence_kept_outside_distribution": true
+}

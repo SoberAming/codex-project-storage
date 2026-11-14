@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security reporting / 安全报告
+    url: https://github.com/YiMingchen111/codex-project-storage/security/policy
+    about: Read the security policy; keep vulnerability details private. The private reporting entry must be enabled by the repository owner.

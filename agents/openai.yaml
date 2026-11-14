@@ -1,0 +1,6 @@
+interface:
+  display_name: "项目磁盘管家"
+  short_description: "分析各类项目的占用与增长，由你选择删除或迁移，保护关键数据并核验执行"
+  default_prompt: "使用 $codex-project-storage 优化当前项目所在磁盘。识别项目类型、主要占用和增长来源，核实可重建产物、共享数据与可用位置，给我删除、迁移或组合方案；你负责技术判断，我决定采用的结果，保护源码、素材、会话、索引和恢复资料。"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,37 @@
+name: Usage question / 使用问题
+description: Ask about documented usage, compatibility, or an analysis result without private data.
+title: "[Question] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check README, SUPPORT.md, and the relevant mode reference first.
+        Ask about the decision or error; do not upload a full disk inventory or private project content.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy / 隐私
+      options:
+        - label: I reviewed the question and removed private paths, names, user content, and credentials.
+          required: true
+  - type: input
+    id: version
+    attributes:
+      label: Skill version and platform / 版本与平台
+      placeholder: Skill release; Windows or macOS version; Python version
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal and question / 目标与问题
+      description: Explain the desired outcome and the documentation you checked. Use fictional paths.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Minimal context / 最小上下文
+      description: Optional short redacted error, status, or fictional directory relationship. No full reports, sessions, indexes, databases, or environment dumps.
+    validations:
+      required: false
